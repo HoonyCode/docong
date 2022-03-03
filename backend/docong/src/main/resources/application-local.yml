@@ -5,7 +5,7 @@
 # 기본 로그 레벨 설정
 logging:
   level:
-    root: warn
+    root: debug
     com.ssapy.api: debug
     org.hibernate.type.descriptor.sql: trace   # trace
 
