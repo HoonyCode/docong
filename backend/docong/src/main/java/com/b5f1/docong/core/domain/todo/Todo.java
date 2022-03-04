@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,8 +19,8 @@ public class Todo extends BaseEntity {
     private Long seq;
 
     @Builder
-    public Todo(String name, String content, TodoStatus status, Integer predictedPomo, Integer realPomo, WorkProficiency workProficiency, WorkType workType, WorkImportance workImportance) {
-        this.name = name;
+    public Todo(String title, String content, TodoStatus status, Integer predictedPomo, Integer realPomo, WorkProficiency workProficiency, WorkType workType, WorkImportance workImportance) {
+        this.title = title;
         this.content = content;
         this.status = status;
         this.predictedPomo = predictedPomo;
@@ -32,7 +34,7 @@ public class Todo extends BaseEntity {
 //    @JoinColumn(name="group_seq")
 //    private Group group;
 
-    private String name, content;
+    private String title, content;
     private TodoStatus status;
 
     private Integer predictedPomo, realPomo;
@@ -40,4 +42,12 @@ public class Todo extends BaseEntity {
     private WorkProficiency workProficiency;
     private WorkType workType;
     private WorkImportance workImportance;
+
+    @OneToMany(mappedBy="todo", fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UserTodo> userTodos = new ArrayList<>();
+
+    public void addUserTodo(UserTodo userTodo){
+        userTodos.add(userTodo);
+        userTodo.changeTodo(this);
+    }
 }
