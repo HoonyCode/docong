@@ -2,6 +2,7 @@ package com.b5f1.docong.core.domain.group;
 
 import com.b5f1.docong.core.domain.BaseEntity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,13 +13,18 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "TeamUser")
 @IdClass(TeamUserId.class)
 public class TeamUser extends BaseEntity implements Serializable {
     @Id
-    @ManyToOne(targetEntity = Team.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_seq")
+    @Column(name = "team_seq")
     private Long teamSeq;
+
+    @ManyToOne(targetEntity = Team.class, fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "team_seq")
+    private Team team;
 
 //    @Id
 //    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)

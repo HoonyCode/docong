@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Table(name = "Team")
 public class Team extends BaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
 
     @Column
