@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -21,4 +23,11 @@ public class TodoServiceImpl implements TodoService{
         todo.addUserTodo(userTodo);
         return todoRepository.save(todo).getSeq();
     }
+
+    @Override
+    public void deleteTodo(Long id) {
+        Todo todo = todoRepository.findById(id).orElseThrow(()->new IllegalStateException("없는 Todo 입니다."));
+        todoRepository.delete(todo);
+    }
+
 }

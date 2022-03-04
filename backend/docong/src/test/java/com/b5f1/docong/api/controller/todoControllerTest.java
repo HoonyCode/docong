@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,6 +45,18 @@ class todoControllerTest {
         // then
                 .andExpect(status().isOk());
         verify(todoService,  times(1)).saveTodo(any(SaveTodoReqDto.class));
+    }
+
+    @Test
+    void testDeleteTodo() throws Exception{
+        // given
+
+        // when
+        mockMvc.perform(delete("/api/todo/{id}",1L))
+
+                // then
+                .andExpect(status().isOk());
+        verify(todoService, times(1)).deleteTodo(1L);
     }
 
     public static String asJsonString(final Object obj) {
