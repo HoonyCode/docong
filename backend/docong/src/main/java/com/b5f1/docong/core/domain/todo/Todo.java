@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@QueryEntity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Todo extends BaseEntity {
