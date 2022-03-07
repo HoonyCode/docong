@@ -4,8 +4,11 @@ import com.b5f1.docong.api.dto.request.ModifyTodoStatusReqDto;
 import com.b5f1.docong.api.dto.request.SaveTodoReqDto;
 import com.b5f1.docong.api.service.TodoService;
 import com.b5f1.docong.core.domain.todo.TodoStatus;
+import com.b5f1.docong.core.domain.user.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +36,14 @@ class todoControllerTest {
     @MockBean
     private TodoService todoService;
 
+
     @Test
     void testSaveTodo() throws Exception{
         // given
-        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목","내용",null,null,null,null);
+        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목","내용",null,null,null,null,null);
 
         // when
-        mockMvc.perform(post("/api/todo")
+        mockMvc.perform(post("/todo")
                 .content(asJsonString(reqDto))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -54,7 +58,7 @@ class todoControllerTest {
         // given
 
         // when
-        mockMvc.perform(delete("/api/todo/{id}",1L))
+        mockMvc.perform(delete("/todo/{id}",1L))
 
                 // then
                 .andExpect(status().isOk());
@@ -64,10 +68,10 @@ class todoControllerTest {
     @Test
     void testModifyTodo() throws Exception{
         // given
-        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목","내용",null,null,null,null);
+        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목","내용",null,null,null,null,null);
 
         // when
-        mockMvc.perform(put("/api/todo/{id}", 1L)
+        mockMvc.perform(put("/todo/{id}", 1L)
                         .content(asJsonString(reqDto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -83,7 +87,7 @@ class todoControllerTest {
         ModifyTodoStatusReqDto reqDto = new ModifyTodoStatusReqDto(TodoStatus.IN_PROGRESS);
 
         // when
-        mockMvc.perform(put("/api/todo/status/{id}", 1L)
+        mockMvc.perform(put("/todo/status/{id}", 1L)
                         .content(asJsonString(reqDto))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
