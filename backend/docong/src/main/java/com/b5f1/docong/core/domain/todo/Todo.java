@@ -1,6 +1,7 @@
 package com.b5f1.docong.core.domain.todo;
 
 import com.b5f1.docong.core.domain.BaseEntity;
+import com.b5f1.docong.core.domain.group.Team;
 import com.querydsl.core.annotations.QueryEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -30,9 +31,9 @@ public class Todo extends BaseEntity {
         this.workImportance = workImportance;
     }
 
-    //    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="group_seq")
-//    private Group group;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="team_seq")
+    private Team team;
 
     private String title, content;
     private TodoStatus status;
@@ -46,8 +47,24 @@ public class Todo extends BaseEntity {
     @OneToMany(mappedBy="todo", fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     private List<UserTodo> userTodos = new ArrayList<>();
 
+    public void addTeam(Team team) {
+        this.team = team;
+    }
     public void addUserTodo(UserTodo userTodo){
         userTodos.add(userTodo);
         userTodo.changeTodo(this);
     }
+    public void changeTodo(String title, String content, WorkImportance workImportance, WorkProficiency workProficiency, WorkType workType) {
+        this.title = title;
+        this.content = content;
+        this.workImportance = workImportance;
+        this.workProficiency = workProficiency;
+        this.workType = workType;
+    }
+
+    public void changeStatus(TodoStatus todoStatus) {
+        this.status = todoStatus;
+    }
+
+
 }

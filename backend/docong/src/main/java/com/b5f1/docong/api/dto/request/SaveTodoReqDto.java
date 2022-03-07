@@ -12,7 +12,7 @@ public class SaveTodoReqDto {
     public String title;
     @NotNull
     public String content;
-    public Long groupId;
+    public Long teamId;
     public WorkProficiency workProficiency;
     public WorkType workType;
     public WorkImportance workImportance;
