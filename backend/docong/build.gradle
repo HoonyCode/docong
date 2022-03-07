@@ -39,6 +39,9 @@ dependencies {
 	// Swagger 추가
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+	// https://mvnrepository.com/artifact/com.auth0/java-jwt
+	implementation group: 'com.auth0', name: 'java-jwt', version: '3.18.2'
+
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
