@@ -25,8 +25,6 @@ public class SavePomodoroReqDto {
     private LocalDateTime startTime;
     @NotNull
     private LocalDateTime endTime;
-    @NotNull
     private Emotion emotion;
-    @NotNull
     private noiseStatus noise;
 }

@@ -2,7 +2,6 @@ package com.b5f1.docong.api.controller;
 
 
 import com.b5f1.docong.api.dto.request.SavePomodoroReqDto;
-import com.b5f1.docong.api.dto.request.SaveTodoReqDto;
 import com.b5f1.docong.api.dto.response.BaseResponseEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,7 @@ public class PomodoroController {
         return ResponseEntity.status(200).body(new BaseResponseEntity(200, "Success"));
     }
 
-    @GetMapping("/{user_seq")
+    @GetMapping("/{user_seq}")
     public ResponseEntity<BaseResponseEntity> findAllPomo(@RequestBody @PathVariable String user_seq) {
 
 
