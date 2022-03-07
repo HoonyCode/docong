@@ -76,8 +76,6 @@ public class UserServiceImpl implements UserService {
 
         userEntity.updateUserInfo(userInfoReqDto);
 
-        userRepository.save(userEntity);
-
         return;
     }
 }

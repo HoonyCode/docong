@@ -24,11 +24,11 @@ public class UserServiceTest {
     void testChangeUserInfo() {
         User user = userRepository.findByEmail("test@naver.com");
         UserInfoReqDto userInfoReqDto =
-                new UserInfoReqDto("1234","혜승", "2005-11-23", "M", "Busan", "student", "student");
+                new UserInfoReqDto("1234","혀승", "2005-11-23", "M", "Busan", "student", "student");
 
         userService.setUserInfo(user, userInfoReqDto);
         user = userRepository.findByEmail("test@naver.com");
 
-        assertThat(user.getName()).isEqualTo("혜승");
+        assertThat(user.getName()).isEqualTo("혀승");
     }
 }
