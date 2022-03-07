@@ -80,6 +80,7 @@ server:
         name: SID
         http-only: true
         secure: true
+    context-path: /api
   max-http-header-size: 3145728
 
 aes256:
