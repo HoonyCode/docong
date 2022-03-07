@@ -1,6 +1,7 @@
 package com.b5f1.docong.api.controller;
 
 import com.b5f1.docong.api.dto.request.SaveTeamReqDto;
+import com.b5f1.docong.api.dto.request.UpdateTeamReqDto;
 import com.b5f1.docong.api.service.TeamService;
 import com.b5f1.docong.core.domain.group.Team;
 import com.b5f1.docong.core.domain.group.TeamUser;
@@ -29,11 +30,14 @@ public class TeamController {
     }
 
     @PutMapping("/{team_id}")
-    public ResponseEntity<String> updateTeam() {
-        //user_id가 리더인지 확인
-        //team_id가 존재하는지 확인
-        //존재한다면 team정보 수정
-        return null;
+    public ResponseEntity<String> updateTeam(@RequestBody @Validated UpdateTeamReqDto teamReqDto) {
+        int result = teamService.updateTeam(teamReqDto);
+        if(result==-1){
+            return ResponseEntity.badRequest().body("badRequest");
+        }else if(result==0){
+            return ResponseEntity.internalServerError().body("internalServerError");
+        }
+        return ResponseEntity.ok().body("ok");
     }
 
     @GetMapping("/{team_id}")
@@ -67,7 +71,7 @@ public class TeamController {
 
     @DeleteMapping("/{team_id}/{member_id}")
     public ResponseEntity<String> deleteTeamMember(@PathVariable Long team_id, @PathVariable Long member_id) {
-        //team_id, member_id, user_id가 숫자인지 확인
+        //삭제 요청한 사람과 member_id가 같거나 삭제 요청한 사람이 팀장이면 member_id 삭제
         //팀이 존재하는지 확인
         //팀에 멤버가 존재하는지 확인
         //user_id가 팀장인지 확인
