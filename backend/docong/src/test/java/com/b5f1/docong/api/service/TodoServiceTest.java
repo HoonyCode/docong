@@ -1,5 +1,6 @@
 package com.b5f1.docong.api.service;
 
+import com.b5f1.docong.api.dto.request.ModifyTodoStatusReqDto;
 import com.b5f1.docong.api.dto.request.SaveTodoReqDto;
 import com.b5f1.docong.core.domain.todo.Todo;
 import com.b5f1.docong.core.domain.todo.TodoStatus;
@@ -65,4 +66,36 @@ class TodoServiceTest {
             userTodoRepository.findById(savedUserTodo.getSeq()).orElseThrow(() -> new IllegalStateException());
         }).isInstanceOf(IllegalStateException.class);
     }
+
+    @Test
+    void testModifyTodo() {
+        // given
+        Todo todo = Todo.builder().title("제목").content("내용").build();
+        Todo savedTodo = todoRepository.save(todo);
+        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목수정","내용수정",null,null,null,null);
+
+        // when
+        todoService.modifyTodo(savedTodo.getSeq(), reqDto);
+
+        // then
+        Todo findTodo = todoRepository.findById(savedTodo.getSeq()).orElseThrow(()->new IllegalStateException("없는 Todo입니다"));
+        assertThat(findTodo.getTitle()).isEqualTo("제목수정");
+        assertThat(findTodo.getContent()).isEqualTo("내용수정");
+    }
+
+    @Test
+    void testModifyStatus() {
+        // given
+        Todo todo = Todo.builder().title("제목").content("내용").status(TodoStatus.TODO).build();
+        Todo savedTodo = todoRepository.save(todo);
+        ModifyTodoStatusReqDto reqDto = new ModifyTodoStatusReqDto(TodoStatus.IN_PROGRESS);
+
+        // when
+        todoService.modifyStatus(savedTodo.getSeq(), reqDto);
+
+        // then
+        Todo findTodo = todoRepository.findById(savedTodo.getSeq()).orElseThrow(()->new IllegalStateException("없는 Todo입니다"));
+        assertThat(findTodo.getStatus()).isEqualTo(TodoStatus.IN_PROGRESS);
+    }
+
 }

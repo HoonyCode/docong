@@ -50,4 +50,16 @@ public class Todo extends BaseEntity {
         userTodos.add(userTodo);
         userTodo.changeTodo(this);
     }
+
+    public void changeTodo(String title, String content, WorkImportance workImportance, WorkProficiency workProficiency, WorkType workType) {
+        this.title = title;
+        this.content = content;
+        this.workImportance = workImportance;
+        this.workProficiency = workProficiency;
+        this.workType = workType;
+    }
+
+    public void changeStatus(TodoStatus todoStatus) {
+        this.status = todoStatus;
+    }
 }

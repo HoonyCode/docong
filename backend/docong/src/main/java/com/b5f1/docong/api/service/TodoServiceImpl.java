@@ -1,5 +1,6 @@
 package com.b5f1.docong.api.service;
 
+import com.b5f1.docong.api.dto.request.ModifyTodoStatusReqDto;
 import com.b5f1.docong.api.dto.request.SaveTodoReqDto;
 import com.b5f1.docong.core.domain.todo.Todo;
 import com.b5f1.docong.core.domain.todo.UserTodo;
@@ -30,4 +31,15 @@ public class TodoServiceImpl implements TodoService{
         todoRepository.delete(todo);
     }
 
+    @Override
+    public void modifyTodo(Long id, SaveTodoReqDto reqDto) {
+        Todo todo = todoRepository.findById(id).orElseThrow(()->new IllegalStateException("없는 Todo 입니다."));
+        todo.changeTodo(reqDto.getTitle(), reqDto.getContent(), reqDto.getWorkImportance(),reqDto.getWorkProficiency(),reqDto.getWorkType());
+    }
+
+    @Override
+    public void modifyStatus(Long id, ModifyTodoStatusReqDto reqDto) {
+        Todo todo = todoRepository.findById(id).orElseThrow(()->new IllegalStateException("없는 Todo 입니다."));
+        todo.changeStatus(reqDto.getTodoStatus());
+    }
 }

@@ -1,5 +1,6 @@
 package com.b5f1.docong.api.controller;
 
+import com.b5f1.docong.api.dto.request.ModifyTodoStatusReqDto;
 import com.b5f1.docong.api.dto.request.SaveTodoReqDto;
 import com.b5f1.docong.api.dto.response.BaseResponseEntity;
 import com.b5f1.docong.api.service.TodoService;
@@ -24,6 +25,18 @@ public class todoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponseEntity> deleteTodo(@PathVariable Long id){
         todoService.deleteTodo(id);
+        return ResponseEntity.status(200).body(new BaseResponseEntity(200, "Success"));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BaseResponseEntity> modifyTodo(@PathVariable Long id, @RequestBody @Valid SaveTodoReqDto reqDto){
+        todoService.modifyTodo(id, reqDto);
+        return ResponseEntity.status(200).body(new BaseResponseEntity(200, "Success"));
+    }
+
+    @PutMapping("/status/{id}")
+    public ResponseEntity<BaseResponseEntity> modifyStatus(@PathVariable Long id, @RequestBody @Valid ModifyTodoStatusReqDto reqDto){
+        todoService.modifyStatus(id, reqDto);
         return ResponseEntity.status(200).body(new BaseResponseEntity(200, "Success"));
     }
 }
