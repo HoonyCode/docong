@@ -2,8 +2,10 @@ package com.b5f1.docong.api.service;
 
 import com.b5f1.docong.api.dto.request.ModifyTodoStatusReqDto;
 import com.b5f1.docong.api.dto.request.SaveTodoReqDto;
+import com.b5f1.docong.core.domain.group.Team;
 import com.b5f1.docong.core.domain.todo.Todo;
 import com.b5f1.docong.core.domain.todo.UserTodo;
+import com.b5f1.docong.core.repository.TeamRepository;
 import com.b5f1.docong.core.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,12 +18,16 @@ import java.util.Optional;
 @Transactional
 public class TodoServiceImpl implements TodoService{
     private final TodoRepository todoRepository;
-
+    private final TeamRepository teamRepository;
     @Override
     public Long saveTodo(SaveTodoReqDto reqDto) {
         Todo todo = reqDto.toEntity();
         UserTodo userTodo = UserTodo.builder().build();
         todo.addUserTodo(userTodo);
+        if(reqDto.getTeamId() != null){
+            Team team = teamRepository.findById(reqDto.getTeamId()).orElseThrow(()->new IllegalStateException("없는 team입니다."));
+            todo.addTeam(team);
+        }
         return todoRepository.save(todo).getSeq();
     }
 

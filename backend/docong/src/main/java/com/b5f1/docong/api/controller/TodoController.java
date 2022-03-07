@@ -13,7 +13,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/todo")
 @RequiredArgsConstructor
-public class todoController {
+public class TodoController {
     private final TodoService todoService;
 
     @PostMapping
