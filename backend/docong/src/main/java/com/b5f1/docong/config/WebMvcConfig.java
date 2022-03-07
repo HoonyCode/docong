@@ -20,7 +20,7 @@ import java.util.List;
 
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig extends WebMvcConfigurationSupport {
+public class WebMvcConfig extends WebMvcConfigurationSupport {
 
     @Autowired
     AuthHandlerMethodArgumentResolver authHandlerMethodArgumentResolver;
