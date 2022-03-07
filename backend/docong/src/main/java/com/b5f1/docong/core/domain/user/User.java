@@ -1,5 +1,6 @@
 package com.b5f1.docong.core.domain.user;
 
+import com.b5f1.docong.api.dto.request.UserInfoReqDto;
 import com.b5f1.docong.core.domain.group.TeamUser;
 import com.b5f1.docong.core.domain.todo.UserTodo;
 import lombok.*;
@@ -71,5 +72,16 @@ public class User {
         this.position = position;
         this.activate = activate;
         this.oauth_type = oauth_type;
+    }
+    // 여기서부터 추가
+
+    public void updateUserInfo(UserInfoReqDto userInfoReqDto) {
+        this.password = userInfoReqDto.getPassword();
+        this.name = userInfoReqDto.getName();
+        this.birth = userInfoReqDto.getBirth();
+        this.gender = userInfoReqDto.getGender();
+        this.address = userInfoReqDto.getAddress();
+        this.job = userInfoReqDto.getJob();
+        this.position = userInfoReqDto.getPosition();
     }
 }

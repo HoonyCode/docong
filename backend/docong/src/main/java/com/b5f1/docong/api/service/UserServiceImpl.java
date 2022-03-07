@@ -1,6 +1,7 @@
 package com.b5f1.docong.api.service;
 
 import com.b5f1.docong.api.dto.request.JoinReqDto;
+import com.b5f1.docong.api.dto.request.UserInfoReqDto;
 import com.b5f1.docong.api.dto.response.UserInfoResDto;
 import com.b5f1.docong.core.domain.user.User;
 import com.b5f1.docong.core.repository.UserRepository;
@@ -45,6 +46,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserInfoResDto getUserInfo(Long seq) {
 
         User user = userRepository.findById(seq).get();
@@ -53,5 +55,29 @@ public class UserServiceImpl implements UserService {
                 new UserInfoResDto(user.getEmail(), user.getName(), user.getBirth(), user.getGender(), user.getAddress(), user.getJob(), user.getPosition());
 
         return userRes;
+    }
+
+    @Override
+    @Transactional
+    public void setUserInfo(User user, UserInfoReqDto userInfoReqDto) {
+        // password가 null인지 체크
+        if (userInfoReqDto.getPassword() == null) {
+            System.out.println("password가 null입니다.");
+            return;
+        }
+
+        User userEntity = userRepository.findById(user.getSeq()).get();
+
+        // user entity의 메서드 불러와서 set한 후 save
+        // 바꾸기 전 비밀번호 암호화
+        String rawPwd = userInfoReqDto.getPassword();
+        String encPwd = bCryptPasswordEncoder.encode(rawPwd);
+        userInfoReqDto.setPassword(encPwd);
+
+        userEntity.updateUserInfo(userInfoReqDto);
+
+        userRepository.save(userEntity);
+
+        return;
     }
 }

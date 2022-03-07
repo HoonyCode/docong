@@ -33,4 +33,10 @@ public class UserController {
         return ResponseEntity.ok().body(userInfoResDto);
     }
 
+    @PatchMapping("/userInfo")
+    public ResponseEntity<BaseResponseEntity> setUserInfo(@Auth User user, @RequestBody UserInfoReqDto userInfoReqDto) {
+        userService.setUserInfo(user, userInfoReqDto);
+
+        return ResponseEntity.ok().body(new BaseResponseEntity(200, "Success"));
+    }
 }
