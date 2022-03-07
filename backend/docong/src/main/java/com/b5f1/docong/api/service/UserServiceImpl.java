@@ -1,6 +1,7 @@
 package com.b5f1.docong.api.service;
 
 import com.b5f1.docong.api.dto.request.JoinReqDto;
+import com.b5f1.docong.api.dto.response.UserInfoResDto;
 import com.b5f1.docong.core.domain.user.User;
 import com.b5f1.docong.core.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -23,11 +24,10 @@ public class UserServiceImpl implements UserService{
         // email 중복체크
         User user = userRepository.findByEmail(joinReqDto.getEmail());
 
-        if(user!=null) {
+        if (user != null) {
             // 에러 던지기
             System.out.println("이미 존재하는 email입니다.");
-        }
-        else if(user==null) {
+        } else if (user == null) {
             user = User.builder()
                     .email(joinReqDto.getEmail())
                     .password(bCryptPasswordEncoder.encode(joinReqDto.getPassword()))
@@ -42,5 +42,16 @@ public class UserServiceImpl implements UserService{
                     .build();
             userRepository.save(user);
         }
+    }
+
+    @Override
+    public UserInfoResDto getUserInfo(Long seq) {
+
+        User user = userRepository.findById(seq).get();
+
+        UserInfoResDto userRes =
+                new UserInfoResDto(user.getEmail(), user.getName(), user.getBirth(), user.getGender(), user.getAddress(), user.getJob(), user.getPosition());
+
+        return userRes;
     }
 }
