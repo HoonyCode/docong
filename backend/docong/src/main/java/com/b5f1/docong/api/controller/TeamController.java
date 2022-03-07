@@ -2,14 +2,11 @@ package com.b5f1.docong.api.controller;
 
 import com.b5f1.docong.api.dto.request.SaveTeamReqDto;
 import com.b5f1.docong.api.dto.request.UpdateTeamReqDto;
-import com.b5f1.docong.api.service.TeamService;
+import com.b5f1.docong.api.dto.response.BaseResponseEntity;
+import com.b5f1.docong.api.service.TeamServiceImpl;
 import com.b5f1.docong.core.domain.group.Team;
-import com.b5f1.docong.core.domain.group.TeamUser;
-import com.b5f1.docong.core.repository.TeamRepository;
-import com.b5f1.docong.core.repository.TeamUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,19 +16,19 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class TeamController {
     //    private final UserRepository userRepository;
-    private final TeamService teamService;
+    private final TeamServiceImpl teamService;
 
 
     @PostMapping()
-    public ResponseEntity<Team> createTeam(@RequestBody @Validated SaveTeamReqDto teamReqDto) {
+    public ResponseEntity<Long> createTeam(@RequestBody @Validated SaveTeamReqDto teamReqDto) {
         System.out.println("teamReqDto.getName() = " + teamReqDto.getName());
-        Team team = teamService.createTeam(teamReqDto);
-        return ResponseEntity.ok().body(team);
+        Long seq = teamService.createTeam(teamReqDto);
+        return ResponseEntity.ok().body(seq);
     }
 
     @PutMapping("/{team_id}")
     public ResponseEntity<String> updateTeam(@RequestBody @Validated UpdateTeamReqDto teamReqDto) {
-        int result = teamService.updateTeam(teamReqDto);
+        Long result = teamService.updateTeam(teamReqDto);
         if(result==-1){
             return ResponseEntity.badRequest().body("badRequest");
         }else if(result==0){
