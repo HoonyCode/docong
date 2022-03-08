@@ -26,7 +26,7 @@ public class TeamController {
         return ResponseEntity.ok().body(seq);
     }
 
-    @PutMapping("/{team_id}")
+    @PutMapping
     public ResponseEntity<String> updateTeam(@RequestBody @Validated UpdateTeamReqDto teamReqDto) {
         Long result = teamService.updateTeam(teamReqDto);
         if(result==-1){
