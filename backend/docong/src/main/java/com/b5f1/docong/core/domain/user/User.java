@@ -1,5 +1,6 @@
 package com.b5f1.docong.core.domain.user;
 
+import com.b5f1.docong.api.dto.request.UserInfoReqDto;
 import com.b5f1.docong.core.domain.group.TeamUser;
 import com.b5f1.docong.core.domain.todo.UserTodo;
 import lombok.*;
@@ -60,7 +61,8 @@ public class User {
 
     @Builder
     public User(String email, String password, String name, String birth,
-                String gender, String address, String job, String position, boolean activate, String oauth_type) {
+        String gender, String address, String job, String position, boolean activate, String oauth_type)        
+    {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -76,5 +78,16 @@ public class User {
     public void addUserTodo(UserTodo userTodo){
         userTodos.add(userTodo);
         userTodo.changeUser(this);
+
+    // 여기서부터 추가
+
+    public void updateUserInfo(UserInfoReqDto userInfoReqDto) {
+        this.password = userInfoReqDto.getPassword();
+        this.name = userInfoReqDto.getName();
+        this.birth = userInfoReqDto.getBirth();
+        this.gender = userInfoReqDto.getGender();
+        this.address = userInfoReqDto.getAddress();
+        this.job = userInfoReqDto.getJob();
+        this.position = userInfoReqDto.getPosition();
     }
 }

@@ -27,10 +27,16 @@ public class UserController {
         return ResponseEntity.ok().body(new BaseResponseEntity(200, "Success"));
     }
 
-    @GetMapping("/userInfo")
+    @GetMapping("/info")
     public ResponseEntity<UserInfoResDto> getUserInfo(@Auth User user) {
         UserInfoResDto userInfoResDto = userService.getUserInfo(user.getSeq());
         return ResponseEntity.ok().body(userInfoResDto);
     }
 
+    @PatchMapping("/info")
+    public ResponseEntity<BaseResponseEntity> setUserInfo(@Auth User user, @RequestBody UserInfoReqDto userInfoReqDto) {
+        userService.setUserInfo(user, userInfoReqDto);
+
+        return ResponseEntity.ok().body(new BaseResponseEntity(200, "Success"));
+    }
 }

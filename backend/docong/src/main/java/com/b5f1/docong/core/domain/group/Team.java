@@ -21,4 +21,8 @@ public class Team extends BaseEntity {
 
     @Column
     private String name;
+
+    public void changeName(String name){
+        this.name = name;
+    }
 }
