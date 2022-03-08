@@ -53,15 +53,16 @@ public class User {
     @Column
     private String access_token;
 
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<UserTodo> userTodos = new ArrayList<>();
-//
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserTodo> userTodos = new ArrayList<>();
+
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<TeamUser> teamUsers = new ArrayList<>();
 
     @Builder
     public User(String email, String password, String name, String birth,
-                String gender, String address, String job, String position, boolean activate, String oauth_type) {
+        String gender, String address, String job, String position, boolean activate, String oauth_type)        
+    {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -73,6 +74,11 @@ public class User {
         this.activate = activate;
         this.oauth_type = oauth_type;
     }
+
+    public void addUserTodo(UserTodo userTodo){
+        userTodos.add(userTodo);
+        userTodo.changeUser(this);
+
     // 여기서부터 추가
 
     public void updateUserInfo(UserInfoReqDto userInfoReqDto) {

@@ -1,6 +1,7 @@
 package com.b5f1.docong.core.domain.todo;
 
 import com.b5f1.docong.core.domain.BaseEntity;
+import com.b5f1.docong.core.domain.user.User;
 import com.querydsl.core.annotations.QueryEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,13 +18,14 @@ public class UserTodo extends BaseEntity {
     private Long seq;
 
     @Builder
-    public UserTodo(Todo todo) {
+    public UserTodo(User user, Todo todo) {
+        this.user = user;
         this.todo = todo;
     }
 
-    //    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_seq")
-//    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_seq")
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "todo_seq")
@@ -31,5 +33,8 @@ public class UserTodo extends BaseEntity {
 
     public void changeTodo(Todo todo){
         this.todo = todo;
+    }
+    public void changeUser(User user){
+        this.user = user;
     }
 }
