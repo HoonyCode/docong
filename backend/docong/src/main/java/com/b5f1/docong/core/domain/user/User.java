@@ -75,10 +75,10 @@ public class User {
         this.oauth_type = oauth_type;
     }
 
-    public void addUserTodo(UserTodo userTodo){
+    public void addUserTodo(UserTodo userTodo) {
         userTodos.add(userTodo);
         userTodo.changeUser(this);
-
+    }
     // 여기서부터 추가
 
     public void updateUserInfo(UserInfoReqDto userInfoReqDto) {

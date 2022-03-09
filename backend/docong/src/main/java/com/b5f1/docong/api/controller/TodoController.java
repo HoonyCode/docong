@@ -3,18 +3,38 @@ package com.b5f1.docong.api.controller;
 import com.b5f1.docong.api.dto.request.ModifyTodoStatusReqDto;
 import com.b5f1.docong.api.dto.request.SaveTodoReqDto;
 import com.b5f1.docong.api.dto.response.BaseResponseEntity;
+import com.b5f1.docong.api.dto.response.FindTodoResDto;
 import com.b5f1.docong.api.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/todo")
 @RequiredArgsConstructor
 public class TodoController {
     private final TodoService todoService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<FindTodoResDto> findTodo(@PathVariable Long id){
+        FindTodoResDto response = todoService.findTodo(id);
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<FindTodoResDto>> findUserTodos(@PathVariable Long id){
+        List<FindTodoResDto> response = todoService.findUserTodos(id);
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @GetMapping("/group/{id}")
+    public ResponseEntity<List<FindTodoResDto>> findGroupTodos(@PathVariable Long id){
+        List<FindTodoResDto> response = todoService.findGroupTodos(id);
+        return ResponseEntity.status(200).body(response);
+    }
 
     @PostMapping
     public ResponseEntity<BaseResponseEntity> saveTodo(@RequestBody @Valid SaveTodoReqDto reqDto){

@@ -3,6 +3,7 @@ package com.b5f1.docong.api.service;
 import com.b5f1.docong.api.dto.request.ModifyTodoStatusReqDto;
 import com.b5f1.docong.api.dto.request.SaveTeamReqDto;
 import com.b5f1.docong.api.dto.request.SaveTodoReqDto;
+import com.b5f1.docong.api.dto.response.FindTodoResDto;
 import com.b5f1.docong.core.domain.group.Team;
 import com.b5f1.docong.core.domain.todo.Todo;
 import com.b5f1.docong.core.domain.todo.TodoStatus;
@@ -17,6 +18,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -40,6 +43,36 @@ class TodoServiceTest {
     @BeforeEach
     void before() {
         createUser();
+    }
+
+    private User savedUser;
+    private Todo savedTodo;
+
+    @Test
+    public void testFindTodo() throws Exception{
+        //given
+        createTodo();
+
+        //when
+        FindTodoResDto resDto = todoService.findTodo(savedTodo.getSeq());
+
+        //then
+        assertThat(resDto.getTitle()).isEqualTo("제목");
+        assertThat(resDto.getContent()).isEqualTo("내용");
+    }
+
+    @Test
+    public void testFindUserTodos() throws Exception{
+        //given
+        createTodo();
+
+        //when
+        List<FindTodoResDto> resDto = todoService.findUserTodos(savedUser.getSeq());
+
+        //then
+        assertThat(resDto.size()).isEqualTo(1);
+        assertThat(resDto.get(0).getTitle()).isEqualTo("제목");
+        assertThat(resDto.get(0).getContent()).isEqualTo("내용");
     }
 
     @Test
@@ -136,6 +169,20 @@ class TodoServiceTest {
                 .email("wjddma1214@gmail.com")
                 .password("12345")
                 .build();
-        userRepository.save(user);
+        savedUser = userRepository.save(user);
+    }
+
+    private void createTodo(){
+        User user = userRepository.findByEmail("wjddma1214@gmail.com");
+
+        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, user.getSeq(), null, null, null);
+        Todo todo = reqDto.toEntity();
+        UserTodo userTodo = UserTodo.builder()
+                .build();
+
+        todo.addUserTodo(userTodo);
+        user.addUserTodo(userTodo);
+
+        savedTodo = todoRepository.save(todo);
     }
 }

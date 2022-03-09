@@ -2,10 +2,12 @@ package com.b5f1.docong.api.service;
 
 import com.b5f1.docong.api.dto.request.ModifyTodoStatusReqDto;
 import com.b5f1.docong.api.dto.request.SaveTodoReqDto;
+import com.b5f1.docong.api.dto.response.FindTodoResDto;
 import com.b5f1.docong.core.domain.group.Team;
 import com.b5f1.docong.core.domain.todo.Todo;
 import com.b5f1.docong.core.domain.todo.UserTodo;
 import com.b5f1.docong.core.domain.user.User;
+import com.b5f1.docong.core.queryrepository.TodoQueryRepository;
 import com.b5f1.docong.core.repository.TeamRepository;
 import com.b5f1.docong.core.repository.TodoRepository;
 import com.b5f1.docong.core.repository.UserRepository;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,6 +25,7 @@ public class TodoServiceImpl implements TodoService{
     private final TodoRepository todoRepository;
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
+    private final TodoQueryRepository todoQueryRepository;
     @Override
     public Long saveTodo(SaveTodoReqDto reqDto) {
         User user = userRepository.findById(reqDto.getUserId())
@@ -62,5 +66,22 @@ public class TodoServiceImpl implements TodoService{
         Todo todo = todoRepository.findById(id)
                 .orElseThrow(()->new IllegalStateException("없는 Todo 입니다."));
         todo.changeStatus(reqDto.getTodoStatus());
+    }
+
+    @Override
+    public FindTodoResDto findTodo(Long id) {
+        Todo todo = todoRepository.findById(id)
+                .orElseThrow(()->new IllegalStateException());
+        return new FindTodoResDto(todo);
+    }
+
+    @Override
+    public List<FindTodoResDto> findUserTodos(Long userSeq) {
+        return todoQueryRepository.findAllWithUserId(userSeq);
+    }
+
+    @Override
+    public List<FindTodoResDto> findGroupTodos(Long groupSeq) {
+        return todoQueryRepository.findAllWithGroupId(groupSeq);
     }
 }
