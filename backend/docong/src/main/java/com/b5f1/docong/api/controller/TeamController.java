@@ -3,6 +3,7 @@ package com.b5f1.docong.api.controller;
 import com.b5f1.docong.api.dto.request.SaveTeamReqDto;
 import com.b5f1.docong.api.dto.request.UpdateTeamReqDto;
 import com.b5f1.docong.api.dto.response.BaseResponseEntity;
+import com.b5f1.docong.api.dto.response.FindTeamResDto;
 import com.b5f1.docong.api.service.TeamServiceImpl;
 import com.b5f1.docong.core.domain.group.Team;
 import lombok.RequiredArgsConstructor;
@@ -38,10 +39,9 @@ public class TeamController {
     }
 
     @GetMapping("/{team_id}")
-    public ResponseEntity<String> findTeam(@PathVariable Long team_id) {
-        //team_id가 존재하는지 확인
-        //존재한다면 team정보 반환
-        return null;
+    public ResponseEntity<FindTeamResDto> findTeam(@PathVariable Long team_id) {
+        FindTeamResDto teamResDto = teamService.findTeam(team_id);
+        return ResponseEntity.ok().body(teamResDto);
     }
 
     @GetMapping

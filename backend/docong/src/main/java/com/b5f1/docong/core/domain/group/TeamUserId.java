@@ -8,6 +8,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Data
 public class TeamUserId implements Serializable {
-//    private Long userSeq;
+    private Long userSeq;
     private Long teamSeq;
 }

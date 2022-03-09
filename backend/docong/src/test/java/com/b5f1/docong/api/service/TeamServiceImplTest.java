@@ -2,6 +2,7 @@ package com.b5f1.docong.api.service;
 
 import com.b5f1.docong.api.dto.request.SaveTeamReqDto;
 import com.b5f1.docong.api.dto.request.UpdateTeamReqDto;
+import com.b5f1.docong.api.dto.response.FindTeamResDto;
 import com.b5f1.docong.core.domain.group.Team;
 import com.b5f1.docong.core.domain.group.TeamUser;
 import com.b5f1.docong.core.repository.TeamRepository;
@@ -37,6 +38,22 @@ class TeamServiceImplTest {
         Optional<Team> save = teamRepository.findById(seq);
         //then
         assertThat(save.get().getName()).isEqualTo(save.get().getName());
+    }
+
+    @Test
+    void findTest(){
+        //given
+        SaveTeamReqDto teamReqDto = new SaveTeamReqDto(1l, "findTeamTest");
+        //when
+        Long seq = teamService.createTeam(teamReqDto);
+        FindTeamResDto teamResDto = teamService.findTeam(seq);
+        Long teamId = teamResDto.getTeamId();
+        Long userCount = teamResDto.getUserList().stream().count();
+        Long leader = teamResDto.getLeader();
+        //then
+        assertThat(teamId).isEqualTo(seq);
+        assertThat(userCount).isEqualTo(1);
+        assertThat(leader).isEqualTo(1);
     }
 
     @Test
