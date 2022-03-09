@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +50,18 @@ public class TeamServiceImpl implements TeamService{
         find.changeName(teamReqDto.getName());
         find.preUpdate();
         return teamReqDto.getTeamId();
+    }
+    @Override
+    public void deleteTeam(Long team_id){
+        //팀이 존재하는지 확인
+        //팀목록에서 멤버 삭제(TeamUser에서 해당 row삭제)
+        List<TeamUser> teamUserList = teamUserRepository.findAll()
+                                                        .stream()
+                                                        .filter(teamUser -> teamUser.getTeamSeq() == team_id)
+                                                        .collect(Collectors.toList());
+        teamUserRepository.deleteAll(teamUserList);
+        teamRepository.deleteById(team_id);
+        return;
     }
     private boolean isTeam(Long id){
         return teamRepository.existsById(id);

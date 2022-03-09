@@ -52,8 +52,7 @@ public class TeamController {
 
     @DeleteMapping("/{team_id}")
     public ResponseEntity<String> deleteTeam(@PathVariable Long team_id) {
-        //팀이 존재하는지 확인
-        //위 조건을 만족한다면 팀목록에서 멤버 삭제(TeamUser에서 해당 row삭제)
+        teamService.deleteTeam(team_id);
         return null;
     }
 

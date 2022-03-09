@@ -7,4 +7,5 @@ import com.b5f1.docong.core.domain.group.Team;
 public interface TeamService {
     Long updateTeam(UpdateTeamReqDto teamReqDto);
     Long createTeam(SaveTeamReqDto teamReqDto);
+    void deleteTeam(Long team_id);
 }
