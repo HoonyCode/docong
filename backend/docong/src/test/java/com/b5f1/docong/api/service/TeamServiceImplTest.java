@@ -84,15 +84,15 @@ class TeamServiceImplTest {
         System.out.println("find.isPresent() = " + find.isPresent());
         List<TeamUser> teamUsers = teamUserRepository.findAll();
         System.out.println("teamUsers.stream().count() = " + teamUsers.stream().count());
-//        long count = teamUserRepository.findAll()
-//                .stream()
-//                .filter(teamUser -> teamUser.getTeamSeq() == seq)
-//                .count();
-//        System.out.println("count = " + count);
+        long count = teamUserRepository.findAll()
+                .stream()
+                .filter(teamUser -> teamUser.getTeamSeq() == seq)
+                .count();
+        System.out.println("count = " + count);
         //then
 
 
         assertThat(find.isPresent()).isEqualTo(false);
-//        assertThat(count).isEqualTo(0);
+        assertThat(count).isEqualTo(0);
     }
 }
