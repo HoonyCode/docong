@@ -2,6 +2,7 @@ package com.b5f1.docong.api.service;
 
 import com.b5f1.docong.api.dto.request.SaveTeamReqDto;
 import com.b5f1.docong.api.dto.request.UpdateTeamReqDto;
+import com.b5f1.docong.api.dto.response.FindTeamResDto;
 import com.b5f1.docong.core.domain.group.Team;
 import com.b5f1.docong.core.domain.group.TeamUser;
 import com.b5f1.docong.core.repository.TeamRepository;
@@ -11,7 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +35,7 @@ public class TeamServiceImpl implements TeamService{
         //user를 리더 지정해 teamUser테이블에 추가한다.
         TeamUser teamUser = TeamUser.builder()
                                     .teamSeq(save.getSeq())
+                                    .userSeq(teamReqDto.getUserId())
                                     .leader(true)
                                     .build();
         teamUserRepository.save(teamUser);
@@ -48,6 +53,41 @@ public class TeamServiceImpl implements TeamService{
         find.changeName(teamReqDto.getName());
         find.preUpdate();
         return teamReqDto.getTeamId();
+    }
+    @Override
+    public void deleteTeam(Long team_id){
+        //팀이 존재하는지 확인
+        //팀목록에서 멤버 삭제(TeamUser에서 해당 row삭제)
+        List<TeamUser> teamUserList = teamUserRepository.findAll()
+                                                        .stream()
+                                                        .filter(teamUser -> teamUser.getTeamSeq() == team_id)
+                                                        .collect(Collectors.toList());
+        teamUserRepository.deleteAll(teamUserList);
+        teamRepository.deleteById(team_id);
+        return;
+    }
+
+    @Override
+    public FindTeamResDto findTeam(Long team_id){
+        List<Long> userList = new ArrayList<>();
+        //team_id가 존재하는지 확인
+        Team team = teamRepository.findById(team_id)
+                .orElseThrow(() -> new IllegalStateException("없는 Team 입니다."));
+
+        List<TeamUser> teamUsers = teamUserRepository.findAll()
+                .stream()
+                .filter(teamUser -> teamUser.getTeamSeq() == team_id)
+                .collect(Collectors.toList());
+
+        teamUsers.stream()
+                .forEach(teamUser -> userList.add(teamUser.getUserSeq()));
+
+        Optional<TeamUser> leader = teamUsers.stream()
+                .filter(teamUser -> teamUser.isLeader())
+                .findFirst();
+
+        FindTeamResDto findTeamResDto = new FindTeamResDto(team.getSeq(),userList,team.getName(),leader.get().getUserSeq());
+        return findTeamResDto;
     }
     private boolean isTeam(Long id){
         return teamRepository.existsById(id);

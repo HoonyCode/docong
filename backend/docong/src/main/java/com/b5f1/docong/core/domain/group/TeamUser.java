@@ -1,6 +1,7 @@
 package com.b5f1.docong.core.domain.group;
 
 import com.b5f1.docong.core.domain.BaseEntity;
+import com.b5f1.docong.core.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,15 +22,19 @@ public class TeamUser extends BaseEntity implements Serializable {
     @Column(name = "team_seq")
     private Long teamSeq;
 
+    @Id
+    @Column(name = "user_seq")
+    private Long userSeq;
+
     @ManyToOne(targetEntity = Team.class, fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "team_seq")
     private Team team;
 
-//    @Id
-//    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_seq")
-//    private User user;
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "user_seq")
+    private User user;
 
     @Column(name = "leader")
     private boolean leader;
