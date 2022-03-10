@@ -4,10 +4,10 @@ import lombok.*;
 
 import java.io.Serializable;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-public class TeamUserId implements Serializable {
-    private Long userSeq;
-    private Long teamSeq;
-}
+//@NoArgsConstructor
+//@AllArgsConstructor
+//@Data
+//public class TeamUserId implements Serializable {
+//    private Long userSeq;
+//    private Long teamSeq;
+//}

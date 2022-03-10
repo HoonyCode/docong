@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.b5f1.docong.core.domain.group.QTeamUser.teamUser;
 
@@ -22,7 +23,7 @@ public class TeamUserQueryRepositoryImpl implements TeamUserQueryRepository {
         return query
                 .select(teamUser)
                 .from(teamUser)
-                .where(teamUser.teamSeq.eq(teamSeq))
+                .where(teamUser.team.seq.eq(teamSeq))
                 .fetch();
     }
 
@@ -31,7 +32,15 @@ public class TeamUserQueryRepositoryImpl implements TeamUserQueryRepository {
         return query
                 .select(teamUser)
                 .from(teamUser)
-                .where(teamUser.userSeq.eq(userSeq))
+                .where(teamUser.user.seq.eq(userSeq))
                 .fetch();
+    }
+
+    @Override
+    public Optional<TeamUser> findTeamUserWithUserIdAndTeamId(Long userSeq, Long teamSeq) {
+        return Optional.ofNullable(query
+                .selectFrom(teamUser)
+                .where(teamUser.user.seq.eq(userSeq),teamUser.team.seq.eq(teamSeq))
+                .fetchOne());
     }
 }
