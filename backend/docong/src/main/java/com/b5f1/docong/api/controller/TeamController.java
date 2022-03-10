@@ -20,7 +20,7 @@ public class TeamController {
     private final TeamServiceImpl teamService;
 
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Long> createTeam(@RequestBody @Validated SaveTeamReqDto teamReqDto) {
         System.out.println("teamReqDto.getName() = " + teamReqDto.getName());
         Long seq = teamService.createTeam(teamReqDto);
@@ -38,9 +38,9 @@ public class TeamController {
         return ResponseEntity.ok().body("ok");
     }
 
-    @GetMapping("/{team_id}")
-    public ResponseEntity<FindTeamResDto> findTeam(@PathVariable Long team_id) {
-        FindTeamResDto teamResDto = teamService.findTeam(team_id);
+    @GetMapping("/{id}")
+    public ResponseEntity<FindTeamResDto> findTeam(@PathVariable Long id) {
+        FindTeamResDto teamResDto = teamService.findTeam(id);
         return ResponseEntity.ok().body(teamResDto);
     }
 
@@ -50,9 +50,9 @@ public class TeamController {
         return ResponseEntity.ok().body("ok");
     }
 
-    @DeleteMapping("/{team_id}")
-    public ResponseEntity<String> deleteTeam(@PathVariable Long team_id) {
-        teamService.deleteTeam(team_id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteTeam(@PathVariable Long id) {
+        teamService.deleteTeam(id);
         return null;
     }
 

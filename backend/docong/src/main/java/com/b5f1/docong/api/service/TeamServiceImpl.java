@@ -5,6 +5,7 @@ import com.b5f1.docong.api.dto.request.UpdateTeamReqDto;
 import com.b5f1.docong.api.dto.response.FindTeamResDto;
 import com.b5f1.docong.core.domain.group.Team;
 import com.b5f1.docong.core.domain.group.TeamUser;
+import com.b5f1.docong.core.queryrepository.TeamUserQueryRepositoryImpl;
 import com.b5f1.docong.core.repository.TeamRepository;
 import com.b5f1.docong.core.repository.TeamUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class TeamServiceImpl implements TeamService{
     private final TeamRepository teamRepository;
     private final TeamUserRepository teamUserRepository;
+    private final TeamUserQueryRepositoryImpl teamUserQueryRepository;
 
     @Override
     public Long createTeam(SaveTeamReqDto teamReqDto){
@@ -58,10 +60,7 @@ public class TeamServiceImpl implements TeamService{
     public void deleteTeam(Long team_id){
         //팀이 존재하는지 확인
         //팀목록에서 멤버 삭제(TeamUser에서 해당 row삭제)
-        List<TeamUser> teamUserList = teamUserRepository.findAll()
-                                                        .stream()
-                                                        .filter(teamUser -> teamUser.getTeamSeq() == team_id)
-                                                        .collect(Collectors.toList());
+        List<TeamUser> teamUserList = teamUserQueryRepository.findTeamUserWithTeamId(team_id);
         teamUserRepository.deleteAll(teamUserList);
         teamRepository.deleteById(team_id);
         return;
@@ -74,10 +73,7 @@ public class TeamServiceImpl implements TeamService{
         Team team = teamRepository.findById(team_id)
                 .orElseThrow(() -> new IllegalStateException("없는 Team 입니다."));
 
-        List<TeamUser> teamUsers = teamUserRepository.findAll()
-                .stream()
-                .filter(teamUser -> teamUser.getTeamSeq() == team_id)
-                .collect(Collectors.toList());
+        List<TeamUser> teamUsers = teamUserQueryRepository.findTeamUserWithTeamId(team_id);
 
         teamUsers.stream()
                 .forEach(teamUser -> userList.add(teamUser.getUserSeq()));
@@ -89,10 +85,5 @@ public class TeamServiceImpl implements TeamService{
         FindTeamResDto findTeamResDto = new FindTeamResDto(team.getSeq(),userList,team.getName(),leader.get().getUserSeq());
         return findTeamResDto;
     }
-    private boolean isTeam(Long id){
-        return teamRepository.existsById(id);
-    }
-//    private boolean isUser(Long id){
-//        return userRepository.existsById(id);
-//    }
+
 }
