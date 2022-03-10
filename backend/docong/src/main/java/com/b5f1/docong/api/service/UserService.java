@@ -11,4 +11,6 @@ public interface UserService {
     UserInfoResDto getUserInfo(Long seq);
 
     void setUserInfo(User user, UserInfoReqDto userInfoReqDto);
+
+    void deleteUser(User user);
 }

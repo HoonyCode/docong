@@ -44,7 +44,7 @@ public class AuthHandlerMethodArgumentResolver implements HandlerMethodArgumentR
             DecodedJWT decodedJWT = verifier.verify(token.replace(JwtProperties.TOKEN_PREFIX, ""));
             String email = decodedJWT.getSubject();
             System.out.println("Email : " + email);
-            return userRepository.findByEmail(email);
+            return userRepository.findByEmailAndActivateTrue(email);
         } else {
 //            throw new CustomException(ErrorCode.TOKEN_NOT_FOUND);
             return null;

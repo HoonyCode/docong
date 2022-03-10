@@ -29,7 +29,7 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
     private final AuthenticationManager authenticationManager;
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
-        super("/api/user/login");
+        super("/user/login");
         this.authenticationManager = authenticationManager;
     }
 

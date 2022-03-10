@@ -22,13 +22,22 @@ public class UserServiceTest {
 
     @Test
     void testChangeUserInfo() {
-        User user = userRepository.findByEmail("test@naver.com");
+        User user = userRepository.findByEmailAndActivateTrue("test@naver.com");
         UserInfoReqDto userInfoReqDto =
                 new UserInfoReqDto("1234","혀승", "2005-11-23", "M", "Busan", "student", "student");
 
         userService.setUserInfo(user, userInfoReqDto);
-        user = userRepository.findByEmail("test@naver.com");
+        user = userRepository.findByEmailAndActivateTrue("test@naver.com");
 
         assertThat(user.getName()).isEqualTo("혀승");
+    }
+    @Test
+    void testDeleteUser() {
+        User user = userRepository.findByEmailAndActivateTrue("test@naver.com");
+        userService.deleteUser(user);
+        System.out.println("test email -> "+user.getEmail());
+        System.out.println("test activate -> "+user.isActivate());
+
+        assertThat(!user.isActivate());
     }
 }
