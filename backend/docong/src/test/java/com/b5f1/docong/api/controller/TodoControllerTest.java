@@ -29,13 +29,43 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest
-class todoControllerTest {
+class TodoControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private TodoService todoService;
 
+    @Test
+    public void testFindTodo() throws Exception{
+        //given
+        //when
+        mockMvc.perform(get("/todo/{id}", 1L))
+
+        //then
+                .andExpect(status().isOk());
+        verify(todoService,  times(1)).findTodo(1L);
+    }
+
+    @Test
+    public void testFindUserTodos() throws Exception{
+        //when
+        mockMvc.perform(get("/todo/user/{id}", 1L))
+
+        //then
+                .andExpect(status().isOk());
+        verify(todoService,  times(1)).findUserTodos(1L);
+    }
+
+    @Test
+    public void testFindGroupTodos() throws Exception{
+        //when
+        mockMvc.perform(get("/todo/group/{id}", 1L))
+
+                //then
+                .andExpect(status().isOk());
+        verify(todoService,  times(1)).findGroupTodos(1L);
+    }
 
     @Test
     void testSaveTodo() throws Exception{
