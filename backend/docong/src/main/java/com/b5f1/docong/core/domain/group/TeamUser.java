@@ -16,23 +16,17 @@ import java.io.Serializable;
 @Entity
 @Builder
 @Table(name = "TeamUser")
-@IdClass(TeamUserId.class)
 public class TeamUser extends BaseEntity implements Serializable {
     @Id
-    @Column(name = "team_seq")
-    private Long teamSeq;
-
-    @Id
-    @Column(name = "user_seq")
-    private Long userSeq;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long seq;
 
     @ManyToOne(targetEntity = Team.class, fetch = FetchType.LAZY)
-    @MapsId
     @JoinColumn(name = "team_seq")
     private Team team;
 
+
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-    @MapsId
     @JoinColumn(name = "user_seq")
     private User user;
 

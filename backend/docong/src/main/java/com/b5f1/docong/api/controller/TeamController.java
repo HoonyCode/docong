@@ -1,13 +1,15 @@
 package com.b5f1.docong.api.controller;
 
 import com.b5f1.docong.api.dto.request.SaveTeamReqDto;
+import com.b5f1.docong.api.dto.request.SaveAndDeleteTeamUserReqDto;
 import com.b5f1.docong.api.dto.request.UpdateTeamReqDto;
 import com.b5f1.docong.api.dto.response.BaseResponseEntity;
 import com.b5f1.docong.api.dto.response.FindTeamResDto;
+import com.b5f1.docong.api.dto.response.FindTodoResDto;
+import com.b5f1.docong.api.resolver.Auth;
 import com.b5f1.docong.api.service.TeamServiceImpl;
-import com.b5f1.docong.core.domain.group.Team;
+import com.b5f1.docong.core.domain.user.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,27 +22,22 @@ public class TeamController {
     private final TeamServiceImpl teamService;
 
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Long> createTeam(@RequestBody @Validated SaveTeamReqDto teamReqDto) {
         System.out.println("teamReqDto.getName() = " + teamReqDto.getName());
-        Long seq = teamService.createTeam(teamReqDto);
-        return ResponseEntity.ok().body(seq);
+        Long result = teamService.createTeam(teamReqDto);
+        return ResponseEntity.ok().body(result);
     }
 
     @PutMapping
-    public ResponseEntity<String> updateTeam(@RequestBody @Validated UpdateTeamReqDto teamReqDto) {
+    public ResponseEntity<Long> updateTeam(@RequestBody @Validated UpdateTeamReqDto teamReqDto) {
         Long result = teamService.updateTeam(teamReqDto);
-        if(result==-1){
-            return ResponseEntity.badRequest().body("badRequest");
-        }else if(result==0){
-            return ResponseEntity.internalServerError().body("internalServerError");
-        }
-        return ResponseEntity.ok().body("ok");
+        return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/{team_id}")
-    public ResponseEntity<FindTeamResDto> findTeam(@PathVariable Long team_id) {
-        FindTeamResDto teamResDto = teamService.findTeam(team_id);
+    @GetMapping("/{id}")
+    public ResponseEntity<FindTeamResDto> findTeam(@PathVariable Long id) {
+        FindTeamResDto teamResDto = teamService.findTeam(id);
         return ResponseEntity.ok().body(teamResDto);
     }
 
@@ -50,29 +47,24 @@ public class TeamController {
         return ResponseEntity.ok().body("ok");
     }
 
-    @DeleteMapping("/{team_id}")
-    public ResponseEntity<String> deleteTeam(@PathVariable Long team_id) {
-        teamService.deleteTeam(team_id);
-        return null;
+    @DeleteMapping("/{id}")
+    public ResponseEntity<BaseResponseEntity> deleteTeam(@PathVariable Long id) {
+        teamService.deleteTeam(id);
+        return ResponseEntity.ok().body(new BaseResponseEntity(200,"Success"));
     }
 
-    @PostMapping("/member")
-    public ResponseEntity<String> addTeamMember() {
-        //request body에서 team_id와 member_id를 받는다.
-        //team_id가 있는지 확인
-        //member_id가 회원인지 확인
-        //회원이면 TeamUser에 멤버추가
-        return null;
+    @PostMapping("/member/{team_id}/{user_id}")
+    public ResponseEntity<BaseResponseEntity> addTeamMember(@PathVariable Long team_id, @PathVariable Long user_id, @Auth User user) {
+        SaveAndDeleteTeamUserReqDto teamUserReqDto = new SaveAndDeleteTeamUserReqDto(team_id, user_id, user.getSeq());
+        teamService.addTeamMember(teamUserReqDto);
+        return ResponseEntity.ok().body(new BaseResponseEntity(200,"Success"));
     }
 
-    @DeleteMapping("/{team_id}/{member_id}")
-    public ResponseEntity<String> deleteTeamMember(@PathVariable Long team_id, @PathVariable Long member_id) {
-        //삭제 요청한 사람과 member_id가 같거나 삭제 요청한 사람이 팀장이면 member_id 삭제
-        //팀이 존재하는지 확인
-        //팀에 멤버가 존재하는지 확인
-        //user_id가 팀장인지 확인
-        //위 조건을 만족한다면 팀목록에서 멤버 삭제(TeamUser에서 해당 row삭제)
-        return null;
+    @DeleteMapping("member/{team_id}/{user_id}")
+    public ResponseEntity<BaseResponseEntity> deleteTeamMember(@PathVariable Long team_id, @PathVariable Long user_id, @Auth User user) {
+        SaveAndDeleteTeamUserReqDto teamUserReqDto = new SaveAndDeleteTeamUserReqDto(team_id, user_id, user.getSeq());
+        teamService.deleteTeamMember(teamUserReqDto);
+        return ResponseEntity.ok().body(new BaseResponseEntity(200,"Success"));
     }
 
 

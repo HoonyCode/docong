@@ -7,10 +7,12 @@ import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
 @Data
-public class SaveTeamReqDto {
+public class SaveAndDeleteTeamUserReqDto {
+    @NotNull
+    private Long teamId;
     @NotNull
     private Long userId;
     @NotNull
-    private String name;
+    private Long reqUserId;
 
 }
