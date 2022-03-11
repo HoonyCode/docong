@@ -20,13 +20,13 @@ public class PomodoroController {
 
 
     @PostMapping
-    public ResponseEntity<BaseResponseEntity> savePomo(@RequestBody @Valid SavePomodoroReqDto reqDto) {
+    public ResponseEntity<BaseResponseEntity> savePomodoro(@RequestBody @Valid SavePomodoroReqDto reqDto) {
         pomodoroService.savePomodoro(reqDto);
         return ResponseEntity.ok().body(new BaseResponseEntity(200, "Success"));
     }
 
     @GetMapping("/{user_seq}")
-    public ResponseEntity<List<Pomodoro>> findAllPomo(@RequestBody @PathVariable Long user_seq) {
+    public ResponseEntity<List<Pomodoro>> findAllPomodoro(@RequestBody @PathVariable Long user_seq) {
         List<Pomodoro> result = pomodoroService.findAll(user_seq);
         return ResponseEntity.ok().body(result);
     }
