@@ -26,7 +26,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmailAndActivateTrue(joinReqDto.getEmail());
 
         // gmail 가입 시도 시 oAuth를 이용해달라고 하기
-        if(joinReqDto.getEmail().contains("gmail")) {
+        String emailPart = joinReqDto.getEmail().split("@")[1];
+        if(emailPart.contains("gmail")) {
             // 에러 던지기
             System.out.println("gmail은 Google 로그인을 이용해주세요.");
         }
