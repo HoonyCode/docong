@@ -42,10 +42,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository))
                 .httpBasic().disable()
                 .formLogin()
-                .loginPage("/api/login") // 로그인을 하고자하는 위치
+                //.loginPage("/api/login") // 로그인을 하고자하는 위치
                 .usernameParameter("email")
                 .passwordParameter("password")
-                .loginProcessingUrl("/api/user/login")
+                .loginProcessingUrl("/user/login")
                 .and()
                 .authorizeRequests()
                 .anyRequest().permitAll();

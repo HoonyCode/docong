@@ -39,4 +39,11 @@ public class UserController {
 
         return ResponseEntity.ok().body(new BaseResponseEntity(200, "Success"));
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<BaseResponseEntity> delete(@Auth User user) {
+        userService.deleteUser(user);
+
+        return ResponseEntity.ok().body(new BaseResponseEntity(200, "Success"));
+    }
 }

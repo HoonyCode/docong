@@ -30,7 +30,7 @@ public class GoogleUserController {
 
         OAuthUserInfo googleUser = new GoogleUser((Map<String, Object>) data.get("profileObj"));
 
-        User userEntity = userRepository.findByEmail(googleUser.getEmail());
+        User userEntity = userRepository.findByEmailAndActivateTrue(googleUser.getEmail());
 
         if (userEntity == null) {
             User userRequest = User.builder()

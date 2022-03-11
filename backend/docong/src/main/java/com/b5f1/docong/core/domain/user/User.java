@@ -6,7 +6,11 @@ import com.b5f1.docong.core.domain.todo.UserTodo;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -61,8 +65,7 @@ public class User {
 
     @Builder
     public User(String email, String password, String name, String birth,
-        String gender, String address, String job, String position, boolean activate, String oauth_type)        
-    {
+                String gender, String address, String job, String position, boolean activate, String oauth_type) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -89,5 +92,10 @@ public class User {
         this.address = userInfoReqDto.getAddress();
         this.job = userInfoReqDto.getJob();
         this.position = userInfoReqDto.getPosition();
+    }
+
+    public void deleteUser() {
+        this.activate = false;
+        this.email = "deleteUser";
     }
 }

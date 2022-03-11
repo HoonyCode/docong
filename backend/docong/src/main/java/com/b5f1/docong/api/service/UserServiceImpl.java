@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -20,10 +21,9 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    @Transactional
     public void join(JoinReqDto joinReqDto) {
         // email 중복체크
-        User user = userRepository.findByEmail(joinReqDto.getEmail());
+        User user = userRepository.findByEmailAndActivateTrue(joinReqDto.getEmail());
 
         if (user != null) {
             // 에러 던지기
@@ -46,7 +46,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public UserInfoResDto getUserInfo(Long seq) {
 
         User user = userRepository.findById(seq).get();
@@ -58,7 +57,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void setUserInfo(User user, UserInfoReqDto userInfoReqDto) {
         // password가 null인지 체크
         if (userInfoReqDto.getPassword() == null) {
@@ -77,5 +75,13 @@ public class UserServiceImpl implements UserService {
         userEntity.updateUserInfo(userInfoReqDto);
 
         return;
+    }
+
+    @Override
+    public void deleteUser(User user) {
+        // user의 activate를 false로 변경
+        // user의 email 변경
+        user.deleteUser();
+
     }
 }
