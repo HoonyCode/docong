@@ -1,6 +1,7 @@
 package com.b5f1.docong.api.dto.request;
 
 import com.b5f1.docong.core.domain.pomodoro.Emotion;
+import com.b5f1.docong.core.domain.pomodoro.Pomodoro;
 import com.b5f1.docong.core.domain.pomodoro.TimeStatus;
 import com.b5f1.docong.core.domain.pomodoro.noiseStatus;
 import lombok.AllArgsConstructor;
@@ -27,4 +28,5 @@ public class SavePomodoroReqDto {
     private LocalDateTime endTime;
     private Emotion emotion;
     private noiseStatus noise;
+
 }
