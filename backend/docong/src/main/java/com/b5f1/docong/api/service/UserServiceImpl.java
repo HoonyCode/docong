@@ -25,10 +25,16 @@ public class UserServiceImpl implements UserService {
         // email 중복체크
         User user = userRepository.findByEmailAndActivateTrue(joinReqDto.getEmail());
 
-        if (user != null) {
+        // gmail 가입 시도 시 oAuth를 이용해달라고 하기
+        if(joinReqDto.getEmail().contains("gmail")) {
+            // 에러 던지기
+            System.out.println("gmail은 Google 로그인을 이용해주세요.");
+        }
+        else if (user != null) {
             // 에러 던지기
             System.out.println("이미 존재하는 email입니다.");
-        } else if (user == null) {
+        }
+        else if (user == null) {
             user = User.builder()
                     .email(joinReqDto.getEmail())
                     .password(bCryptPasswordEncoder.encode(joinReqDto.getPassword()))
