@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: 500px;
+            height: fit-content;
+            display: flex;
+        }
+
+        #add {
+            width: fit-content;
+            height: 200px;
+            padding-right: 25px;
+            margin-right: 25px;
+            border-right: 2px solid black;
+        }
+
+        #search {
+            width: fit-content;
+            height: 200px;
+        }
+
+        .search-label {
+            font-weight: bold;
+        }
+
+        .details {
+            font-weight: normal;
+            font-size: 1.5em;
+        }
+
+        .updated-details {
+            font-weight: normal;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div id="add">
+            <form id="add_form">
+                <input class="add_rec_input" type="text" name="url" id="url" placeholder="URL">
+                <br>
+                <br>
+                <button type="submit">Add</button>
+            </form>
+        </div>
+        <div id ="list">
+        </div>
+    </div>
+    <script src="popup-script.js"></script>
+</body>
