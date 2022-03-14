@@ -2,6 +2,7 @@ import React, { FormEvent, useState, ChangeEvent } from 'react'
 import { LoginData } from '../../api/user'
 import {
   Box,
+  Button,
   FormControl,
   IconButton,
   InputAdornment,
@@ -10,6 +11,7 @@ import {
   TextField,
 } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
+import { useNavigate } from 'react-router-dom'
 
 interface UserLoginFormProps {
   onLoginSubmit: (loginInput: LoginData) => void
@@ -22,6 +24,8 @@ function UserLoginForm({ onLoginSubmit }: UserLoginFormProps) {
   })
 
   const [showPassword, setShowPassword] = useState(false)
+
+  const navigate = useNavigate()
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -38,6 +42,11 @@ function UserLoginForm({ onLoginSubmit }: UserLoginFormProps) {
 
   const onClickShowPassword = (e: React.MouseEvent<HTMLButtonElement>) => {
     setShowPassword(!showPassword)
+  }
+
+  const onClickToSignup = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    navigate('/join')
   }
 
   return (
@@ -79,7 +88,12 @@ function UserLoginForm({ onLoginSubmit }: UserLoginFormProps) {
           label="Password"
         />
       </FormControl>
-      <button type="submit">로그인</button>
+      <Button variant="outlined" type="submit">
+        Log In
+      </Button>
+      <Button variant="outlined" onClick={onClickToSignup}>
+        Register
+      </Button>
     </Box>
   )
 }

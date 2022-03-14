@@ -1,10 +1,6 @@
 import { createAsyncAction } from 'typesafe-actions' // createAsyncAction 유틸함수 사용
 import { AxiosError } from 'axios'
-import { LoginData, SignupData, SignupResponse } from '../../api/user'
-import {
-  GoogleLoginResponse,
-  GoogleLoginResponseOffline,
-} from 'react-google-login'
+import { SignupResponse } from '../../api/user'
 
 export const USER_SIGNUP = 'user/USER_SIGNUP'
 export const USER_SIGNUP_SUCCESS = 'user/USER_SIGNUP_SUCCESS'
@@ -22,16 +18,16 @@ export const userSignupAsync = createAsyncAction(
   USER_SIGNUP,
   USER_SIGNUP_SUCCESS,
   USER_SIGNUP_ERROR
-)<SignupData, SignupResponse, AxiosError>()
+)<any, SignupResponse, AxiosError>()
 
 export const userLoginAsync = createAsyncAction(
   USER_LOGIN,
   USER_LOGIN_SUCCESS,
   USER_LOGIN_ERROR
-)<LoginData, any, AxiosError>()
+)<any, any, AxiosError>()
 
 export const userGoogleLoginAsync = createAsyncAction(
   USER_GOOGLE_LOGIN,
   USER_GOOGLE_LOGIN_SUCCESS,
   USER_GOOGLE_LOGIN_ERROR
-)<GoogleLoginResponse | GoogleLoginResponseOffline, string, AxiosError>()
+)<any, string, AxiosError>()

@@ -7,20 +7,27 @@ import {
   GoogleLoginResponseOffline,
 } from 'react-google-login'
 import { userGoogleLoginAsync, userLoginAsync } from '../../modules/user'
+import { useNavigate } from 'react-router-dom'
 
 function UserLoginContainer() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   // 로그인 요청
   const onLoginSubmit = (loginInput: LoginData) => {
-    dispatch(userLoginAsync.request(loginInput))
+    dispatch(userLoginAsync.request({ loginInput: loginInput, navigate }))
   }
 
   // 구글 로그인 요청
   const onSuccessGoogleLogin = (
     googleLoginResponse: GoogleLoginResponse | GoogleLoginResponseOffline
   ) => {
-    dispatch(userGoogleLoginAsync.request(googleLoginResponse))
+    dispatch(
+      userGoogleLoginAsync.request({
+        googleLoginResponse: googleLoginResponse,
+        navigate,
+      })
+    )
   }
 
   const onFailureGoogleLogin = (googleLoginError: any) => {
