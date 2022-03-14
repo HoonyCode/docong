@@ -36,16 +36,16 @@ public class TeamController {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<FindTeamResDto> findTeam(@PathVariable Long id) {
-        FindTeamResDto teamResDto = teamService.findTeam(id);
+    @GetMapping("/{team_id}")
+    public ResponseEntity<FindTeamResDto> findTeam(@PathVariable Long team_id) {
+        FindTeamResDto teamResDto = teamService.findTeam(team_id);
         return ResponseEntity.ok().body(teamResDto);
     }
 
-    @GetMapping("/{user_id}")
-    public ResponseEntity<FindAllTeamResDto> findAllTeam(@PathVariable Long user_id) {
+    @GetMapping("/all")
+    public ResponseEntity<FindAllTeamResDto> findAllTeam(@Auth User user) {
         //해당 유저 모든 team list반환
-        FindAllTeamResDto teamResDto = teamService.findAllTeam(user_id);
+        FindAllTeamResDto teamResDto = teamService.findAllTeam(user.getSeq());
         return ResponseEntity.ok().body(teamResDto);
     }
 
