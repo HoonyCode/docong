@@ -11,7 +11,6 @@
             height: fit-content;
             display: flex;
         }
-
         #add {
             width: fit-content;
             height: 200px;
@@ -19,26 +18,24 @@
             margin-right: 25px;
             border-right: 2px solid black;
         }
-
-        #search {
-            width: fit-content;
-            height: 200px;
+        #deleteAll{
+            float: right;
         }
-
-        .search-label {
-            font-weight: bold;
+        table{
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid black;
+            margin-bottom: 10px;
         }
-
-        .details {
-            font-weight: normal;
-            font-size: 1.5em;
+        td{
+            padding: 3px;
+            border: 1px solid black;
         }
-
-        .updated-details {
-            font-weight: normal;
-            font-size: 1.2em;
+        td:first-child{
+            width: 95%;
         }
     </style>
+
 </head>
 
 <body>
@@ -49,10 +46,17 @@
                 <br>
                 <br>
                 <button type="submit">Add</button>
+                <button id="deleteAll">초기화</button>
             </form>
         </div>
-        <div id ="list">
+        <div style="width:100%">
+            <table style="border:1px solid black;">
+                <tbody id ="list" >
+                </tbody>
+            </table>
+            
         </div>
     </div>
-    <script src="popup-script.js"></script>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="popup.js"></script>
 </body>
