@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
-import { LoginData } from '../../api/user'
-import UserLoginForm from '../../components/user/UserLoginForm'
+import { LoginData } from '../../api/auth'
+import UserLoginForm from '../../components/auth/UserLoginForm'
 import {
   GoogleLogin,
   GoogleLoginResponse,

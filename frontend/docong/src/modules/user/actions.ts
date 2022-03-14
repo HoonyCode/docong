@@ -1,6 +1,6 @@
 import { createAsyncAction } from 'typesafe-actions' // createAsyncAction 유틸함수 사용
 import { AxiosError } from 'axios'
-import { SignupResponse } from '../../api/user'
+import { SignupResponse } from '../../api/auth'
 
 export const USER_SIGNUP = 'user/USER_SIGNUP'
 export const USER_SIGNUP_SUCCESS = 'user/USER_SIGNUP_SUCCESS'

@@ -1,5 +1,5 @@
 import React, { FormEvent, useState, ChangeEvent } from 'react'
-import { LoginData } from '../../api/user'
+import { LoginData } from '../../api/auth'
 import {
   Box,
   Button,

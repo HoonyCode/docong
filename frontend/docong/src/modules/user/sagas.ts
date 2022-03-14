@@ -12,7 +12,7 @@ import {
   userGoogleLogin,
   SignupResponse,
   LoginHeader,
-} from '../../api/user'
+} from '../../api/auth'
 import { call, put, takeEvery } from 'redux-saga/effects'
 
 function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
@@ -52,7 +52,10 @@ function* userGoogleLoginSaga(
   action: ReturnType<typeof userGoogleLoginAsync.request>
 ) {
   try {
-    const jwtToken: string = yield call(userGoogleLogin, action.payload)
+    const jwtToken: string = yield call(
+      userGoogleLogin,
+      action.payload.googleLoginResponse
+    )
     alert('구글 로그인이 완료되었습니다.')
     localStorage.setItem('jwtToken', jwtToken)
     yield action.payload.navigate('/')
