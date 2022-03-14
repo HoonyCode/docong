@@ -8,6 +8,7 @@ import reportWebVitals from './reportWebVitals'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
+import { BrowserRouter } from 'react-router-dom'
 import rootReducer, { rootSaga } from './modules'
 
 const sagaMiddleware = createSagaMiddleware()
@@ -32,9 +33,11 @@ Sentry.init({
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <BrowserRouter>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 )

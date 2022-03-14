@@ -1,5 +1,18 @@
-import { userSignupAsync, USER_SIGNUP } from './actions'
-import { userSignup, SignupResponse } from '../../api/user'
+import {
+  USER_SIGNUP,
+  USER_LOGIN,
+  userSignupAsync,
+  userLoginAsync,
+  userGoogleLoginAsync,
+  USER_GOOGLE_LOGIN,
+} from './actions'
+import {
+  userSignup,
+  userLogin,
+  userGoogleLogin,
+  SignupResponse,
+  LoginHeader,
+} from '../../api/user'
 import { call, put, takeEvery } from 'redux-saga/effects'
 
 function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
@@ -14,11 +27,36 @@ function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
     // put : 특정 액션을 dispatch
     // yield put(userSignupAsync.success(signupResponse))
   } catch (e: any) {
-    alert('Err')
+    alert('회원가입 실패')
     // yield put(userSignupAsync.failure(e))
+  }
+}
+
+function* userLoginSaga(action: ReturnType<typeof userLoginAsync.request>) {
+  try {
+    const loginHeader: LoginHeader = yield call(userLogin, action.payload)
+    alert('로그인이 완료되었습니다.')
+    console.log(loginHeader)
+    // localStorage.setItem('JWT', loginHeader.accessToken)
+  } catch (e: any) {
+    alert('로그인 실패')
+  }
+}
+
+function* userGoogleLoginSaga(
+  action: ReturnType<typeof userGoogleLoginAsync.request>
+) {
+  try {
+    const jwtToken: string = yield call(userGoogleLogin, action.payload)
+    alert('구글 로그인이 완료되었습니다.')
+    localStorage.setItem('jwtToken', jwtToken)
+  } catch (e: any) {
+    alert('구글 로그인 실패')
   }
 }
 
 export function* userSaga() {
   yield takeEvery(USER_SIGNUP, userSignupSaga)
+  yield takeEvery(USER_LOGIN, userLoginSaga)
+  yield takeEvery(USER_GOOGLE_LOGIN, userGoogleLoginSaga)
 }

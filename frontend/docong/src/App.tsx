@@ -1,8 +1,17 @@
 import React from 'react'
-import UserSignupContainer from './containers/user/UserSignupContainer'
+import { Route, Routes } from 'react-router-dom'
+import UserLoginPage from './pages/user/UserLoginPage'
+import UserSignupPage from './pages/user/UserSignupPage'
 
 function App() {
-  return <UserSignupContainer />
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<UserLoginPage />} />
+        <Route path="/join" element={<UserSignupPage />} />
+      </Routes>
+    </>
+  )
 }
 
 export default App
