@@ -3,6 +3,7 @@ package com.b5f1.docong.api.service;
 import com.b5f1.docong.api.dto.request.SaveTeamReqDto;
 import com.b5f1.docong.api.dto.request.SaveAndDeleteTeamUserReqDto;
 import com.b5f1.docong.api.dto.request.UpdateTeamReqDto;
+import com.b5f1.docong.api.dto.response.FindAllTeamResDto;
 import com.b5f1.docong.api.dto.response.FindTeamResDto;
 import com.b5f1.docong.core.domain.group.Team;
 import com.b5f1.docong.core.domain.group.TeamUser;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,7 +94,17 @@ public class TeamServiceImpl implements TeamService {
         FindTeamResDto findTeamResDto = new FindTeamResDto(team.getSeq(), userList, team.getName(), leader.get().getUser());
         return findTeamResDto;
     }
-
+    @Override
+    public FindAllTeamResDto findAllTeam(Long user_id){
+        FindAllTeamResDto teamResDto = new FindAllTeamResDto(new HashMap<>());
+        List<TeamUser> teamUsers = teamUserQueryRepository.findTeamUserWithUserId(user_id);
+        teamUsers.stream()
+                .forEach(teamUser -> {
+                    Team team = teamUser.getTeam();
+                    teamResDto.getTeams().put(team.getSeq(),team.getName());
+                });
+        return teamResDto;
+    }
     @Override
     public void addTeamMember(SaveAndDeleteTeamUserReqDto teamUserReqDto) {
         //팀이 존재하는지 확인

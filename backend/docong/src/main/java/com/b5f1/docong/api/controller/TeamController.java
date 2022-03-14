@@ -4,6 +4,7 @@ import com.b5f1.docong.api.dto.request.SaveTeamReqDto;
 import com.b5f1.docong.api.dto.request.SaveAndDeleteTeamUserReqDto;
 import com.b5f1.docong.api.dto.request.UpdateTeamReqDto;
 import com.b5f1.docong.api.dto.response.BaseResponseEntity;
+import com.b5f1.docong.api.dto.response.FindAllTeamResDto;
 import com.b5f1.docong.api.dto.response.FindTeamResDto;
 import com.b5f1.docong.api.dto.response.FindTodoResDto;
 import com.b5f1.docong.api.resolver.Auth;
@@ -35,16 +36,17 @@ public class TeamController {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<FindTeamResDto> findTeam(@PathVariable Long id) {
-        FindTeamResDto teamResDto = teamService.findTeam(id);
+    @GetMapping("/{team_id}")
+    public ResponseEntity<FindTeamResDto> findTeam(@PathVariable Long team_id) {
+        FindTeamResDto teamResDto = teamService.findTeam(team_id);
         return ResponseEntity.ok().body(teamResDto);
     }
 
-    @GetMapping
-    public ResponseEntity<String> findAllTeam() {
-        //모든 team list반환
-        return ResponseEntity.ok().body("ok");
+    @GetMapping("/all")
+    public ResponseEntity<FindAllTeamResDto> findAllTeam(@Auth User user) {
+        //해당 유저 모든 team list반환
+        FindAllTeamResDto teamResDto = teamService.findAllTeam(user.getSeq());
+        return ResponseEntity.ok().body(teamResDto);
     }
 
     @DeleteMapping("/{id}")
