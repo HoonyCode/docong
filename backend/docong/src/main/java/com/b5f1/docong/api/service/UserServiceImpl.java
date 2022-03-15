@@ -27,15 +27,13 @@ public class UserServiceImpl implements UserService {
 
         // gmail 가입 시도 시 oAuth를 이용해달라고 하기
         String emailPart = joinReqDto.getEmail().trim().split("@")[1];
-        if(emailPart.equals("gmail.com")) {
+        if (emailPart.equals("gmail.com")) {
             // 에러 던지기
             System.out.println("gmail은 Google 로그인을 이용해주세요.");
-        }
-        else if (user != null) {
+        } else if (user != null) {
             // 에러 던지기
             System.out.println("이미 존재하는 email입니다.");
-        }
-        else if (user == null) {
+        } else if (user == null) {
             user = User.builder()
                     .email(joinReqDto.getEmail())
                     .password(bCryptPasswordEncoder.encode(joinReqDto.getPassword()))
@@ -90,5 +88,19 @@ public class UserServiceImpl implements UserService {
         // user의 email 변경
         user.deleteUser();
 
+    }
+
+    @Override
+    public boolean checkEmail(String email) {
+
+        User existUser = userRepository.findByEmailAndActivateTrue(email);
+
+        if (existUser == null) {
+            return true;
+        } else if (existUser != null) {
+            return false;
+        }
+
+        return false;
     }
 }

@@ -13,4 +13,6 @@ public interface UserService {
     void setUserInfo(User user, UserInfoReqDto userInfoReqDto);
 
     void deleteUser(User user);
+
+    boolean checkEmail(String email);
 }

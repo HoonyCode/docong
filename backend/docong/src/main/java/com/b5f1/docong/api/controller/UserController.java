@@ -1,8 +1,10 @@
 package com.b5f1.docong.api.controller;
 
+import com.b5f1.docong.api.dto.request.EmailCheckReqDto;
 import com.b5f1.docong.api.dto.request.JoinReqDto;
 import com.b5f1.docong.api.dto.request.UserInfoReqDto;
 import com.b5f1.docong.api.dto.response.BaseResponseEntity;
+import com.b5f1.docong.api.dto.response.EmailCheckResDto;
 import com.b5f1.docong.api.dto.response.UserInfoResDto;
 import com.b5f1.docong.api.resolver.Auth;
 import com.b5f1.docong.api.service.UserService;
@@ -45,5 +47,13 @@ public class UserController {
         userService.deleteUser(user);
 
         return ResponseEntity.ok().body(new BaseResponseEntity(200, "Success"));
+    }
+
+    @PostMapping("/duplicate")
+    public ResponseEntity<EmailCheckResDto> checkEmail(@RequestBody EmailCheckReqDto emailCheckReqDto) {
+        boolean possible = userService.checkEmail(emailCheckReqDto.getEmail());
+
+        // true면 사용가능한 이메일, false면 이미 존재하는 이메일
+        return ResponseEntity.ok().body(new EmailCheckResDto(possible));
     }
 }
