@@ -5,6 +5,10 @@ import {
   userLoginAsync,
   userGoogleLoginAsync,
   USER_GOOGLE_LOGIN,
+  START_USER_TIMER,
+  changeUserTimerStatus,
+  stopUserTimer,
+  changeUserTimerTime,
 } from './actions'
 import {
   userSignup,
@@ -13,7 +17,21 @@ import {
   SignupResponse,
   LoginHeader,
 } from '../../api/auth'
-import { call, put, takeEvery } from 'redux-saga/effects'
+import {
+  all,
+  call,
+  cancel,
+  delay,
+  flush,
+  fork,
+  put,
+  race,
+  select,
+  take,
+  takeEvery,
+} from 'redux-saga/effects'
+import { buffers, EventChannel, Task } from 'redux-saga'
+import { closeChannel, subscribe } from './channel'
 
 function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
   try {
@@ -64,8 +82,49 @@ function* userGoogleLoginSaga(
   }
 }
 
+function* startUserTimerSaga() {
+  const userTimerSelectedType: { name: string; time: number } = yield select(
+    (state) => state.user.userTimer.selectedType
+  )
+  try {
+    const worker: Task[] = yield fork(connectChannel)
+    yield take(stopUserTimer)
+    yield cancel(worker)
+  } catch (e) {
+    console.error(e)
+  } finally {
+    yield all([
+      put(changeUserTimerStatus('stop')),
+      put(changeUserTimerTime(userTimerSelectedType.time)),
+    ])
+  }
+}
+
+function* connectChannel() {
+  let channel: EventChannel<any>
+  try {
+    const timer = 1000
+    const buffer = buffers.sliding(1)
+
+    const param = { buffer, timer }
+    channel = yield call(subscribe, param)
+
+    while (true) {
+      const { message } = yield flush(channel)
+      const time: number = yield select((state) => state.user.userTimer.time)
+      yield put(changeUserTimerTime(time - 1))
+      const { timeout } = yield race({ timeout: delay(timer) })
+    }
+  } catch (e) {
+    console.error(e)
+  } finally {
+    closeChannel(channel!)
+  }
+}
+
 export function* userSaga() {
   yield takeEvery(USER_SIGNUP, userSignupSaga)
   yield takeEvery(USER_LOGIN, userLoginSaga)
   yield takeEvery(USER_GOOGLE_LOGIN, userGoogleLoginSaga)
+  yield takeEvery(START_USER_TIMER, startUserTimerSaga)
 }

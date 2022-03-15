@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { SignupData } from '../../api/auth'
 import UserSignupForm from '../../components/auth/UserSignupForm'
@@ -8,10 +8,19 @@ import {
   GoogleLoginResponseOffline,
 } from 'react-google-login'
 import { userGoogleLoginAsync, userSignupAsync } from '../../modules/user'
+import { useEffect } from 'react'
+import { RootState } from '../../modules'
 
 function UserSignupContainer() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { status } = useSelector((state: RootState) => state.user.userTimer)
+
+  useEffect(() => {
+    if (status === 'play') {
+      navigate('/')
+    }
+  })
 
   // 회원가입 요청
   const onSignupSubmit = (signupInput: SignupData) => {

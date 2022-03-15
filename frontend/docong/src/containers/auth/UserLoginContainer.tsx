@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { LoginData } from '../../api/auth'
 import UserLoginForm from '../../components/auth/UserLoginForm'
 import {
@@ -8,10 +8,19 @@ import {
 } from 'react-google-login'
 import { userGoogleLoginAsync, userLoginAsync } from '../../modules/user'
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { RootState } from '../../modules'
 
 function UserLoginContainer() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { status } = useSelector((state: RootState) => state.user.userTimer)
+
+  useEffect(() => {
+    if (status === 'play') {
+      navigate('/')
+    }
+  })
 
   // 로그인 요청
   const onLoginSubmit = (loginInput: LoginData) => {
