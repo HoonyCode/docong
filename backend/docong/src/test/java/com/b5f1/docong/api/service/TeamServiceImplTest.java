@@ -148,6 +148,6 @@ class TeamServiceImplTest {
         user.setJob("student");
         user.setPosition("student");
         userService.join(user);
-        return userRepository.findByEmail(email+"@naver.com");
+        return userRepository.findByEmailAndActivateTrue(email+"@naver.com");
     }
 }
