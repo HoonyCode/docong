@@ -91,7 +91,7 @@ class PomodoroServiceImplTest {
     }
 
     private void createTodo() {
-        User user = userRepository.findByEmail("wjddma1214@gmail.com");
+        User user = userRepository.findByEmailAndActivateTrue("wjddma1214@naver.com");
 
         SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, user.getSeq(), null, null, null);
         Todo todo = reqDto.toEntity();
