@@ -2,12 +2,14 @@ package com.b5f1.docong.api.controller;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.b5f1.docong.api.dto.response.GoogleLoginResDto;
 import com.b5f1.docong.config.jwt.JwtProperties;
 import com.b5f1.docong.config.oauth.provider.GoogleUser;
 import com.b5f1.docong.config.oauth.provider.OAuthUserInfo;
 import com.b5f1.docong.core.domain.user.User;
 import com.b5f1.docong.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,13 +26,15 @@ public class GoogleUserController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/oauth/jwt/google")
-    public String GoogleJwtCreate(@RequestBody Map<String, Object> data) {
+    public ResponseEntity<GoogleLoginResDto> GoogleJwtCreate(@RequestBody Map<String, Object> data) {
         System.out.println("GoogleJwtCreate 실행됨");
         System.out.println(data.get("profileObj"));
 
         OAuthUserInfo googleUser = new GoogleUser((Map<String, Object>) data.get("profileObj"));
 
         User userEntity = userRepository.findByEmailAndActivateTrue(googleUser.getEmail());
+
+        boolean newUser = false;
 
         if (userEntity == null) {
             User userRequest = User.builder()
@@ -47,6 +51,7 @@ public class GoogleUserController {
                     .build();
 
             userEntity = userRepository.save(userRequest);
+            newUser = true;
         }
 
         String jwtToken = JWT.create()
@@ -57,7 +62,8 @@ public class GoogleUserController {
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
         System.out.println("Google JWT Token : " + jwtToken);
-        return jwtToken;
+        GoogleLoginResDto googleLoginResDto = new GoogleLoginResDto(jwtToken,newUser);
+        return ResponseEntity.ok().body(googleLoginResDto);
     }
 
 }
