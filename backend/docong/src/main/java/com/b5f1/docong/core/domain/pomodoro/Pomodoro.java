@@ -24,14 +24,14 @@ public class Pomodoro extends BaseEntity {
 
 
     @Builder
-    public Pomodoro(Long seq, User user, Todo todo, TimeStatus timeStatus, LocalDateTime startTime, LocalDateTime endTime, Emotion emotion, noiseStatus noise) {
+    public Pomodoro(Long seq, User user, Todo todo, TimeStatus timeStatus, LocalDateTime startTime, LocalDateTime endTime, int otherTime, noiseStatus noise) {
         this.seq = seq;
         this.user = user;
         this.todo = todo;
         this.timeStatus = timeStatus;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.emotion = emotion;
+        this.otherTime = otherTime;
         this.noise = noise;
     }
 
@@ -48,8 +48,9 @@ public class Pomodoro extends BaseEntity {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    @Enumerated(EnumType.STRING)
-    private Emotion emotion;
+//    @Enumerated(EnumType.STRING)
+//    private Emotion emotion;
+    private int otherTime;
     @Enumerated(EnumType.STRING)
     private noiseStatus noise;
 

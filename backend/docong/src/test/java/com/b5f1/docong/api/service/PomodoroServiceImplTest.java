@@ -58,7 +58,7 @@ class PomodoroServiceImplTest {
     @Test
     void 뽀모도로저장하기() {
         //given
-        SavePomodoroReqDto savePomodoroReqDto = new SavePomodoroReqDto(savedUser.getSeq(), savedTodo.getSeq(), TimeStatus.BASIC, null, null, Emotion.ANGER, noiseStatus.NOISE);
+        SavePomodoroReqDto savePomodoroReqDto = new SavePomodoroReqDto(savedUser.getSeq(), savedTodo.getSeq(), TimeStatus.BASIC, null, null, 0, noiseStatus.NOISE);
 
         //when
         Long saveSeq = pomodoroService.savePomodoro(savePomodoroReqDto);
@@ -72,7 +72,7 @@ class PomodoroServiceImplTest {
     @Test
     void 유저아이디로뽀모도로리스트찾기() {
         //given
-        Long seq = pomodoroService.savePomodoro(new SavePomodoroReqDto(savedUser.getSeq(), savedTodo.getSeq(), TimeStatus.BASIC, null, null, Emotion.ANGER, noiseStatus.NOISE));
+        Long seq = pomodoroService.savePomodoro(new SavePomodoroReqDto(savedUser.getSeq(), savedTodo.getSeq(), TimeStatus.BASIC, null, null, 0, noiseStatus.NOISE));
 
         //when
         List<Pomodoro> findByUser = pomodoroService.findAll(savedUser.getSeq());
