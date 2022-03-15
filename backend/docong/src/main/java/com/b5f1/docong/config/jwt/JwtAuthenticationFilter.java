@@ -37,25 +37,30 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         System.out.println("JwtAuthenticationFilter 진입");
 
-        // request에 있는 username과 password를 파싱해서 자바 Object로 받기
-        LoginReqDto loginReqDto = new LoginReqDto();
+        try {
+            // request에 있는 username과 password를 파싱해서 자바 Object로 받기
+            ObjectMapper om = new ObjectMapper();
+            LoginReqDto loginReqDto = om.readValue(request.getInputStream(), LoginReqDto.class);
 
-        loginReqDto.setEmail(request.getParameter("email"));
-        loginReqDto.setPassword(request.getParameter("password"));
+            System.out.println("JwtAuthenticationFilter : " + loginReqDto);
 
-        System.out.println("JwtAuthenticationFilter : " + loginReqDto);
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(loginReqDto.getEmail(), loginReqDto.getPassword());
 
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginReqDto.getEmail(), loginReqDto.getPassword());
+            System.out.println("JwtAuthenticaionFilter : 토큰 생성 완료");
 
-        System.out.println("JwtAuthenticaionFilter : 토큰 생성 완료");
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+            PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+            System.out.println("Authentication : " + principalDetails.getUser().getEmail());
 
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        System.out.println("Authentication : " + principalDetails.getUser().getEmail());
+            return authentication;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        return authentication;
+        return null;
+
     }
 
     @Override
