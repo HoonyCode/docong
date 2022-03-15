@@ -84,22 +84,21 @@ class PomodoroServiceImplTest {
 
     private void createUser() {
         User user = User.builder()
-                .email("wjddma1214@gmail.com")
+                .email("wjddma1214@naver.com")
                 .password("12345")
                 .build();
         savedUser = userRepository.save(user);
     }
 
     private void createTodo() {
-        User user = userRepository.findByEmailAndActivateTrue("wjddma1214@naver.com");
 
-        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, user.getSeq(), null, null, null);
+        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, savedUser.getSeq(), null, null, null);
         Todo todo = reqDto.toEntity();
         UserTodo userTodo = UserTodo.builder()
                 .build();
 
         todo.addUserTodo(userTodo);
-        user.addUserTodo(userTodo);
+        savedUser.addUserTodo(userTodo);
 
         savedTodo = todoRepository.save(todo);
     }
