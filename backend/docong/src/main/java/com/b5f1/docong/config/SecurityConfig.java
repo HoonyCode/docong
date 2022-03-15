@@ -5,6 +5,7 @@ import com.b5f1.docong.config.jwt.JwtAuthorizationFilter;
 import com.b5f1.docong.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,16 +31,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @Value("${spring.jwt.secret}")
+    public String secret;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(), secret), UsernamePasswordAuthenticationFilter.class);
         http
                 .addFilter(corsConfig.corsFilter())
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 //.addFilter(new JwtAuthenticationFilter(authenticationManager())) // formLogin()을 사용하면 security에서 기본적으로 불러줌
-                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository, secret))
                 .httpBasic().disable()
                 .formLogin()
                 //.loginPage("/api/login") // 로그인을 하고자하는 위치

@@ -20,10 +20,12 @@ import java.io.IOException;
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private UserRepository userRepository;
+    private String secret;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository, String secret) {
         super(authenticationManager);
         this.userRepository = userRepository;
+        this.secret = secret;
     }
 
     @Override
@@ -37,8 +39,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         }
 
         String token = request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX, "");
-
-        String email = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token)
+        String email = JWT.require(Algorithm.HMAC512(secret)).build().verify(token)
                 .getClaim("email").asString();
         if (email != null) {
             User user = userRepository.findByEmailAndActivateTrue(email);

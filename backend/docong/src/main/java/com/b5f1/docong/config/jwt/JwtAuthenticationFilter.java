@@ -3,9 +3,11 @@ package com.b5f1.docong.config.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.b5f1.docong.api.dto.request.LoginReqDto;
+import com.b5f1.docong.config.SecurityConfig;
 import com.b5f1.docong.config.auth.PrincipalDetails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,10 +29,12 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
         인증 요청 시 실행되는 함수 => /login
      */
     private final AuthenticationManager authenticationManager;
+    private final String secret;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, String secret) {
         super("/user/login");
         this.authenticationManager = authenticationManager;
+        this.secret = secret;
     }
 
     @Override
@@ -63,6 +67,7 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
     }
 
+
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
@@ -73,7 +78,7 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
                 .withClaim("id", principalDetails.getUser().getSeq())
                 .withClaim("email", principalDetails.getUser().getEmail())
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+                .sign(Algorithm.HMAC512(secret));
 
         System.out.println("JWT TOKEN : " + jwtToken);
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
