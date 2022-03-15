@@ -58,9 +58,9 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username:  # 구글 아이디
-    to-name:  # 구글 아이디
-    password:  # 구글 비밀번호
+    username:  docongs003@gmail.com
+    to-name:  docongs003@gmail.com
+    password:  docong1234!
     properties:
       mail:
         smtp:
@@ -93,3 +93,4 @@ app:
 # swagger에서 테스트 할 때의 host
 swagger:
   host: http://localhost:8080
+

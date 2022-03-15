@@ -9,6 +9,7 @@ import com.b5f1.docong.config.oauth.provider.OAuthUserInfo;
 import com.b5f1.docong.core.domain.user.User;
 import com.b5f1.docong.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,9 @@ public class GoogleUserController {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Value("${spring.jwt.secret}")
+    public String secret;
 
     @PostMapping("/oauth/jwt/google")
     public ResponseEntity<GoogleLoginResDto> GoogleJwtCreate(@RequestBody Map<String, Object> data) {
@@ -59,7 +63,7 @@ public class GoogleUserController {
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
                 .withClaim("id", userEntity.getSeq())
                 .withClaim("email", userEntity.getEmail())
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+                .sign(Algorithm.HMAC512(secret));
 
         System.out.println("Google JWT Token : " + jwtToken);
         GoogleLoginResDto googleLoginResDto = new GoogleLoginResDto(jwtToken,newUser);
