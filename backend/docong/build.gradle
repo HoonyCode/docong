@@ -77,4 +77,13 @@ configurations {
 compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl
 }
+/**
+ * comileQuerydsl.doFirst 추가
+ * 빌드 에러 해결을 위한 설정 추가 22.03.06 LeeNamSoo
+ */
+compileQuerydsl.doFirst {
+	if(file(querydslDir).exists() )
+		delete(file(querydslDir))
+}
+
 // querydsl 추가 끝
