@@ -78,7 +78,7 @@ class TodoServiceTest {
     @Test
     void testSaveTodo() {
         // given
-        User user = userRepository.findByEmailAndActivateTrue("wjddma1214@gmail.com");
+        User user = userRepository.findByEmailAndActivateTrue("wjddma1214@naver.com");
         SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, user.getSeq(), null, null, null);
 
         // when
@@ -127,7 +127,7 @@ class TodoServiceTest {
     @Test
     void testModifyTodo() {
         // given
-        User user = userRepository.findByEmailAndActivateTrue("wjddma1214@gmail.com");
+        User user = userRepository.findByEmailAndActivateTrue("wjddma1214@naver.com");
         Todo todo = Todo.builder()
                 .title("제목")
                 .content("내용")
@@ -166,14 +166,15 @@ class TodoServiceTest {
 
     private void createUser() {
         User user = User.builder()
-                .email("wjddma1214@gmail.com")
+                .email("wjddma1214@naver.com")
                 .password("12345")
+                .activate(true)
                 .build();
         savedUser = userRepository.save(user);
     }
 
     private void createTodo(){
-        User user = userRepository.findByEmailAndActivateTrue("wjddma1214@gmail.com");
+        User user = userRepository.findByEmailAndActivateTrue("wjddma1214@naver.com");
 
         SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, user.getSeq(), null, null, null);
         Todo todo = reqDto.toEntity();
