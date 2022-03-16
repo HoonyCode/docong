@@ -1,4 +1,4 @@
-import React, { FormEvent, useState, ChangeEvent } from 'react'
+import React, { FormEvent, useState, ChangeEvent, useEffect } from 'react'
 import { LoginData } from '../../api/auth'
 import {
   Box,
@@ -26,6 +26,10 @@ function UserLoginForm({ onLoginSubmit }: UserLoginFormProps) {
   const [showPassword, setShowPassword] = useState(false)
 
   const navigate = useNavigate()
+
+  useEffect(() => {
+    document.title = `docong`
+  })
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()

@@ -45,11 +45,11 @@ function UserTimerContainer() {
       }
       dispatch(
         savePomoAsync.request({
-          emotion: 'ANGER',
+          emotion: '',
           endTime: '2022-03-15T18:30:16.392Z',
-          noise: 'COMMON',
+          noise: '',
           startTime: '2022-03-15T18:30:16.392Z',
-          timeStatus: 'SHORT',
+          timeStatus: selectedType.name.toUpperCase(),
           todo_seq: 0,
           user_seq: 1,
         })

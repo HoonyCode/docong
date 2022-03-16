@@ -11,6 +11,8 @@ import {
   changeUserTimerTime,
   savePomoAsync,
   SAVE_POMO,
+  getUserInfoAsync,
+  GET_USER_INFO,
 } from './actions'
 import {
   userSignup,
@@ -18,6 +20,7 @@ import {
   userGoogleLogin,
   SignupResponse,
   LoginHeader,
+  GoogleLoginResponseData,
 } from '../../api/auth'
 import {
   all,
@@ -35,6 +38,7 @@ import {
 import { buffers, EventChannel, Task } from 'redux-saga'
 import { closeChannel, subscribe } from './channel'
 import { savePomo } from '../../api/pomo'
+import { getUserInfo, UserInfo } from '../../api/user'
 
 function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
   try {
@@ -59,11 +63,15 @@ function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
 
 function* userLoginSaga(action: ReturnType<typeof userLoginAsync.request>) {
   try {
-    const loginHeader: LoginHeader = yield call(userLogin, action.payload)
+    const loginHeader: LoginHeader = yield call(
+      userLogin,
+      action.payload.loginInput
+    )
     alert('로그인이 완료되었습니다.')
     console.log(loginHeader)
-    // localStorage.setItem('JWT', loginHeader.accessToken)
+    // localStorage.setItem('jwtToken', loginHeader.accessToken)
     yield action.payload.navigate('/')
+    yield put(getUserInfoAsync.request(null))
   } catch (e: any) {
     alert('로그인 실패')
   }
@@ -73,15 +81,29 @@ function* userGoogleLoginSaga(
   action: ReturnType<typeof userGoogleLoginAsync.request>
 ) {
   try {
-    const jwtToken: string = yield call(
+    const googleLoginResponseData: GoogleLoginResponseData = yield call(
       userGoogleLogin,
       action.payload.googleLoginResponse
     )
     alert('구글 로그인이 완료되었습니다.')
-    localStorage.setItem('jwtToken', jwtToken)
+    localStorage.setItem('jwtToken', googleLoginResponseData.jwtToken)
     yield action.payload.navigate('/')
+    yield put(getUserInfoAsync.request(null))
   } catch (e: any) {
     alert('구글 로그인 실패')
+  }
+}
+
+function* getUserInfoSaga(action: ReturnType<typeof getUserInfoAsync.request>) {
+  try {
+    const userInfo: UserInfo = yield call(getUserInfo)
+    alert('유저 정보 요청완료')
+    console.log('유저 정보 :', userInfo)
+    yield put(getUserInfoAsync.success(userInfo))
+  } catch (e: any) {
+    alert('유저 정보 요청실패')
+    console.log(e)
+    yield put(getUserInfoAsync.failure(e))
   }
 }
 
@@ -138,6 +160,7 @@ export function* userSaga() {
   yield takeEvery(USER_SIGNUP, userSignupSaga)
   yield takeEvery(USER_LOGIN, userLoginSaga)
   yield takeEvery(USER_GOOGLE_LOGIN, userGoogleLoginSaga)
+  yield takeEvery(GET_USER_INFO, getUserInfoSaga)
   yield takeEvery(START_USER_TIMER, startUserTimerSaga)
   yield takeEvery(SAVE_POMO, savePomoSaga)
 }

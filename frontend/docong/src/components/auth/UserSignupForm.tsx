@@ -1,4 +1,4 @@
-import React, { FormEvent, useState, ChangeEvent } from 'react'
+import React, { FormEvent, useState, ChangeEvent, useEffect } from 'react'
 import { SignupData } from '../../api/auth'
 import {
   Box,
@@ -12,9 +12,10 @@ import {
 } from '@mui/material'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 interface UserSignupFormProps {
-  onSignupSubmit: (signupInput: SignupData) => void
+  onSignupSubmit: (signupInput: SignupData, isCheckedEmail: boolean) => void
 }
 
 function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
@@ -35,12 +36,18 @@ function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
     showConfirmPassword: false,
   })
 
+  const [isCheckedEmail, setIsCheckedEmail] = useState(false)
+
   const navigate = useNavigate()
+
+  useEffect(() => {
+    document.title = `docong`
+  })
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (signupInput.password === passwordData.confirmPassword) {
-      onSignupSubmit(signupInput)
+      onSignupSubmit(signupInput, isCheckedEmail)
     } else {
       alert('패스워드가 동일하지 않습니다.')
     }
@@ -48,6 +55,7 @@ function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
 
   const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
     setSignupInput({ ...signupInput, email: e.target.value })
+    setIsCheckedEmail(false)
   }
 
   const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
@@ -76,6 +84,23 @@ function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
 
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     setSignupInput({ ...signupInput, name: e.target.value })
+  }
+
+  const onClickEmailCheck = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    try {
+      const emailCheckResponse = await axios.post(`/api/user/duplicate`, {
+        email: signupInput.email,
+      })
+      if (emailCheckResponse.data.possible) {
+        alert('사용 가능한 이메일입니다.')
+        setIsCheckedEmail(true)
+      } else {
+        alert('이미 가입되어 있는 이메일입니다.')
+      }
+    } catch (e: any) {
+      console.log(e)
+    }
   }
 
   const onClickToLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -158,6 +183,9 @@ function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
       </FormControl>
       <Button variant="outlined" type="submit">
         Register
+      </Button>
+      <Button variant="outlined" onClick={onClickEmailCheck}>
+        Email Check
       </Button>
       <Button variant="outlined" onClick={onClickToLogin}>
         Log In

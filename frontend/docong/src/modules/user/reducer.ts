@@ -4,7 +4,13 @@ import {
   CHANGE_USER_TIMER_STATUS,
   CHANGE_USER_TIMER_TIME,
   CHANGE_USER_TIMER_TYPE,
+  getUserInfoAsync,
 } from './actions'
+import {
+  asyncState,
+  createAsyncReducer,
+  transformToArray,
+} from '../../lib/reducerUtils'
 // import {
 //   asyncState,
 //   createAsyncReducer,
@@ -13,6 +19,7 @@ import {
 
 // --- recerUtils 의 asyncState 를 활용한 리팩토링 ---
 const initialState: UserState = {
+  userInfo: asyncState.initial(),
   // 개인 타이머 상태
   userTimer: {
     selectedType: { name: 'Normal', time: 1500 },
@@ -23,10 +30,6 @@ const initialState: UserState = {
 }
 
 // --- reducerUtils 의 asyncState, createAsyncReducer, transformToArray 를 활용한 리팩토링 ---
-// const user = createReducer<UserState, UserAction>(initialState).handleAction(
-//   changeUserTimer,
-//   (state, action) => ({ ...state, [action.payload.key]: action.payload.value })
-// )
 const user = createReducer<UserState, UserAction>(initialState, {
   [CHANGE_USER_TIMER_TYPE]: (state, action) => ({
     ...state,
@@ -50,10 +53,9 @@ const user = createReducer<UserState, UserAction>(initialState, {
       time: action.payload,
     },
   }),
-})
-// ).handleAction(
-//   transformToArray(userTimerAsync),
-//   createAsyncReducer(userTimerAsync, "userTimer")
-// );
+}).handleAction(
+  transformToArray(getUserInfoAsync),
+  createAsyncReducer(getUserInfoAsync, 'userInfo')
+)
 
 export default user
