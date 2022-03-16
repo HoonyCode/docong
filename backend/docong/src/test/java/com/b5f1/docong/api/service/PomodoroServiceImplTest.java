@@ -58,7 +58,7 @@ class PomodoroServiceImplTest {
     @Test
     void 뽀모도로저장하기() {
         //given
-        SavePomodoroReqDto savePomodoroReqDto = new SavePomodoroReqDto(savedUser.getSeq(), savedTodo.getSeq(), TimeStatus.BASIC, null, null, Emotion.ANGER, noiseStatus.NOISE);
+        SavePomodoroReqDto savePomodoroReqDto = new SavePomodoroReqDto(savedUser.getSeq(), savedTodo.getSeq(), TimeStatus.BASIC, null, null, 0, noiseStatus.NOISE);
 
         //when
         Long saveSeq = pomodoroService.savePomodoro(savePomodoroReqDto);
@@ -72,7 +72,7 @@ class PomodoroServiceImplTest {
     @Test
     void 유저아이디로뽀모도로리스트찾기() {
         //given
-        Long seq = pomodoroService.savePomodoro(new SavePomodoroReqDto(savedUser.getSeq(), savedTodo.getSeq(), TimeStatus.BASIC, null, null, Emotion.ANGER, noiseStatus.NOISE));
+        Long seq = pomodoroService.savePomodoro(new SavePomodoroReqDto(savedUser.getSeq(), savedTodo.getSeq(), TimeStatus.BASIC, null, null, 0, noiseStatus.NOISE));
 
         //when
         List<Pomodoro> findByUser = pomodoroService.findAll(savedUser.getSeq());
@@ -84,22 +84,21 @@ class PomodoroServiceImplTest {
 
     private void createUser() {
         User user = User.builder()
-                .email("wjddma1214@gmail.com")
+                .email("wjddma1214@naver.com")
                 .password("12345")
                 .build();
         savedUser = userRepository.save(user);
     }
 
     private void createTodo() {
-        User user = userRepository.findByEmailAndActivateTrue("wjddma1214@naver.com");
 
-        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, user.getSeq(), null, null, null);
+        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, savedUser.getSeq(), null, null, null);
         Todo todo = reqDto.toEntity();
         UserTodo userTodo = UserTodo.builder()
                 .build();
 
         todo.addUserTodo(userTodo);
-        user.addUserTodo(userTodo);
+        savedUser.addUserTodo(userTodo);
 
         savedTodo = todoRepository.save(todo);
     }

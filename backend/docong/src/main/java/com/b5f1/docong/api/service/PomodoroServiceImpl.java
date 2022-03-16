@@ -32,7 +32,7 @@ public class PomodoroServiceImpl implements PomodoroService {
         Pomodoro pomodoro = Pomodoro.builder()
                 .user(user)
                 .todo(todo)
-                .emotion(reqDto.getEmotion())
+                .otherTime(reqDto.getOtherTime())
                 .noise(reqDto.getNoise())
                 .startTime(reqDto.getStartTime())
                 .endTime(reqDto.getEndTime())
