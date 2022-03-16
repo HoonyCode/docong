@@ -10,6 +10,7 @@ import com.b5f1.docong.core.domain.user.User;
 import com.b5f1.docong.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -23,6 +24,9 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class AuthHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final UserRepository userRepository;
+
+    @Value("${spring.jwt.secret}")
+    public String secret;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -38,8 +42,9 @@ public class AuthHandlerMethodArgumentResolver implements HandlerMethodArgumentR
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String token = webRequest.getHeader(JwtProperties.HEADER_STRING);
         System.out.println("AuthHandlerMethodA~~~ Token : " + token);
+
         if (token != null) {
-            JWTVerifier verifier = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build(); // issuer?
+            JWTVerifier verifier = JWT.require(Algorithm.HMAC512(secret)).build(); // issuer?
             handleError(token);
             DecodedJWT decodedJWT = verifier.verify(token.replace(JwtProperties.TOKEN_PREFIX, ""));
             String email = decodedJWT.getSubject();
@@ -51,9 +56,9 @@ public class AuthHandlerMethodArgumentResolver implements HandlerMethodArgumentR
         }
     }
 
-    public static void handleError(String token) {
+    public void handleError(String token) {
         JWTVerifier verifier = JWT
-                .require(Algorithm.HMAC512(JwtProperties.SECRET))
+                .require(Algorithm.HMAC512(secret))
                 .build();
 
         try {

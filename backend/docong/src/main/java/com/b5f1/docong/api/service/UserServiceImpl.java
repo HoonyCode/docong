@@ -82,6 +82,7 @@ public class UserServiceImpl implements UserService {
         // user의 email 변경
         user.deleteUser();
 
+        userRepository.save(user);
     }
 
     @Override
