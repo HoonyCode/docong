@@ -7,6 +7,7 @@ import { RootState } from '../../modules'
 import {
   changeUserTimerStatus,
   changeUserTimerType,
+  savePomoAsync,
   startUserTimer,
   stopUserTimer,
 } from '../../modules/user'
@@ -20,7 +21,7 @@ function UserTimerContainer() {
   const dispatch = useDispatch()
 
   const timerTypes = [
-    { name: 'Short', time: 10 },
+    { name: 'Short', time: 5 },
     { name: 'Normal', time: 1500 },
     { name: 'Long', time: 3000 },
   ]
@@ -42,6 +43,17 @@ function UserTimerContainer() {
       } catch (e) {
         console.log('Notification error', e)
       }
+      dispatch(
+        savePomoAsync.request({
+          emotion: 'ANGER',
+          endTime: '2022-03-15T18:30:16.392Z',
+          noise: 'COMMON',
+          startTime: '2022-03-15T18:30:16.392Z',
+          timeStatus: 'SHORT',
+          todo_seq: 0,
+          user_seq: 1,
+        })
+      )
     }
   }, [status, time, dispatch, selectedType])
 

@@ -25,16 +25,10 @@ export default function useUserTimerActions() {
     [dispatch]
   )
 
-  const onTickUserTimer = useCallback(
-    () => dispatch(actions.tickUserTimer()),
-    [dispatch]
-  )
-
   return {
     onChangeUserTimerType,
     onStartUserTimer,
     onStopUserTimer,
     onFinishUserTimer,
-    onTickUserTimer,
   }
 }

@@ -43,11 +43,6 @@ export async function userGoogleLogin(
   return response.data
 }
 
-export interface SignupResponse {
-  response: number
-  message: string
-}
-
 export interface SignupData {
   email: string
   password: string
@@ -59,9 +54,14 @@ export interface SignupData {
   position: string
 }
 
-export interface LoginHeader {}
+export interface SignupResponse {
+  response: number
+  message: string
+}
 
 export interface LoginData {
   email: string
   password: string
 }
+
+export interface LoginHeader {}

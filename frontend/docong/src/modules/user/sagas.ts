@@ -9,6 +9,8 @@ import {
   changeUserTimerStatus,
   stopUserTimer,
   changeUserTimerTime,
+  savePomoAsync,
+  SAVE_POMO,
 } from './actions'
 import {
   userSignup,
@@ -32,6 +34,7 @@ import {
 } from 'redux-saga/effects'
 import { buffers, EventChannel, Task } from 'redux-saga'
 import { closeChannel, subscribe } from './channel'
+import { savePomo } from '../../api/pomo'
 
 function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
   try {
@@ -122,9 +125,19 @@ function* connectChannel() {
   }
 }
 
+function* savePomoSaga(action: ReturnType<typeof savePomoAsync.request>) {
+  try {
+    yield call(savePomo, action.payload)
+    alert('Pomo 저장이 완료되었습니다.')
+  } catch (e: any) {
+    alert('Pomo 저장 실패')
+  }
+}
+
 export function* userSaga() {
   yield takeEvery(USER_SIGNUP, userSignupSaga)
   yield takeEvery(USER_LOGIN, userLoginSaga)
   yield takeEvery(USER_GOOGLE_LOGIN, userGoogleLoginSaga)
   yield takeEvery(START_USER_TIMER, startUserTimerSaga)
+  yield takeEvery(SAVE_POMO, savePomoSaga)
 }
