@@ -50,7 +50,7 @@ public class Pomodoro extends BaseEntity {
 
 //    @Enumerated(EnumType.STRING)
 //    private Emotion emotion;
-    private int otherTime;
+    private Integer otherTime;
     @Enumerated(EnumType.STRING)
     private noiseStatus noise;
 
