@@ -4,7 +4,9 @@ import com.b5f1.docong.api.dto.request.ModifyTodoStatusReqDto;
 import com.b5f1.docong.api.dto.request.SaveTodoReqDto;
 import com.b5f1.docong.api.dto.response.BaseResponseEntity;
 import com.b5f1.docong.api.dto.response.FindTodoResDto;
+import com.b5f1.docong.api.resolver.Auth;
 import com.b5f1.docong.api.service.TodoService;
+import com.b5f1.docong.core.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +26,9 @@ public class TodoController {
         return ResponseEntity.status(200).body(response);
     }
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<List<FindTodoResDto>> findUserTodos(@PathVariable Long id){
-        List<FindTodoResDto> response = todoService.findUserTodos(id);
+    @GetMapping("/user")
+    public ResponseEntity<List<FindTodoResDto>> findUserTodos(@Auth User user){
+        List<FindTodoResDto> response = todoService.findUserTodos(user.getSeq());
         return ResponseEntity.status(200).body(response);
     }
 
