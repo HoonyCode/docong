@@ -3,12 +3,19 @@ package com.b5f1.docong.config.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.b5f1.docong.api.dto.request.LoginReqDto;
+import com.b5f1.docong.api.exception.CustomException;
+import com.b5f1.docong.api.exception.ErrorCode;
 import com.b5f1.docong.config.SecurityConfig;
 import com.b5f1.docong.config.auth.PrincipalDetails;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -53,18 +60,18 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
             System.out.println("JwtAuthenticaionFilter : 토큰 생성 완료");
 
-            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+            Authentication authentication = authenticationManager.authenticate(authenticationToken); // 여기서 PrincipalDetailsService 진입
+
+            System.out.println("authentication -> "+authentication);
 
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
             System.out.println("Authentication : " + principalDetails.getUser().getEmail());
 
             return authentication;
         } catch (Exception e) {
-            e.printStackTrace();
+            request.setAttribute("exception", "아이디 잘못침");
         }
-
         return null;
-
     }
 
 

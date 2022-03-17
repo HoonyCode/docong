@@ -36,14 +36,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(), secret), UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(), secret), UsernamePasswordAuthenticationFilter.class);
         http
                 .addFilter(corsConfig.corsFilter())
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                //.addFilter(new JwtAuthenticationFilter(authenticationManager())) // formLogin()을 사용하면 security에서 기본적으로 불러줌
+
+                // 401 error (UNAUTHORIZED EXCEPTION) 발생 시 동작 -> 이 코드 추가하면 /api/login 404 error
+                .exceptionHandling()
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .and()
+
+                .addFilterBefore(new JwtAuthenticationFilter(authenticationManager(), secret), UsernamePasswordAuthenticationFilter.class)
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository, secret))
+
                 .httpBasic().disable()
                 .formLogin()
                 //.loginPage("/api/login") // 로그인을 하고자하는 위치
@@ -51,7 +58,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password")
                 .loginProcessingUrl("/user/login")
                 .and()
+
                 .authorizeRequests()
+                .antMatchers("/user/info","/user/delete")
+                .access("hasRole('ROLE_USER')")
                 .anyRequest().permitAll();
 
     }

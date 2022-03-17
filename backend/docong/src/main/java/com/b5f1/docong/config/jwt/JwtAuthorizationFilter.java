@@ -2,6 +2,8 @@ package com.b5f1.docong.config.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.b5f1.docong.config.auth.PrincipalDetails;
 import com.b5f1.docong.core.domain.user.User;
 import com.b5f1.docong.core.repository.UserRepository;
@@ -38,17 +40,25 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        String token = request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX, "");
-        String email = JWT.require(Algorithm.HMAC512(secret)).build().verify(token)
-                .getClaim("email").asString();
-        if (email != null) {
-            User user = userRepository.findByEmailAndActivateTrue(email);
+        try {
+            String token = request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX, "");
+            String email = JWT.require(Algorithm.HMAC512(secret)).build().verify(token)
+                    .getClaim("email").asString();
+            if (email != null) {
+                User user = userRepository.findByEmailAndActivateTrue(email);
 
-            PrincipalDetails principalDetails = new PrincipalDetails(user);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
+                PrincipalDetails principalDetails = new PrincipalDetails(user);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
 
-            // 강제로 시큐리티 세션에 접근하여 값 저장
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                // 강제로 시큐리티 세션에 접근하여 값 저장
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        }
+        catch (TokenExpiredException e) {
+            request.setAttribute("exception", "token expired");
+        }
+        catch(JWTDecodeException e) {
+            request.setAttribute("exception", "wrong token");
         }
         chain.doFilter(request, response);
     }
