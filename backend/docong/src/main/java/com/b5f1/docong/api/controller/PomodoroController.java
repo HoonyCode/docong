@@ -3,8 +3,10 @@ package com.b5f1.docong.api.controller;
 
 import com.b5f1.docong.api.dto.request.SavePomodoroReqDto;
 import com.b5f1.docong.api.dto.response.BaseResponseEntity;
+import com.b5f1.docong.api.resolver.Auth;
 import com.b5f1.docong.api.service.PomodoroService;
 import com.b5f1.docong.core.domain.pomodoro.Pomodoro;
+import com.b5f1.docong.core.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,14 +22,14 @@ public class PomodoroController {
 
 
     @PostMapping
-    public ResponseEntity<BaseResponseEntity> savePomodoro(@RequestBody @Valid SavePomodoroReqDto reqDto) {
-        pomodoroService.savePomodoro(reqDto);
+    public ResponseEntity<BaseResponseEntity> savePomodoro(@RequestBody @Valid SavePomodoroReqDto reqDto, @Auth User user) {
+        pomodoroService.savePomodoro(reqDto, user);
         return ResponseEntity.ok().body(new BaseResponseEntity(200, "Success"));
     }
 
-    @GetMapping("/{user_seq}")
-    public ResponseEntity<List<Pomodoro>> findAllPomodoro(@RequestBody @PathVariable Long user_seq) {
-        List<Pomodoro> result = pomodoroService.findAll(user_seq);
+    @GetMapping
+    public ResponseEntity<List<Pomodoro>> findAllPomodoro(@Auth User user) {
+        List<Pomodoro> result = pomodoroService.findAll(user.getSeq());
         return ResponseEntity.ok().body(result);
     }
 }
