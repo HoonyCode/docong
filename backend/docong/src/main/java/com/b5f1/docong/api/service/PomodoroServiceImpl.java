@@ -25,8 +25,7 @@ public class PomodoroServiceImpl implements PomodoroService {
 
 
     @Override
-    public Long savePomodoro(SavePomodoroReqDto reqDto) {
-        User user = userRepository.findById(reqDto.getUser_seq()).orElseThrow(() -> new IllegalStateException("없는 user 입니다."));
+    public Long savePomodoro(SavePomodoroReqDto reqDto, User user) {
         Todo todo = todoRepository.findById(reqDto.getTodo_seq()).orElseThrow(() -> new IllegalStateException("없는 todo 입니다."));
 
         Pomodoro pomodoro = Pomodoro.builder()

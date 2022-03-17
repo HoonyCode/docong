@@ -18,8 +18,6 @@ import java.time.LocalDateTime;
 public class SavePomodoroReqDto {
 
     @NotNull
-    private Long user_seq;
-    @NotNull
     private Long todo_seq;
     @NotNull
     private TimeStatus timeStatus;
