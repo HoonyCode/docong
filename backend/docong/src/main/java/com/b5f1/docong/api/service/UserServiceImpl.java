@@ -3,6 +3,8 @@ package com.b5f1.docong.api.service;
 import com.b5f1.docong.api.dto.request.JoinReqDto;
 import com.b5f1.docong.api.dto.request.UserInfoReqDto;
 import com.b5f1.docong.api.dto.response.UserInfoResDto;
+import com.b5f1.docong.api.exception.CustomException;
+import com.b5f1.docong.api.exception.ErrorCode;
 import com.b5f1.docong.core.domain.user.User;
 import com.b5f1.docong.core.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,8 @@ public class UserServiceImpl implements UserService {
         String emailPart = joinReqDto.getEmail().trim().split("@")[1];
         if (emailPart.equals("gmail.com")) {
             // 에러 던지기
-            System.out.println("gmail은 Google 로그인을 이용해주세요.");
+//            System.out.println("gmail은 Google 로그인을 이용해주세요.");
+            throw new CustomException(ErrorCode.INVALID_EMAIL_FORMAT);
         } else {
             User user = User.builder()
                     .email(joinReqDto.getEmail())
@@ -59,8 +62,8 @@ public class UserServiceImpl implements UserService {
     public void setUserInfo(User user, UserInfoReqDto userInfoReqDto) {
         // password가 null인지 체크
         if (userInfoReqDto.getPassword() == null) {
-            System.out.println("password가 null입니다.");
-            return;
+//            System.out.println("password가 null입니다.");
+            throw new CustomException(ErrorCode.NULL_PASSWORD);
         }
 
         User userEntity = userRepository.findById(user.getSeq()).get();
@@ -72,8 +75,6 @@ public class UserServiceImpl implements UserService {
         userInfoReqDto.setPassword(encPwd);
 
         userEntity.updateUserInfo(userInfoReqDto);
-
-        return;
     }
 
     @Override
