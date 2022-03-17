@@ -27,7 +27,7 @@ public class PomodoroController {
         return ResponseEntity.ok().body(new BaseResponseEntity(200, "Success"));
     }
 
-    @GetMapping("/user")
+    @GetMapping
     public ResponseEntity<List<Pomodoro>> findAllPomodoro(@Auth User user) {
         List<Pomodoro> result = pomodoroService.findAll(user.getSeq());
         return ResponseEntity.ok().body(result);
