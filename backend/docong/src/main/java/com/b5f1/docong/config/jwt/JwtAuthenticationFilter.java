@@ -45,7 +45,7 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
         System.out.println("JwtAuthenticationFilter 진입");
 
         try {
@@ -62,18 +62,30 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
             Authentication authentication = authenticationManager.authenticate(authenticationToken); // 여기서 PrincipalDetailsService 진입
 
-            System.out.println("authentication -> "+authentication);
+            System.out.println("authentication? -> " + authentication);
 
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
             System.out.println("Authentication : " + principalDetails.getUser().getEmail());
 
             return authentication;
+        } catch (BadCredentialsException e) {
+            System.out.println("BadCredentialsException 발생!");
+            sendErrorResponse(response, "BadCredentialsException");
         } catch (Exception e) {
-            request.setAttribute("exception", "아이디 잘못침");
+            e.printStackTrace();
         }
         return null;
     }
 
+    private void sendErrorResponse(HttpServletResponse response, String message) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(ErrorCode.USER_NOT_FOUND.getHttpStatus().value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.getWriter().println("{ \"message\" : \"" + message
+                + "\", \"code\" : \"" + ErrorCode.USER_NOT_FOUND.getHttpStatus().value()
+                + "\", \"status\" : " + ErrorCode.USER_NOT_FOUND.getHttpStatus().name()
+                + ", \"errors\" : [ ] }");
+    }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {

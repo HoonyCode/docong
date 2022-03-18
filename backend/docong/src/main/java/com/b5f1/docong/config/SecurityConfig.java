@@ -36,14 +36,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http.addFilterBefore(new JwtAuthenticationFilter(authenticationManager(), secret), UsernamePasswordAuthenticationFilter.class);
         http
                 .addFilter(corsConfig.corsFilter())
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
 
-                // 401 error (UNAUTHORIZED EXCEPTION) 발생 시 동작 -> 이 코드 추가하면 /api/login 404 error
+                /*
+                    AuthenticationEntryPoint (401 error) : 인증되지 않은 유저가 요청을 했을 시 동작 -> 이 코드 추가하면 /api/login 404 error
+                    AccessDeniedHandler (403 error) : 서버에 요청을 할 때 엑세스가 가능한지 권한을 체크 후 엑세스 할 수 없는 요청을 했을 시 동작
+                 */
                 .exceptionHandling()
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .and()
@@ -53,14 +55,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .httpBasic().disable()
                 .formLogin()
-                //.loginPage("/api/login") // 로그인을 하고자하는 위치
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .loginProcessingUrl("/user/login")
                 .and()
 
                 .authorizeRequests()
-                .antMatchers("/user/info","/user/delete")
+                .antMatchers("/user/info", "/user/delete")
                 .access("hasRole('ROLE_USER')")
                 .anyRequest().permitAll();
 
