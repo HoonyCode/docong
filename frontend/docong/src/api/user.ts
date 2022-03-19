@@ -9,7 +9,6 @@ const setHeader = function () {
 }
 
 export async function getUserInfo() {
-  alert('유저 정보 요청')
   const response = await axios.get(`/api/user/info`, { headers: setHeader() })
   return response.data
 }

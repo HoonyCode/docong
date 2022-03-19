@@ -19,7 +19,6 @@ import {
   userLogin,
   userGoogleLogin,
   SignupResponse,
-  LoginHeader,
   GoogleLoginResponseData,
 } from '../../api/auth'
 import {
@@ -37,20 +36,17 @@ import {
 } from 'redux-saga/effects'
 import { buffers, EventChannel, Task } from 'redux-saga'
 import { closeChannel, subscribe } from './channel'
-import { savePomo } from '../../api/pomo'
+import { DefaultResponse, savePomo } from '../../api/pomo'
 import { getUserInfo, UserInfo } from '../../api/user'
 
 function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
   try {
-    console.log(action)
-    console.log(action.payload)
     // call : 함수 실행 (함수, 파라미터)
     const signupResponse: SignupResponse = yield call(
       userSignup,
       action.payload.signupInput
     )
     alert('회원가입이 완료되었습니다.')
-    console.log(signupResponse)
     // 회원가입 후 로그인 페이지로 이동
     yield action.payload.navigate('/login')
     // put : 특정 액션을 dispatch
@@ -58,22 +54,20 @@ function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
   } catch (e: any) {
     alert('회원가입 실패')
     yield put(userSignupAsync.failure(e))
+    console.error(e)
   }
 }
 
 function* userLoginSaga(action: ReturnType<typeof userLoginAsync.request>) {
   try {
-    const loginHeader: LoginHeader = yield call(
-      userLogin,
-      action.payload.loginInput
-    )
+    const loginToken: string = yield call(userLogin, action.payload.loginInput)
     alert('로그인이 완료되었습니다.')
-    console.log(loginHeader)
-    // localStorage.setItem('jwtToken', loginHeader.accessToken)
+    localStorage.setItem('jwtToken', loginToken)
     yield action.payload.navigate('/')
     yield put(getUserInfoAsync.request(null))
   } catch (e: any) {
     alert('로그인 실패')
+    console.error(e)
   }
 }
 
@@ -91,19 +85,18 @@ function* userGoogleLoginSaga(
     yield put(getUserInfoAsync.request(null))
   } catch (e: any) {
     alert('구글 로그인 실패')
+    console.error(e)
   }
 }
 
 function* getUserInfoSaga(action: ReturnType<typeof getUserInfoAsync.request>) {
   try {
     const userInfo: UserInfo = yield call(getUserInfo)
-    alert('유저 정보 요청완료')
-    console.log('유저 정보 :', userInfo)
     yield put(getUserInfoAsync.success(userInfo))
   } catch (e: any) {
     alert('유저 정보 요청실패')
-    console.log(e)
     yield put(getUserInfoAsync.failure(e))
+    console.error(e)
   }
 }
 
@@ -149,10 +142,15 @@ function* connectChannel() {
 
 function* savePomoSaga(action: ReturnType<typeof savePomoAsync.request>) {
   try {
-    yield call(savePomo, action.payload)
+    const savePomoResponse: DefaultResponse = yield call(
+      savePomo,
+      action.payload
+    )
     alert('Pomo 저장이 완료되었습니다.')
+    console.log(savePomoResponse)
   } catch (e: any) {
     alert('Pomo 저장 실패')
+    console.error(e)
   }
 }
 

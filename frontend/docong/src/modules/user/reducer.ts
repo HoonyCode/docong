@@ -11,11 +11,6 @@ import {
   createAsyncReducer,
   transformToArray,
 } from '../../lib/reducerUtils'
-// import {
-//   asyncState,
-//   createAsyncReducer,
-//   transformToArray,
-// } from '../../lib/reducerUtils'
 
 // --- recerUtils 의 asyncState 를 활용한 리팩토링 ---
 const initialState: UserState = {
@@ -26,10 +21,9 @@ const initialState: UserState = {
     status: 'stop',
     time: 1500,
   },
-  // userTimer: asyncState.initial(),
 }
 
-// --- reducerUtils 의 asyncState, createAsyncReducer, transformToArray 를 활용한 리팩토링 ---
+// --- reducerUtils 의 createAsyncReducer, transformToArray 를 활용한 리팩토링 ---
 const user = createReducer<UserState, UserAction>(initialState, {
   [CHANGE_USER_TIMER_TYPE]: (state, action) => ({
     ...state,
