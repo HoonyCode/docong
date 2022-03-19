@@ -94,7 +94,7 @@ class PomodoroServiceImplTest {
 
     private void createTodo() {
 
-        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, savedUser.getSeq(), null, null, null);
+        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, savedUser.getEmail(), null, null, null);
         Todo todo = reqDto.toEntity();
         UserTodo userTodo = UserTodo.builder()
                 .build();

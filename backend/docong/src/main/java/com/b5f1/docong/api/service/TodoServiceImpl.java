@@ -28,8 +28,7 @@ public class TodoServiceImpl implements TodoService{
     private final TodoQueryRepository todoQueryRepository;
     @Override
     public Long saveTodo(SaveTodoReqDto reqDto) {
-        User user = userRepository.findById(reqDto.getUserId())
-                .orElseThrow(()->new IllegalStateException("없는 user입니다."));
+        User user = userRepository.findByEmailAndActivateTrue(reqDto.getUserEmail());
 
         Todo todo = reqDto.toEntity();
         UserTodo userTodo = UserTodo.builder()
