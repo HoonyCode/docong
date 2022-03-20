@@ -1,7 +1,8 @@
 import { createAction, createAsyncAction } from 'typesafe-actions' // createAsyncAction 유틸함수 사용
 import { AxiosError } from 'axios'
 import { SignupResponse } from '../../api/auth'
-import { UserInfo } from '../../api/user'
+import { UserData, UserInfo } from '../../api/user'
+import { PomoData } from '../../api/pomo'
 
 // 액션 type 선언
 export const USER_SIGNUP = 'user/USER_SIGNUP'
@@ -64,13 +65,13 @@ export const setUserInfoAsync = createAsyncAction(
   SET_USER_INFO,
   SET_USER_INFO_SUCCESS,
   SET_USER_INFO_ERROR
-)<any, any, AxiosError>()
+)<UserData, any, AxiosError>()
 
 export const savePomoAsync = createAsyncAction(
   SAVE_POMO,
   SAVE_POMO_SUCCESS,
   SAVE_POMO_ERROR
-)<any, any, AxiosError>()
+)<PomoData, any, AxiosError>()
 
 export const changeUserTimerType = createAction(CHANGE_USER_TIMER_TYPE)<any>()
 export const changeUserTimerStatus = createAction(
@@ -89,6 +90,7 @@ export const actions = {
   userGoogleLoginAsync,
   getUserInfoAsync,
   setUserInfoAsync,
+  savePomoAsync,
   changeUserTimerType,
   changeUserTimerStatus,
   changeUserTimerTime,

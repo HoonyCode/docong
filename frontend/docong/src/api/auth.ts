@@ -4,6 +4,8 @@ import {
   GoogleLoginResponseOffline,
 } from 'react-google-login'
 
+export const BASE_URL = 'http://j6s003.p.ssafy.io'
+
 const config = {
   headers: {
     'Content-Type': 'application/json; charset=utf-8',
@@ -11,17 +13,17 @@ const config = {
 }
 
 export async function userSignup(signupData: SignupData) {
-  const response = await axios.post(`/api/user/join`, signupData)
+  const response = await axios.post(`${BASE_URL}/api/user/join`, signupData)
   return response.data
 }
 
 export async function emailDuplicateCheck(email: string) {
-  const response = await axios.post(`/api/user/duplicate`, email)
+  const response = await axios.post(`${BASE_URL}/api/user/duplicate`, email)
   return response.data
 }
 
 export async function userLogin(loginData: LoginData) {
-  const response = await axios.post(`/api/user/login`, loginData)
+  const response = await axios.post(`${BASE_URL}/api/user/login`, loginData)
   return response.headers.authorization.split(' ')[1]
 }
 
@@ -29,7 +31,7 @@ export async function userGoogleLogin(
   googleLoginResponse: GoogleLoginResponse | GoogleLoginResponseOffline
 ) {
   const response = await axios.post(
-    `/api/oauth/jwt/google`,
+    `${BASE_URL}/api/oauth/jwt/google`,
     JSON.stringify(googleLoginResponse),
     config
   )

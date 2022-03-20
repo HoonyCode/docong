@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { BASE_URL } from './auth'
 
 const setHeader = function () {
   const token = localStorage.getItem('jwtToken')
@@ -10,42 +11,50 @@ const setHeader = function () {
 
 export async function saveTodo(todoInput: TodoInput) {
   console.log(todoInput)
-  const response = await axios.post(`/api/todo`, todoInput, {
+  const response = await axios.post(`${BASE_URL}/api/todo`, todoInput, {
     headers: setHeader(),
   })
   return response.data
 }
 
 export async function findTodo(todoId: number) {
-  const response = await axios.get(`/api/todo/${todoId}`, {
+  const response = await axios.get(`${BASE_URL}/api/todo/${todoId}`, {
     headers: setHeader(),
   })
   return response.data
 }
 
 export async function modifyTodo(todoId: number, todoInput: TodoInput) {
-  const response = await axios.put(`/api/todo/${todoId}`, todoInput, {
-    headers: setHeader(),
-  })
+  const response = await axios.put(
+    `${BASE_URL}/api/todo/${todoId}`,
+    todoInput,
+    {
+      headers: setHeader(),
+    }
+  )
   return response.data
 }
 
 export async function deleteTodo(todoId: number) {
-  const response = await axios.delete(`/api/todo/${todoId}`, {
+  const response = await axios.delete(`${BASE_URL}/api/todo/${todoId}`, {
     headers: setHeader(),
   })
   return response.data
 }
 
 export async function modifyTodoStatus(todoId: number, todoStatus: string) {
-  const response = await axios.put(`/api/todo/status/${todoId}`, todoStatus, {
-    headers: setHeader(),
-  })
+  const response = await axios.put(
+    `${BASE_URL}/api/todo/status/${todoId}`,
+    todoStatus,
+    {
+      headers: setHeader(),
+    }
+  )
   return response.data
 }
 
 export async function findUserTodos() {
-  const response = await axios.get(`/api/todo/user`, {
+  const response = await axios.get(`${BASE_URL}/api/todo/user`, {
     headers: setHeader(),
   })
   return response.data

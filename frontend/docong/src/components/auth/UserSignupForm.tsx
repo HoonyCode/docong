@@ -1,5 +1,5 @@
 import React, { FormEvent, useState, ChangeEvent, useEffect } from 'react'
-import { SignupData } from '../../api/auth'
+import { BASE_URL, SignupData } from '../../api/auth'
 import {
   Box,
   Button,
@@ -89,9 +89,12 @@ function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
   const onClickEmailCheck = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     try {
-      const emailCheckResponse = await axios.post(`/api/user/duplicate`, {
-        email: signupInput.email,
-      })
+      const emailCheckResponse = await axios.post(
+        `${BASE_URL}/api/user/duplicate`,
+        {
+          email: signupInput.email,
+        }
+      )
       if (emailCheckResponse.data.possible) {
         alert('사용 가능한 이메일입니다.')
         setIsCheckedEmail(true)

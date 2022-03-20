@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { BASE_URL } from './auth'
 
 export async function savePomo(pomoData: PomoData) {
-  const response = await axios.post(`/api/pomo`, pomoData)
+  const response = await axios.post(`${BASE_URL}/api/pomo`, pomoData)
   return response.data
 }
 
@@ -11,7 +12,7 @@ export interface PomoData {
   noise: string
   startTime: string
   timeStatus: string
-  todo_seq: number
+  todo_seq: null | number
 }
 
 export interface DefaultResponse {

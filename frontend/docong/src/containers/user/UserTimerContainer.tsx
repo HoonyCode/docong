@@ -46,15 +46,15 @@ function UserTimerContainer() {
       } catch (e) {
         console.log('Notification error', e)
       }
+      // noise 적용 후 수정
       dispatch(
         savePomoAsync.request({
           emotion: '',
           endTime: '2022-03-15T18:30:16.392Z',
-          noise: '',
+          noise: 'COMMON',
           startTime: '2022-03-15T18:30:16.392Z',
           timeStatus: selectedType.name.toUpperCase(),
-          todo_seq: 0,
-          user_seq: 3,
+          todo_seq: null,
         })
       )
     }

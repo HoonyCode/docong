@@ -72,7 +72,7 @@ function UserTodo({
   const [isOpenModifyTodo, setIsOpenModifyTodo] = useState(false)
   const [modifyTodoId, setModifyTodoId] = useState(0)
 
-  const [TodoInput, setTodoInput] = useState({
+  const [todoInput, setTodoInput] = useState({
     title: '',
     content: '',
     teamId: null,
@@ -178,35 +178,35 @@ function UserTodo({
   }
 
   const onChangeTodoTitle = (e: ChangeEvent<HTMLInputElement>) => {
-    setTodoInput({ ...TodoInput, title: e.target.value })
+    setTodoInput({ ...todoInput, title: e.target.value })
   }
 
   const onChangeTodoContent = (e: ChangeEvent<HTMLInputElement>) => {
-    setTodoInput({ ...TodoInput, content: e.target.value })
+    setTodoInput({ ...todoInput, content: e.target.value })
   }
 
   const onChangeTodoImportance = (e: SelectChangeEvent<string>) => {
-    setTodoInput({ ...TodoInput, workImportance: e.target.value })
+    setTodoInput({ ...todoInput, workImportance: e.target.value })
   }
 
   const onChangeTodoProficiency = (e: SelectChangeEvent<string>) => {
-    setTodoInput({ ...TodoInput, workProficiency: e.target.value })
+    setTodoInput({ ...todoInput, workProficiency: e.target.value })
   }
 
   const onChangeTodoType = (e: SelectChangeEvent<string>) => {
-    setTodoInput({ ...TodoInput, workType: e.target.value })
+    setTodoInput({ ...todoInput, workType: e.target.value })
   }
 
   const onSubmitCreateTodo = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    createTodo(TodoInput)
+    createTodo(todoInput)
     setInitialTodoInput()
     closeCreateTodo()
   }
 
   const onSubmitModifyTodo = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    modifyTodo(modifyTodoId, TodoInput)
+    modifyTodo(modifyTodoId, todoInput)
     closeModifyTodo()
   }
 
@@ -304,7 +304,7 @@ function UserTodo({
               label="Title"
               variant="outlined"
               onChange={onChangeTodoTitle}
-              value={TodoInput.title}
+              value={todoInput.title}
             />
             <TextField
               required
@@ -313,14 +313,14 @@ function UserTodo({
               label="Content"
               variant="outlined"
               onChange={onChangeTodoContent}
-              value={TodoInput.content}
+              value={todoInput.content}
             />
             <InputLabel id="work-importance">Work Importance</InputLabel>
             <Select
               fullWidth
               labelId="work-importance"
               id="work-importance"
-              value={TodoInput.workImportance}
+              value={todoInput.workImportance}
               onChange={onChangeTodoImportance}
             >
               {workImportanceList.map((workImportance, index) => (
@@ -334,7 +334,7 @@ function UserTodo({
               fullWidth
               labelId="work-proficiency"
               id="work-proficiency"
-              value={TodoInput.workProficiency}
+              value={todoInput.workProficiency}
               onChange={onChangeTodoProficiency}
             >
               {workProficiencyList.map((workProficiency, index) => (
@@ -348,7 +348,7 @@ function UserTodo({
               fullWidth
               labelId="work-type"
               id="work-type"
-              value={TodoInput.workType}
+              value={todoInput.workType}
               onChange={onChangeTodoType}
             >
               {workTypeList.map((workType, index) => (
@@ -375,7 +375,7 @@ function UserTodo({
               label="Title"
               variant="outlined"
               onChange={onChangeTodoTitle}
-              value={TodoInput.title}
+              value={todoInput.title}
             />
             <TextField
               required
@@ -384,14 +384,14 @@ function UserTodo({
               label="Content"
               variant="outlined"
               onChange={onChangeTodoContent}
-              value={TodoInput.content}
+              value={todoInput.content}
             />
             <InputLabel id="work-importance">Work Importance</InputLabel>
             <Select
               fullWidth
               labelId="work-importance"
               id="work-importance"
-              value={TodoInput.workImportance}
+              value={todoInput.workImportance}
               onChange={onChangeTodoImportance}
             >
               {workImportanceList.map((workImportance, index) => (
@@ -405,7 +405,7 @@ function UserTodo({
               fullWidth
               labelId="work-proficiency"
               id="work-proficiency"
-              value={TodoInput.workProficiency}
+              value={todoInput.workProficiency}
               onChange={onChangeTodoProficiency}
             >
               {workProficiencyList.map((workProficiency, index) => (
@@ -419,7 +419,7 @@ function UserTodo({
               fullWidth
               labelId="work-type"
               id="work-type"
-              value={TodoInput.workType}
+              value={todoInput.workType}
               onChange={onChangeTodoType}
             >
               {workTypeList.map((workType, index) => (

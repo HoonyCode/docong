@@ -13,6 +13,8 @@ import {
   SAVE_POMO,
   getUserInfoAsync,
   GET_USER_INFO,
+  setUserInfoAsync,
+  SET_USER_INFO,
 } from './actions'
 import {
   userSignup,
@@ -37,7 +39,7 @@ import {
 import { buffers, EventChannel, Task } from 'redux-saga'
 import { closeChannel, subscribe } from './channel'
 import { DefaultResponse, savePomo } from '../../api/pomo'
-import { getUserInfo, UserInfo } from '../../api/user'
+import { getUserInfo, setUserInfo, UserInfo } from '../../api/user'
 
 function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
   try {
@@ -89,13 +91,27 @@ function* userGoogleLoginSaga(
   }
 }
 
-function* getUserInfoSaga(action: ReturnType<typeof getUserInfoAsync.request>) {
+function* getUserInfoSaga() {
   try {
     const userInfo: UserInfo = yield call(getUserInfo)
     yield put(getUserInfoAsync.success(userInfo))
   } catch (e: any) {
     alert('유저 정보 요청실패')
     yield put(getUserInfoAsync.failure(e))
+    console.error(e)
+  }
+}
+
+function* setUserInfoSaga(action: ReturnType<typeof setUserInfoAsync.request>) {
+  try {
+    const setUserInfoResponse: DefaultResponse = yield call(
+      setUserInfo,
+      action.payload
+    )
+    yield put(getUserInfoAsync.request(null))
+    console.log(setUserInfoResponse)
+  } catch (e: any) {
+    alert('유저 정보 수정 실패')
     console.error(e)
   }
 }
@@ -159,6 +175,7 @@ export function* userSaga() {
   yield takeEvery(USER_LOGIN, userLoginSaga)
   yield takeEvery(USER_GOOGLE_LOGIN, userGoogleLoginSaga)
   yield takeEvery(GET_USER_INFO, getUserInfoSaga)
+  yield takeEvery(SET_USER_INFO, setUserInfoSaga)
   yield takeEvery(START_USER_TIMER, startUserTimerSaga)
   yield takeEvery(SAVE_POMO, savePomoSaga)
 }
