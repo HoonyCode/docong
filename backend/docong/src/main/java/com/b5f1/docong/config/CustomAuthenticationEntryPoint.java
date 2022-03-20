@@ -1,7 +1,5 @@
 package com.b5f1.docong.config;
 
-import com.b5f1.docong.api.exception.model.ErrorResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,24 +20,14 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
         log.error("UnAuthorized error : {}", e.getMessage());
-        String exception = (String)request.getAttribute("exception");
-        System.out.println("CustomAuthenticationEntryPoint 진입 => "+exception);
+        String exception = (String) request.getAttribute("exception");
+        System.out.println("CustomAuthenticationEntryPoint 진입 => " + exception);
 
         // response에 넣기
-        // unauthorized exception
-        if(exception == null) {
-            setResponse(response, "unauthorized");
-        }
-        // token expired
-        else if(exception.equals("token expired")){
-            setResponse(response, "token expired");
-        }
-        // wrong token
-        else if(exception.equals("wrong token")){
-            setResponse(response, "wrong token");
-        }
+        setResponse(response, exception);
     }
-    private void setResponse(HttpServletResponse response, String exception) throws IOException{
+
+    private void setResponse(HttpServletResponse response, String exception) throws IOException {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.getWriter().println("{ \"message\" : \"" + exception
