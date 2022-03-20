@@ -6,7 +6,6 @@ import com.b5f1.docong.api.dto.request.UpdateTeamReqDto;
 import com.b5f1.docong.api.dto.response.BaseResponseEntity;
 import com.b5f1.docong.api.dto.response.FindAllTeamResDto;
 import com.b5f1.docong.api.dto.response.FindTeamResDto;
-import com.b5f1.docong.api.dto.response.FindTodoResDto;
 import com.b5f1.docong.api.resolver.Auth;
 import com.b5f1.docong.api.service.TeamServiceImpl;
 import com.b5f1.docong.core.domain.user.User;
@@ -55,17 +54,17 @@ public class TeamController {
         return ResponseEntity.ok().body(new BaseResponseEntity(200,"Success"));
     }
 
-    @PostMapping("/member/{team_id}/{user_id}")
-    public ResponseEntity<BaseResponseEntity> addTeamMember(@PathVariable Long team_id, @PathVariable Long user_id, @Auth User user) {
-        SaveAndDeleteTeamUserReqDto teamUserReqDto = new SaveAndDeleteTeamUserReqDto(team_id, user_id, user.getSeq());
-        teamService.addTeamMember(teamUserReqDto);
+    @PostMapping("/member")
+    public ResponseEntity<BaseResponseEntity> addTeamMember(@RequestBody @Validated SaveAndDeleteTeamUserReqDto teamUserReqDto, @Auth User user) {
+//        SaveAndDeleteTeamUserReqDto teamUserReqDto = new SaveAndDeleteTeamUserReqDto(teamMemberDto.getTeamId(), teamMemberDto.getUserId(), user.getSeq());
+        teamService.addTeamMember(teamUserReqDto,user.getSeq());
         return ResponseEntity.ok().body(new BaseResponseEntity(200,"Success"));
     }
 
-    @DeleteMapping("member/{team_id}/{user_id}")
-    public ResponseEntity<BaseResponseEntity> deleteTeamMember(@PathVariable Long team_id, @PathVariable Long user_id, @Auth User user) {
-        SaveAndDeleteTeamUserReqDto teamUserReqDto = new SaveAndDeleteTeamUserReqDto(team_id, user_id, user.getSeq());
-        teamService.deleteTeamMember(teamUserReqDto);
+    @DeleteMapping("member/{team_id}/{user_email}")
+    public ResponseEntity<BaseResponseEntity> deleteTeamMember(@PathVariable Long team_id, @PathVariable String user_email, @Auth User user) {
+        SaveAndDeleteTeamUserReqDto teamUserReqDto = new SaveAndDeleteTeamUserReqDto(team_id, user_email);
+        teamService.deleteTeamMember(teamUserReqDto,user.getSeq());
         return ResponseEntity.ok().body(new BaseResponseEntity(200,"Success"));
     }
 

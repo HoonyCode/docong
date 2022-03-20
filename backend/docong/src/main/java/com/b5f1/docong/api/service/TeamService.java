@@ -12,6 +12,6 @@ public interface TeamService {
     void deleteTeam(Long team_id);
     FindTeamResDto findTeam(Long team_id);
     FindAllTeamResDto findAllTeam(Long user_id);
-    void addTeamMember(SaveAndDeleteTeamUserReqDto teamUserReqDto);
-    void deleteTeamMember(SaveAndDeleteTeamUserReqDto teamUserReqDto);
+    void addTeamMember(SaveAndDeleteTeamUserReqDto teamUserReqDto, Long reqUserId);
+    void deleteTeamMember(SaveAndDeleteTeamUserReqDto teamUserReqDto, Long reqUserId);
 }
