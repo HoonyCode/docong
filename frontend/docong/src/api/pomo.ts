@@ -1,18 +1,8 @@
 import axios from 'axios'
-
-const BASE_URL = 'http://localhost:8080/api/'
-
-const setHeader = function () {
-  const token = localStorage.getItem('jwtToken')
-  const header = {
-    Authorization: `Bearer ${token}`,
-  }
-  return header
-}
+import { BASE_URL } from './auth'
 
 export async function savePomo(pomoData: PomoData) {
-  alert('Pomo 저장 요청')
-  const response = await axios.post(`${BASE_URL}pomo`, pomoData)
+  const response = await axios.post(`${BASE_URL}/api/pomo`, pomoData)
   return response.data
 }
 
@@ -22,6 +12,11 @@ export interface PomoData {
   noise: string
   startTime: string
   timeStatus: string
-  todo_seq: number
-  user_seq: number
+  todo_seq: null | number
+}
+
+export interface DefaultResponse {
+  code: string
+  message: string
+  status: number
 }

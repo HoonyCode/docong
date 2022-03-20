@@ -4,7 +4,7 @@ import {
   GoogleLoginResponseOffline,
 } from 'react-google-login'
 
-const BASE_URL = 'http://localhost:8080/api/'
+export const BASE_URL = 'http://j6s003.p.ssafy.io'
 
 const config = {
   headers: {
@@ -13,33 +13,28 @@ const config = {
 }
 
 export async function userSignup(signupData: SignupData) {
-  alert('가입 요청')
-  const response = await axios.post(`${BASE_URL}user/join`, signupData)
-  // debug
-  console.log('가입 요청 데이터 :', response.data)
+  const response = await axios.post(`${BASE_URL}/api/user/join`, signupData)
+  return response.data
+}
+
+export async function emailDuplicateCheck(email: string) {
+  const response = await axios.post(`${BASE_URL}/api/user/duplicate`, email)
   return response.data
 }
 
 export async function userLogin(loginData: LoginData) {
-  alert('로그인 요청')
-  console.log(loginData)
-  const response = await axios.post(`${BASE_URL}user/login`, loginData)
-  // debug
-  console.log('로그인 요청 데이터 :', response.data)
-  return response.data
+  const response = await axios.post(`${BASE_URL}/api/user/login`, loginData)
+  return response.headers.authorization.split(' ')[1]
 }
 
 export async function userGoogleLogin(
   googleLoginResponse: GoogleLoginResponse | GoogleLoginResponseOffline
 ) {
-  alert('구글 로그인 요청')
   const response = await axios.post(
-    `${BASE_URL}oauth/jwt/google`,
+    `${BASE_URL}/api/oauth/jwt/google`,
     JSON.stringify(googleLoginResponse),
     config
   )
-  // debug
-  console.log('구글 로그인 요청 데이터 :', response.data)
   return response.data
 }
 
@@ -59,9 +54,16 @@ export interface SignupResponse {
   message: string
 }
 
+export interface EmailDuplicateCheckResponse {
+  possible: boolean
+}
+
 export interface LoginData {
   email: string
   password: string
 }
 
-export interface LoginHeader {}
+export interface GoogleLoginResponseData {
+  jwtToken: string
+  newUser: boolean
+}

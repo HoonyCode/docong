@@ -24,22 +24,14 @@ function UserTimerControls({
 
       {status === 'Finished' && (
         <button onClick={start} className="start">
-          Restart Timer
+          Start Timer
         </button>
       )}
 
       {(status === 'Paused' || status === 'Running') && (
-        <div>
-          <button onClick={reset} className="reset">
-            Stop
-          </button>
-          <button
-            onClick={pause}
-            className={status === 'Paused' ? 'resume' : 'pause'}
-          >
-            {status === 'Paused' ? 'Resume' : 'Pause'}
-          </button>
-        </div>
+        <button onClick={reset} className="pause">
+          Stop Timer
+        </button>
       )}
     </div>
   )

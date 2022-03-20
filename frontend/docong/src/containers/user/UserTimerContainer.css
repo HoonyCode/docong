@@ -6,9 +6,9 @@ body,
 
 body {
   margin: 0;
-  padding: 0 5%;
-  background: #eee;
-  font-family: "Roboto", sans-serif;
+  padding: 0;
+  background: white;
+  font-family: 'Roboto', sans-serif;
 }
 
 *,

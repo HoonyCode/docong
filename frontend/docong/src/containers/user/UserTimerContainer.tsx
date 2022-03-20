@@ -1,5 +1,7 @@
+import { Button } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import UserTimerControls from '../../components/user/UserTimerControls'
 import UserTimerDisplay from '../../components/user/UserTimerDisplay'
 import UserTimerType from '../../components/user/UserTimerType'
@@ -18,6 +20,7 @@ function UserTimerContainer() {
     (state: RootState) => state.user.userTimer
   )
 
+  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const timerTypes = [
@@ -43,19 +46,31 @@ function UserTimerContainer() {
       } catch (e) {
         console.log('Notification error', e)
       }
+      // noise 적용 후 수정
       dispatch(
         savePomoAsync.request({
-          emotion: 'ANGER',
+          emotion: '',
           endTime: '2022-03-15T18:30:16.392Z',
           noise: 'COMMON',
           startTime: '2022-03-15T18:30:16.392Z',
-          timeStatus: 'SHORT',
-          todo_seq: 0,
-          user_seq: 1,
+          timeStatus: selectedType.name.toUpperCase(),
+          todo_seq: null,
         })
       )
     }
   }, [status, time, dispatch, selectedType])
+
+  const onClickToTodos = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    navigate('/todo')
+  }
+
+  const onClickLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    localStorage.removeItem('jwtToken')
+    localStorage.removeItem('persist:root')
+    navigate('/login')
+  }
 
   const changeType = (type: any) => {
     resetTimer()
@@ -94,26 +109,40 @@ function UserTimerContainer() {
   }
 
   return (
-    <div className="Content">
-      <div className="Pomodoro">
-        <UserTimerType
-          types={timerTypes}
-          selected={selectedType}
-          changeType={changeType}
-        />
-        <UserTimerDisplay
-          time={time}
-          status={getStatus()}
-          progress={getProgress()}
-        />
-        <UserTimerControls
-          start={startTimer}
-          reset={resetTimer}
-          pause={pauseTimer}
-          status={getStatus()}
-        />
+    <>
+      {status !== 'play' && (
+        <Button variant="outlined" onClick={onClickToTodos}>
+          Todo
+        </Button>
+      )}
+      {status !== 'play' && (
+        <Button variant="outlined" onClick={onClickLogout}>
+          Logout
+        </Button>
+      )}
+      <div className="Content">
+        <div className="Pomodoro">
+          {status !== 'play' && (
+            <UserTimerType
+              types={timerTypes}
+              selected={selectedType}
+              changeType={changeType}
+            />
+          )}
+          <UserTimerDisplay
+            time={time}
+            status={getStatus()}
+            progress={getProgress()}
+          />
+          <UserTimerControls
+            start={startTimer}
+            reset={resetTimer}
+            pause={pauseTimer}
+            status={getStatus()}
+          />
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

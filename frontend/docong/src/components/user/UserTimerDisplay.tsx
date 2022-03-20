@@ -19,7 +19,7 @@ function UserTimerDisplay({ time, status, progress }: UserTimerDisplayProps) {
     return `${minutes}:${seconds}`
   }
 
-  document.title = `(${formatTime(time)}) Pomodoro`
+  document.title = `(${formatTime(time)}) docong`
 
   const radius = 150
   const stroke = 5

@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import { all } from 'redux-saga/effects'
-import user from './user'
-import { userSaga } from './user'
+import user, { userSaga } from './user'
+import todo, { todoSaga } from './todo'
 
 // redux-persist : store 의 데이터를 localStorage 에 저장해서 유지할 수 있음
 import { persistReducer } from 'redux-persist'
@@ -16,6 +16,7 @@ const persistConfig = {
 // 모든 Reducer 를 모아서 rootReducer 로 export
 const rootReducer = combineReducers({
   user,
+  todo,
 })
 
 // redux-persist 적용 2
@@ -27,5 +28,5 @@ export type RootState = ReturnType<typeof rootReducer>
 
 // 모든 Saga 를 모아서 rootSaga 로 export
 export function* rootSaga() {
-  yield all([userSaga()])
+  yield all([userSaga(), todoSaga()])
 }

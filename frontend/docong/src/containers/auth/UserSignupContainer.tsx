@@ -23,8 +23,12 @@ function UserSignupContainer() {
   })
 
   // 회원가입 요청
-  const onSignupSubmit = (signupInput: SignupData) => {
-    dispatch(userSignupAsync.request({ signupInput: signupInput, navigate }))
+  const onSignupSubmit = (signupInput: SignupData, isCheckedEmail: boolean) => {
+    if (isCheckedEmail) {
+      dispatch(userSignupAsync.request({ signupInput: signupInput, navigate }))
+    } else {
+      alert('이메일 중복 확인을 진행해주세요.')
+    }
   }
 
   // 구글 로그인 요청
