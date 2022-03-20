@@ -4,7 +4,7 @@ import {
   GoogleLoginResponseOffline,
 } from 'react-google-login'
 
-export const BASE_URL = 'http://j6s003.p.ssafy.io'
+export const BASE_URL = 'https://j6s003.p.ssafy.io'
 
 const config = {
   headers: {
