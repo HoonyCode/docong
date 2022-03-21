@@ -62,14 +62,19 @@ function UserTimerContainer() {
 
   const onClickToTodos = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    navigate('/todo')
+    navigate('/user/todo')
+  }
+
+  const onClickToUserAnalysis = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    navigate('/user/analysis')
   }
 
   const onClickLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     localStorage.removeItem('jwtToken')
     localStorage.removeItem('persist:root')
-    navigate('/login')
+    navigate('/')
   }
 
   const changeType = (type: any) => {
@@ -113,6 +118,11 @@ function UserTimerContainer() {
       {status !== 'play' && (
         <Button variant="outlined" onClick={onClickToTodos}>
           Todo
+        </Button>
+      )}
+      {status !== 'play' && (
+        <Button variant="outlined" onClick={onClickToUserAnalysis}>
+          Analysis
         </Button>
       )}
       {status !== 'play' && (

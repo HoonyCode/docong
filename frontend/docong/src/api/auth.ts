@@ -4,7 +4,8 @@ import {
   GoogleLoginResponseOffline,
 } from 'react-google-login'
 
-export const BASE_URL = 'https://j6s003.p.ssafy.io'
+// export const BASE_URL = 'https://j6s003.p.ssafy.io'
+export const BASE_URL = ''
 
 const config = {
   headers: {
@@ -24,6 +25,7 @@ export async function emailDuplicateCheck(email: string) {
 
 export async function userLogin(loginData: LoginData) {
   const response = await axios.post(`${BASE_URL}/api/user/login`, loginData)
+  console.log(response)
   return response.headers.authorization.split(' ')[1]
 }
 

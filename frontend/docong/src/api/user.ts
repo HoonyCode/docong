@@ -17,6 +17,7 @@ export async function getUserInfo() {
 }
 
 export async function setUserInfo(userData: UserData) {
+  console.log(userData)
   const response = await axios.patch(`${BASE_URL}/api/user/info`, userData, {
     headers: setHeader(),
   })

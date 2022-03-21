@@ -26,14 +26,19 @@ function UserTodoContainer() {
 
   const onClickToTimer = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    navigate('/')
+    navigate('/timer')
+  }
+
+  const onClickToUserAnalysis = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    navigate('/user/analysis')
   }
 
   const onClickLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     localStorage.removeItem('jwtToken')
     localStorage.removeItem('persist:root')
-    navigate('/login')
+    navigate('/')
   }
 
   const createTodo = (todoInput: TodoInput) => {
@@ -65,6 +70,9 @@ function UserTodoContainer() {
     <>
       <Button variant="outlined" onClick={onClickToTimer}>
         Timer
+      </Button>
+      <Button variant="outlined" onClick={onClickToUserAnalysis}>
+        Analysis
       </Button>
       <Button variant="outlined" onClick={onClickLogout}>
         Logout
