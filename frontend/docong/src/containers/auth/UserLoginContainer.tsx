@@ -48,7 +48,7 @@ function UserLoginContainer() {
     <>
       <UserLoginForm onLoginSubmit={onLoginSubmit} />
       <GoogleLogin
-        clientId="402744381856-cvss5niacafgsm9c6i4baua6ofeqej10.apps.googleusercontent.com"
+        clientId="402744381856-cvss5niacafgsm9c6i4baua6ofeqej10"
         onSuccess={onSuccessGoogleLogin}
         onFailure={onFailureGoogleLogin}
         cookiePolicy="single_host_origin"

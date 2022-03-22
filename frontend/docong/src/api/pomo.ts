@@ -7,7 +7,7 @@ export async function savePomo(pomoData: PomoData) {
 }
 
 export interface PomoData {
-  emotion: string
+  otherTime: number
   endTime: string
   noise: string
   startTime: string

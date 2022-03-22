@@ -50,7 +50,7 @@ function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
     )
     alert('회원가입이 완료되었습니다.')
     // 회원가입 후 로그인 페이지로 이동
-    yield action.payload.navigate('/login')
+    yield action.payload.navigate('/')
     // put : 특정 액션을 dispatch
     yield put(userSignupAsync.success(signupResponse))
   } catch (e: any) {
@@ -65,7 +65,7 @@ function* userLoginSaga(action: ReturnType<typeof userLoginAsync.request>) {
     const loginToken: string = yield call(userLogin, action.payload.loginInput)
     alert('로그인이 완료되었습니다.')
     localStorage.setItem('jwtToken', loginToken)
-    yield action.payload.navigate('/')
+    yield action.payload.navigate('/timer')
     yield put(getUserInfoAsync.request(null))
   } catch (e: any) {
     alert('로그인 실패')
@@ -83,7 +83,7 @@ function* userGoogleLoginSaga(
     )
     alert('구글 로그인이 완료되었습니다.')
     localStorage.setItem('jwtToken', googleLoginResponseData.jwtToken)
-    yield action.payload.navigate('/')
+    yield action.payload.navigate('/timer')
     yield put(getUserInfoAsync.request(null))
   } catch (e: any) {
     alert('구글 로그인 실패')
@@ -144,10 +144,10 @@ function* connectChannel() {
     channel = yield call(subscribe, param)
 
     while (true) {
-      const { message } = yield flush(channel)
+      yield flush(channel)
       const time: number = yield select((state) => state.user.userTimer.time)
       yield put(changeUserTimerTime(time - 1))
-      const { timeout } = yield race({ timeout: delay(timer) })
+      yield race({ timeout: delay(timer) })
     }
   } catch (e) {
     console.error(e)

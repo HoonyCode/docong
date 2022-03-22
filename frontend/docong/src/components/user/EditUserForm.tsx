@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -10,12 +11,27 @@ import {
   SelectChangeEvent,
   TextField,
 } from '@mui/material'
-import { ChangeEvent, FormEvent, useState } from 'react'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import DatePicker from '@mui/lab/DatePicker'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { UserData } from '../../api/user'
 import { RootState } from '../../modules'
 
-function EditUserForm() {
+interface EditUserFormProps {
+  isOpenEditUserForm: boolean
+  closeEditUserForm: () => void
+  editUser: (userData: UserData) => void
+}
+
+function EditUserForm({
+  isOpenEditUserForm,
+  closeEditUserForm,
+  editUser,
+}: EditUserFormProps) {
   const userInfo = useSelector((state: RootState) => state.user.userInfo.data)
+  const [date, setDate] = useState<Date | null>(null)
 
   const [userInfoInput, setUserInfoInput] = useState({
     address: userInfo ? userInfo.address : '',
@@ -23,25 +39,40 @@ function EditUserForm() {
     gender: userInfo ? userInfo.gender : '',
     job: userInfo ? userInfo.job : '',
     name: userInfo ? userInfo.name : '',
-    password: '',
     position: userInfo ? userInfo.position : '',
   })
 
   const genderList = ['Female', 'Male']
+  const jobList = ['Job1', 'Job2', 'Job3']
+  const positionList = ['Pos1', 'Pos2', 'Pos3']
 
-  const onChangeUserAddress = (e: ChangeEvent<HTMLInputElement>) => {
-    setUserInfoInput({ ...userInfoInput, address: e.target.value })
-  }
+  useEffect(() => {
+    if (isOpenEditUserForm === true) {
+      setUserInfoInput({
+        address: '1',
+        birth: userInfo ? userInfo.birth : '',
+        gender: userInfo ? userInfo.gender : '',
+        job: userInfo ? userInfo.job : '',
+        name: userInfo ? userInfo.name : '',
+        position: userInfo ? userInfo.position : '',
+      })
+      setDate(null)
+    }
+  }, [isOpenEditUserForm, userInfo])
 
-  const onChangeUserBirth = (e: ChangeEvent<HTMLInputElement>) => {
-    setUserInfoInput({ ...userInfoInput, birth: e.target.value })
+  const onChangeUserBirth = (newDate: any) => {
+    setDate(newDate)
+    setUserInfoInput({
+      ...userInfoInput,
+      birth: newDate.toISOString().slice(0, 10),
+    })
   }
 
   const onChangeUserGender = (e: SelectChangeEvent<string>) => {
     setUserInfoInput({ ...userInfoInput, gender: e.target.value })
   }
 
-  const onChangeUserJob = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeUserJob = (e: SelectChangeEvent<string>) => {
     setUserInfoInput({ ...userInfoInput, job: e.target.value })
   }
 
@@ -49,18 +80,17 @@ function EditUserForm() {
     setUserInfoInput({ ...userInfoInput, name: e.target.value })
   }
 
-  const onChangeUserPosition = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeUserPosition = (e: SelectChangeEvent<string>) => {
     setUserInfoInput({ ...userInfoInput, position: e.target.value })
   }
 
   const onSubmitEditUser = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    editUser(userInfoInput)
   }
 
-  const closeEditUser = () => {}
-
   return (
-    <>
+    <Dialog open={isOpenEditUserForm} onClose={closeEditUserForm}>
       <DialogTitle>EditUserInfo</DialogTitle>
       <Box component="form" onSubmit={onSubmitEditUser}>
         <DialogContent>
@@ -73,17 +103,17 @@ function EditUserForm() {
             onChange={onChangeUserName}
             value={userInfoInput.name}
           />
-          <TextField
-            required
-            fullWidth
-            id="birth"
-            label="Birth"
-            variant="outlined"
-            onChange={onChangeUserBirth}
-            value={userInfoInput.birth}
-          />
+          <LocalizationProvider required dateAdapter={AdapterDateFns}>
+            <DatePicker
+              label="Birth"
+              value={date}
+              onChange={onChangeUserBirth}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
           <InputLabel id="gender">Gender</InputLabel>
           <Select
+            required
             fullWidth
             labelId="gender"
             id="gender"
@@ -96,12 +126,44 @@ function EditUserForm() {
               </MenuItem>
             ))}
           </Select>
+          <InputLabel id="job">Job</InputLabel>
+          <Select
+            required
+            fullWidth
+            labelId="job"
+            id="job"
+            value={userInfoInput.job}
+            onChange={onChangeUserJob}
+          >
+            {jobList.map((job, index) => (
+              <MenuItem key={index} value={job.toUpperCase()}>
+                {job}
+              </MenuItem>
+            ))}
+          </Select>
+          <InputLabel id="position">Position</InputLabel>
+          <Select
+            required
+            fullWidth
+            labelId="position"
+            id="position"
+            value={userInfoInput.position}
+            onChange={onChangeUserPosition}
+          >
+            {positionList.map((position, index) => (
+              <MenuItem key={index} value={position.toUpperCase()}>
+                {position}
+              </MenuItem>
+            ))}
+          </Select>
         </DialogContent>
         <DialogActions>
           <Button type="submit">Edit</Button>
-          <Button onClick={closeEditUser}>Cancel</Button>
+          <Button onClick={closeEditUserForm}>Cancel</Button>
         </DialogActions>
       </Box>
-    </>
+    </Dialog>
   )
 }
+
+export default EditUserForm

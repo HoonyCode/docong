@@ -4,6 +4,7 @@ import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import UserLoginPage from './pages/auth/UserLoginPage'
 import UserSignupPage from './pages/auth/UserSignupPage'
+import UserAnalysisPage from './pages/user/UserAnalysisPage'
 import UserTimerPage from './pages/user/UserTimerPage'
 import UserTodoPage from './pages/user/UserTodoPage'
 
@@ -19,14 +20,11 @@ function App() {
 
   useEffect(() => {
     if (localStorage.getItem('jwtToken')) {
-      if (location.pathname === '/login' || location.pathname === '/join') {
-        navigate('/')
+      if (location.pathname === '/' || location.pathname === '/join') {
+        navigate('/timer')
       }
-    } else if (
-      location.pathname !== '/login' &&
-      location.pathname !== '/join'
-    ) {
-      navigate('/login')
+    } else if (location.pathname !== '/' && location.pathname !== '/join') {
+      navigate('/')
       alert('docong 은 로그인 후 이용 가능합니다.')
     }
   }, [location, dispatch, navigate])
@@ -34,10 +32,11 @@ function App() {
   return (
     <Background>
       <Routes>
-        <Route path="/" element={<UserTimerPage />} />
-        <Route path="/login" element={<UserLoginPage />} />
+        <Route path="/" element={<UserLoginPage />} />
+        <Route path="/timer" element={<UserTimerPage />} />
         <Route path="/join" element={<UserSignupPage />} />
-        <Route path="/todo" element={<UserTodoPage />} />
+        <Route path="/user/todo" element={<UserTodoPage />} />
+        <Route path="/user/analysis" element={<UserAnalysisPage />} />
       </Routes>
     </Background>
   )

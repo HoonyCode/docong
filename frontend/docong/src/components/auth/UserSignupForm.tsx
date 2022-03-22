@@ -108,7 +108,7 @@ function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
 
   const onClickToLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    navigate('/login')
+    navigate('/')
   }
 
   return (

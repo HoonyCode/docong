@@ -2,7 +2,7 @@ import { Button } from '@mui/material'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { TodoInput } from '../../api/todo'
+import { Todo, TodoInput } from '../../api/todo'
 import UserTodo from '../../components/user/UserTodo'
 import { RootState } from '../../modules'
 import {
@@ -12,6 +12,7 @@ import {
   modifyTodoStatusAsync,
   saveTodoAsync,
 } from '../../modules/todo'
+import { changeUserTimerTodo } from '../../modules/user'
 
 function UserTodoContainer() {
   const userTodos = useSelector((state: RootState) => state.todo.userTodos.data)
@@ -26,18 +27,28 @@ function UserTodoContainer() {
 
   const onClickToTimer = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    navigate('/')
+    navigate('/timer')
+  }
+
+  const onClickToUserAnalysis = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    navigate('/user/analysis')
   }
 
   const onClickLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     localStorage.removeItem('jwtToken')
     localStorage.removeItem('persist:root')
-    navigate('/login')
+    navigate('/')
   }
 
   const createTodo = (todoInput: TodoInput) => {
     dispatch(saveTodoAsync.request(todoInput))
+  }
+
+  const startTodoTimer = (selectedTodo: Todo) => {
+    dispatch(changeUserTimerTodo(selectedTodo))
+    navigate('/timer')
   }
 
   const modifyTodo = (todoId: number, todoInput: TodoInput) => {
@@ -66,6 +77,9 @@ function UserTodoContainer() {
       <Button variant="outlined" onClick={onClickToTimer}>
         Timer
       </Button>
+      <Button variant="outlined" onClick={onClickToUserAnalysis}>
+        Analysis
+      </Button>
       <Button variant="outlined" onClick={onClickLogout}>
         Logout
       </Button>
@@ -75,6 +89,7 @@ function UserTodoContainer() {
         modifyTodo={modifyTodo}
         deleteTodo={deleteTodo}
         modifyTodoStatus={modifyTodoStatus}
+        startTodoTimer={startTodoTimer}
       />
     </>
   )
