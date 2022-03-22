@@ -41,7 +41,7 @@ class TeamServiceImplTest {
     void saveTest(){
         //given
         User findUser = joinUser("teat1");
-        SaveTeamReqDto teamReqDto = new SaveTeamReqDto(findUser.getSeq(), "saveTest");
+        SaveTeamReqDto teamReqDto = new SaveTeamReqDto(findUser.getEmail(), "saveTest");
         //when
         Long seq = teamService.createTeam(teamReqDto);
         Optional<Team> save = teamRepository.findById(seq);
@@ -53,7 +53,7 @@ class TeamServiceImplTest {
     void findTest(){
         //given
         User findUser = joinUser("teat1");
-        SaveTeamReqDto teamReqDto = new SaveTeamReqDto(findUser.getSeq(), "findTeamTest");
+        SaveTeamReqDto teamReqDto = new SaveTeamReqDto(findUser.getEmail(), "findTeamTest");
         //when
         Long seq = teamService.createTeam(teamReqDto);
         FindTeamResDto teamResDto = teamService.findTeam(seq);
@@ -70,11 +70,11 @@ class TeamServiceImplTest {
     void updateTest(){
         //given
         User findUser = joinUser("teat1");
-        SaveTeamReqDto teamReqDto = new SaveTeamReqDto(findUser.getSeq(), "updateTeamTest");
+        SaveTeamReqDto teamReqDto = new SaveTeamReqDto(findUser.getEmail(), "updateTeamTest");
         Long seq = teamService.createTeam(teamReqDto);
         //when
         Optional<Team> save = teamRepository.findById(seq);
-        UpdateTeamReqDto updateTeamReqDto = new UpdateTeamReqDto(save.get().getSeq(),findUser.getSeq(),"changedTeamName");
+        UpdateTeamReqDto updateTeamReqDto = new UpdateTeamReqDto(save.get().getSeq(),findUser.getEmail(),"changedTeamName");
         Long result = teamService.updateTeam(updateTeamReqDto);
         Optional<Team> findTeam = teamRepository.findById(save.get().getSeq());
         //then
@@ -87,7 +87,7 @@ class TeamServiceImplTest {
     void deleteTest(){
         //given
         User findUser = joinUser("teat1");
-        SaveTeamReqDto teamReqDto = new SaveTeamReqDto(findUser.getSeq(), "deleteTeamTest");
+        SaveTeamReqDto teamReqDto = new SaveTeamReqDto(findUser.getEmail(), "deleteTeamTest");
         Long seq = teamService.createTeam(teamReqDto);
         //when
         teamService.deleteTeam(seq);
@@ -110,11 +110,11 @@ class TeamServiceImplTest {
         //given
         User findUser1 = joinUser("teat1");
         User findUser2 = joinUser("teat2");
-        SaveTeamReqDto teamReqDto = new SaveTeamReqDto(findUser1.getSeq(), "addTeamMemberTest");
+        SaveTeamReqDto teamReqDto = new SaveTeamReqDto(findUser1.getEmail(), "addTeamMemberTest");
         Long seq = teamService.createTeam(teamReqDto);
         //when
-        SaveAndDeleteTeamUserReqDto teamUserReqDto = new SaveAndDeleteTeamUserReqDto(seq, findUser2.getSeq(), findUser1.getSeq());
-        teamService.addTeamMember(teamUserReqDto);
+        SaveAndDeleteTeamUserReqDto teamUserReqDto = new SaveAndDeleteTeamUserReqDto(seq, findUser2.getEmail());
+        teamService.addTeamMember(teamUserReqDto,findUser1.getSeq());
         List<TeamUser> teamUsers = teamUserQueryRepository.findTeamUserWithTeamId(seq);
         //then
         assertThat(teamUsers.size()).isEqualTo(2);
@@ -126,11 +126,11 @@ class TeamServiceImplTest {
         //given
         User findUser1 = joinUser("teat1");
         User findUser2 = joinUser("teat2");
-        SaveTeamReqDto teamReqDto = new SaveTeamReqDto(findUser1.getSeq(), "deleteTeamMemberTest");
+        SaveTeamReqDto teamReqDto = new SaveTeamReqDto(findUser1.getEmail(), "deleteTeamMemberTest");
         Long seq = teamService.createTeam(teamReqDto);
-        SaveAndDeleteTeamUserReqDto teamUserReqDto = new SaveAndDeleteTeamUserReqDto(seq, findUser2.getSeq(), findUser1.getSeq());
-        teamService.addTeamMember(teamUserReqDto);
-        teamService.deleteTeamMember(teamUserReqDto);
+        SaveAndDeleteTeamUserReqDto teamUserReqDto = new SaveAndDeleteTeamUserReqDto(seq, findUser2.getEmail());
+        teamService.addTeamMember(teamUserReqDto,findUser1.getSeq());
+        teamService.deleteTeamMember(teamUserReqDto,findUser1.getSeq());
         //when
         List<TeamUser> teamUsers = teamUserQueryRepository.findTeamUserWithTeamId(seq);
         //then

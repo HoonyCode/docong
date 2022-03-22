@@ -11,8 +11,8 @@ public class SaveAndDeleteTeamUserReqDto {
     @NotNull
     private Long teamId;
     @NotNull
-    private Long userId;
-    @NotNull
-    private Long reqUserId;
+    private String userEmail;
+//    @NotNull
+//    private Long reqUserId;
 
 }

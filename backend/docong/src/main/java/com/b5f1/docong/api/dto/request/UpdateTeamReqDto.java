@@ -11,7 +11,7 @@ public class UpdateTeamReqDto {
     @NotNull
     private Long teamId;
     @NotNull
-    private Long userId;
+    private String userEmail;
     @NotNull
     private String name;
 }

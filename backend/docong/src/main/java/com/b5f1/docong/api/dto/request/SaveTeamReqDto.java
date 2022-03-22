@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class SaveTeamReqDto {
     @NotNull
-    private Long userId;
+    private String userEmail;
     @NotNull
     private String name;
 

@@ -34,7 +34,7 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public Long createTeam(SaveTeamReqDto teamReqDto) {
         //user_id가 있는지 확인한다.
-        User user = getUser(teamReqDto.getUserId());
+        User user = getUserByEmail(teamReqDto.getUserEmail());
         //team을 생성한다.
         Team team = teamBuilder(teamReqDto.getName());
         teamRepository.save(team);
@@ -44,15 +44,11 @@ public class TeamServiceImpl implements TeamService {
         return team.getSeq();
     }
 
-    private User getUser(Long userSeq) {
-        return userRepository.findById(userSeq)
-                .orElseThrow(() -> new IllegalStateException("없는 user 입니다."));
-    }
-
     @Override
     public Long updateTeam(UpdateTeamReqDto teamReqDto) {
         //user_id가 리더인지 확인
-        TeamUser teamUser = getTeamUser(teamReqDto.getUserId(), teamReqDto.getTeamId());
+        User user = getUserByEmail(teamReqDto.getUserEmail());
+        TeamUser teamUser = getTeamUser(user.getSeq(), teamReqDto.getTeamId());
         if (!teamUser.isLeader()) {
             throw new IllegalStateException("리더가 아닙니다.");
         }
@@ -64,8 +60,6 @@ public class TeamServiceImpl implements TeamService {
         find.preUpdate();
         return teamReqDto.getTeamId();
     }
-
-
 
     @Override
     public void deleteTeam(Long team_id) {
@@ -106,18 +100,20 @@ public class TeamServiceImpl implements TeamService {
         return teamResDto;
     }
     @Override
-    public void addTeamMember(SaveAndDeleteTeamUserReqDto teamUserReqDto) {
+    public void addTeamMember(SaveAndDeleteTeamUserReqDto teamUserReqDto, Long reqUserId) {
         //팀이 존재하는지 확인
         Team team = getTeam(teamUserReqDto.getTeamId());
+        //추가하려는 유저가 회원인지 확인
+        User user = getUserByEmail(teamUserReqDto.getUserEmail());
         //요청자가 리더인지 확인
-        TeamUser findReqTeamUser = getTeamUser(teamUserReqDto.getReqUserId(), teamUserReqDto.getTeamId());
-        Optional<TeamUser> findTeamUser = teamUserQueryRepository.findTeamUserWithUserIdAndTeamId(teamUserReqDto.getUserId(), teamUserReqDto.getTeamId());
+        TeamUser findReqTeamUser = getTeamUser(reqUserId, teamUserReqDto.getTeamId());
+
         if (!findReqTeamUser.isLeader()) {
             throw new IllegalStateException("리더만 팀원을 추가할 수 있습니다.");
         }
-        //member_id가 회원인지 확인
-        User user = getUser(teamUserReqDto.getUserId());
+
         //같은 유저를 넣으려고할 경우
+        Optional<TeamUser> findTeamUser = teamUserQueryRepository.findTeamUserWithUserIdAndTeamId(user.getSeq(), teamUserReqDto.getTeamId());
         if (findTeamUser.isPresent()) {
             throw new IllegalStateException("이미 그룹에 포함된 멤버입니다.");
         }
@@ -127,14 +123,16 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public void deleteTeamMember(SaveAndDeleteTeamUserReqDto teamUserReqDto) {
+    public void deleteTeamMember(SaveAndDeleteTeamUserReqDto teamUserReqDto, Long reqUserId) {
         //팀이 존재하는지 확인
         Team team = getTeam(teamUserReqDto.getTeamId());
+        //삭제하려는 유저가 회원인지 확인
+        User user = getUserByEmail(teamUserReqDto.getUserEmail());
         //삭제할 TeamUser가져오기
-        TeamUser findeamUser = getTeamUser(teamUserReqDto.getUserId(), teamUserReqDto.getTeamId());
+        TeamUser findeamUser = getTeamUser(user.getSeq(), teamUserReqDto.getTeamId());
         //삭제 요청한 사람과 member_id가 같거나 삭제 요청한 사람이 팀장이면 member_id 삭제
-        TeamUser findReqTeamUser = getTeamUser(teamUserReqDto.getReqUserId(), teamUserReqDto.getTeamId());
-        if (!findReqTeamUser.isLeader() && findReqTeamUser.getUser().getSeq() != teamUserReqDto.getUserId()) {
+        TeamUser findReqTeamUser = getTeamUser(reqUserId, teamUserReqDto.getTeamId());
+        if (!findReqTeamUser.isLeader() && findReqTeamUser.getUser().getSeq() != user.getSeq()) {
             throw new IllegalStateException("팀장이 아니거나 본인만 그룹을 나갈 수 있습니다.");
         }
         //팀목록에서 멤버 삭제(TeamUser에서 해당 row삭제)
@@ -146,6 +144,15 @@ public class TeamServiceImpl implements TeamService {
     public boolean isTeam(Long team_id) {
         //team_id가 있는지 확인
         return teamRepository.existsById(team_id);
+    }
+
+    private User getUserById(Long userSeq) {
+        return userRepository.findById(userSeq)
+                .orElseThrow(() -> new IllegalStateException("없는 user 입니다."));
+    }
+    private User getUserByEmail(String userEmail) {
+        return userRepository.findByEmailAndActivateTrue(userEmail);
+//                .orElseThrow(() -> new IllegalStateException("없는 user 입니다."));
     }
     private Team getTeam(Long teamSeq) {
         return teamRepository.findById(teamSeq)
