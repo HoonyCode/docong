@@ -3,6 +3,7 @@ import { UserAction, UserState } from './types'
 import {
   CHANGE_USER_TIMER_STATUS,
   CHANGE_USER_TIMER_TIME,
+  CHANGE_USER_TIMER_TODO,
   CHANGE_USER_TIMER_TYPE,
   getUserInfoAsync,
 } from './actions'
@@ -18,6 +19,7 @@ const initialState: UserState = {
   // 개인 타이머 상태
   userTimer: {
     selectedType: { name: 'Normal', time: 1500 },
+    selectedTodo: null,
     status: 'stop',
     time: 1500,
   },
@@ -31,6 +33,13 @@ const user = createReducer<UserState, UserAction>(initialState, {
       ...state.userTimer,
       selectedType: action.payload.selectedType,
       time: action.payload.time,
+    },
+  }),
+  [CHANGE_USER_TIMER_TODO]: (state, action) => ({
+    ...state,
+    userTimer: {
+      ...state.userTimer,
+      selectedTodo: action.payload,
     },
   }),
   [CHANGE_USER_TIMER_STATUS]: (state, action) => ({

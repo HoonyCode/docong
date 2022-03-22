@@ -22,14 +22,17 @@ import {
   Avatar,
   Grid,
 } from '@mui/material'
+import { styled, css } from '@mui/material/styles'
 import { green } from '@mui/material/colors'
 import AddIcon from '@mui/icons-material/Add'
+import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined'
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
 import CloseIcon from '@mui/icons-material/Close'
 import { Todo, TodoInput } from '../../api/todo'
 import produce from 'immer'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../modules'
+import { darken, lighten } from 'polished'
 
 interface UserTodoProps {
   userTodos: any
@@ -37,6 +40,7 @@ interface UserTodoProps {
   modifyTodo: (todoId: number, todoInput: TodoInput) => void
   deleteTodo: (todoId: number) => void
   modifyTodoStatus: (todoId: number, todoStatus: string) => void
+  startTodoTimer: (selectedTodo: Todo) => void
 }
 
 function UserTodo({
@@ -45,6 +49,7 @@ function UserTodo({
   modifyTodo,
   deleteTodo,
   modifyTodoStatus,
+  startTodoTimer,
 }: UserTodoProps) {
   const [board, setBoard] = useState({
     columns: [
@@ -71,6 +76,7 @@ function UserTodo({
   const [isOpenCreateTodo, setIsOpenCreateTodo] = useState(false)
   const [isOpenModifyTodo, setIsOpenModifyTodo] = useState(false)
   const [modifyTodoId, setModifyTodoId] = useState(0)
+  const [selectedTodo, setSelectedTodo] = useState<null | Todo>(null)
 
   const [todoInput, setTodoInput] = useState({
     title: '',
@@ -155,6 +161,26 @@ function UserTodo({
     setIsOpenCreateTodo(true)
   }
 
+  const onSelectTodo = (card: any) => {
+    if (!selectedTodo) {
+      setSelectedTodo({ ...card, seq: card.id })
+    } else {
+      if (selectedTodo.seq !== card.id) {
+        setSelectedTodo({ ...card, seq: card.id })
+      } else {
+        setSelectedTodo(null)
+      }
+    }
+  }
+
+  const onClickStartTodoTimer = () => {
+    if (selectedTodo) {
+      startTodoTimer(selectedTodo)
+    } else {
+      alert('Todo 를 먼저 선택해주세요.')
+    }
+  }
+
   const openModifyTodoForm = (card: any) => {
     setModifyTodoId(card.id)
     setTodoInput({
@@ -229,13 +255,42 @@ function UserTodo({
           </Fab>
         </Tooltip>
       </Box>
+      <Box sx={{ '& > :not(style)': { m: 3 } }}>
+        <Tooltip title="StartTodo">
+          <Fab
+            color="primary"
+            aria-label="start"
+            onClick={onClickStartTodoTimer}
+          >
+            <PlayArrowOutlinedIcon />
+          </Fab>
+        </Tooltip>
+      </Box>
       <Board
         allowRemoveCard
         onCardDragEnd={handleCardMove}
         onCardRemove={handleCardRemove}
         disableColumnDrag
-        renderCard={(card: Todo, { dragging }: any) => (
-          <Card sx={{ minWidth: 275, p: 1 }}>
+        renderCard={(card: any, { dragging }: any) => (
+          <Card
+            sx={[
+              {
+                minWidth: 275,
+                p: 1,
+                cursor: 'pointer',
+                '&:hover': {
+                  background: `${lighten(0.1, '#BAE691')}`,
+                },
+                '&:active': {
+                  background: `${darken(0.1, '#BAE691')}`,
+                },
+              },
+              card.id === (selectedTodo ? selectedTodo.seq : null) && {
+                background: `${lighten(0.1, '#BAE691')}`,
+              },
+            ]}
+            onClick={() => onSelectTodo(card)}
+          >
             <Grid container>
               <Grid item xs={10}>
                 <Typography

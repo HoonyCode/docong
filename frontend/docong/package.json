@@ -67,6 +67,5 @@
   },
   "resolutions": {
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
-  },
-  "proxy": "http://localhost:8080"
+  }
 }
