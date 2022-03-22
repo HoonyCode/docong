@@ -27,7 +27,7 @@ public class UserTodo extends BaseEntity {
     @JoinColumn(name = "user_seq")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "todo_seq")
     private Todo todo;
 

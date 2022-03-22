@@ -90,9 +90,8 @@ class TodoServiceTest {
 
         assertThat(findTodo.getTitle()).isEqualTo("제목");
         assertThat(findTodo.getStatus()).isEqualTo(TodoStatus.TODO);
-        assertThat(findTodo.getUserTodos().size()).isEqualTo(1);
-        assertThat(findTodo.getUserTodos().get(0).getTodo()).isEqualTo(findTodo);
-        assertThat(findTodo.getUserTodos().get(0).getUser()).isEqualTo(user);
+        assertThat(findTodo.getUserTodo().getTodo()).isEqualTo(findTodo);
+        assertThat(findTodo.getUserTodo().getUser()).isEqualTo(user);
     }
 
     @Test
@@ -108,7 +107,7 @@ class TodoServiceTest {
         todo.addUserTodo(userTodo);
 
         Todo savedTodo = todoRepository.save(todo);
-        UserTodo savedUserTodo = savedTodo.getUserTodos().get(0);
+        UserTodo savedUserTodo = savedTodo.getUserTodo();
 
         // when
         todoService.deleteTodo(savedTodo.getSeq());
