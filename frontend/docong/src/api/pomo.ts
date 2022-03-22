@@ -1,8 +1,18 @@
 import axios from 'axios'
 import { BASE_URL } from './auth'
 
+const setHeader = function () {
+  const token = localStorage.getItem('jwtToken')
+  const header = {
+    Authorization: `Bearer ${token}`,
+  }
+  return header
+}
+
 export async function savePomo(pomoData: PomoData) {
-  const response = await axios.post(`${BASE_URL}/api/pomo`, pomoData)
+  const response = await axios.post(`${BASE_URL}/api/pomo`, pomoData, {
+    headers: setHeader(),
+  })
   return response.data
 }
 

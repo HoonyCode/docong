@@ -29,9 +29,9 @@ export interface UserInfo {
   name: string
   birth: string
   gender: string
-  address: string
+  mbti: string
   job: string
-  position: string
+  position: number
 }
 
 export interface DefaultResponse {
@@ -41,10 +41,10 @@ export interface DefaultResponse {
 }
 
 export interface UserData {
-  address: string
+  mbti: string
   birth: string
   gender: string
   job: string
   name: string
-  position: string
+  position: number
 }

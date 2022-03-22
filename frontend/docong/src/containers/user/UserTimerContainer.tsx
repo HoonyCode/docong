@@ -4,11 +4,17 @@ import {
   Button,
   Card,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
+  Slide,
   Typography,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import UserTimerControls from '../../components/user/UserTimerControls'
@@ -17,6 +23,7 @@ import UserTimerType from '../../components/user/UserTimerType'
 import { RootState } from '../../modules'
 import {
   changeUserTimerStatus,
+  changeUserTimerTime,
   changeUserTimerTodo,
   changeUserTimerType,
   savePomoAsync,
@@ -25,17 +32,30 @@ import {
 } from '../../modules/user'
 import './UserTimerContainer.css'
 import { lighten } from 'polished'
+import { usePrompt } from './Blocker'
+import { TransitionProps } from '@mui/material/transitions'
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />
+})
 
 function UserTimerContainer() {
   const { selectedType, selectedTodo, status, time } = useSelector(
     (state: RootState) => state.user.userTimer
   )
+  const [localStatus, setLocalStatus] = useState(false)
+  const [openStopDialog, setOpenStopDialog] = useState(false)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const timerTypes = [
-    { name: 'Short', time: 5 },
+    { name: 'Short', time: 900 },
     { name: 'Normal', time: 1500 },
     { name: 'Long', time: 3000 },
   ]
@@ -43,12 +63,19 @@ function UserTimerContainer() {
   useEffect(() => {
     Notification.requestPermission()
     if (status === 'play') {
-      dispatch(startUserTimer())
+      if (localStatus) {
+        console.log('start')
+        // dispatch(startUserTimer())
+      } else {
+        console.log('stop!')
+        dispatch(changeUserTimerStatus('stop'))
+        dispatch(changeUserTimerTime(selectedType.time))
+      }
     }
-  }, [status, dispatch])
+  }, [status, localStatus, dispatch, selectedType])
 
   useEffect(() => {
-    if (status === 'play' && time === 0) {
+    if (status === 'play' && localStatus && time === 0) {
       dispatch(stopUserTimer())
       try {
         navigator.serviceWorker.register('service-worker.js').then((sw) => {
@@ -59,7 +86,14 @@ function UserTimerContainer() {
       }
       let start_date = new Date()
       let end_date = new Date()
-      start_date.setSeconds(start_date.getSeconds() - selectedType.time)
+      start_date.setSeconds(
+        start_date.getSeconds() -
+          selectedType.time -
+          start_date.getTimezoneOffset() * 60
+      )
+      end_date.setSeconds(
+        end_date.getSeconds() - end_date.getTimezoneOffset() * 60
+      )
       let todo_seq = null
       if (selectedTodo) {
         todo_seq = selectedTodo.seq
@@ -75,8 +109,15 @@ function UserTimerContainer() {
           todo_seq: todo_seq,
         })
       )
+    } else if (status === 'stop') {
+      dispatch(stopUserTimer())
     }
-  }, [status, time, dispatch, selectedType, selectedTodo])
+  }, [status, localStatus, time, dispatch, selectedType, selectedTodo])
+
+  usePrompt(
+    'Timer 진행 중 이동하면 Timer 가 정지될 수 있습니다.',
+    status === 'play'
+  )
 
   const onClickToTodos = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -96,7 +137,6 @@ function UserTimerContainer() {
   }
 
   const changeType = (type: any) => {
-    resetTimer()
     dispatch(
       changeUserTimerType({
         selectedType: type,
@@ -106,15 +146,23 @@ function UserTimerContainer() {
   }
 
   const stopInterval = () => {
+    setOpenStopDialog(false)
     dispatch(stopUserTimer())
+    setLocalStatus(false)
   }
 
   const startTimer = () => {
     dispatch(changeUserTimerStatus('play'))
+    dispatch(startUserTimer())
+    setLocalStatus(true)
   }
 
   const resetTimer = () => {
-    stopInterval()
+    setOpenStopDialog(true)
+  }
+
+  const onCloseStopDialog = () => {
+    setOpenStopDialog(false)
   }
 
   const pauseTimer = () => {}
@@ -231,6 +279,28 @@ function UserTimerContainer() {
           )}
         </div>
       </div>
+      <Dialog
+        open={openStopDialog}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={onCloseStopDialog}
+        aria-describedby="stop-dialog"
+      >
+        <DialogTitle>{'정말로 타이머를 중지하겠습니까?'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="stop-dialog">
+            타이머를 중지하면 진행중이던 docong 은 저장되지 않습니다.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={stopInterval}>
+            타이머 중지
+          </Button>
+          <Button variant="outlined" onClick={onCloseStopDialog}>
+            취소
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   )
 }

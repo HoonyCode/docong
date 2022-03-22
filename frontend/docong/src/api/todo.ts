@@ -62,6 +62,7 @@ export async function findUserTodos() {
 
 export interface TodoInput {
   content: string
+  predictedPomo: number
   teamId: null | number
   title: string
   userEmail: null | string
