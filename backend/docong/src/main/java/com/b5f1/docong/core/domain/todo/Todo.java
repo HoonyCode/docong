@@ -44,15 +44,18 @@ public class Todo extends BaseEntity {
     private WorkType workType;
     private WorkImportance workImportance;
 
-    @OneToMany(mappedBy="todo", fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<UserTodo> userTodos = new ArrayList<>();
+    @OneToOne(mappedBy="todo", fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    private UserTodo userTodo;
 
     public void addTeam(Team team) {
         this.team = team;
     }
     public void addUserTodo(UserTodo userTodo){
-        userTodos.add(userTodo);
+        this.userTodo = userTodo;
         userTodo.changeTodo(this);
+    }
+    public void addRealPomo(){
+        this.realPomo ++;
     }
     public void changeTodo(String title, String content, WorkImportance workImportance, WorkProficiency workProficiency, WorkType workType) {
         this.title = title;
@@ -65,6 +68,4 @@ public class Todo extends BaseEntity {
     public void changeStatus(TodoStatus todoStatus) {
         this.status = todoStatus;
     }
-
-
 }

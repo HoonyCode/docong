@@ -18,6 +18,7 @@ public class FindTodoResDto {
     WorkProficiency workProficiency;
     WorkType workType;
     WorkImportance workImportance;
+    String userEmail;
 
     public FindTodoResDto(Todo todo) {
         this.seq = todo.getSeq();
@@ -29,5 +30,6 @@ public class FindTodoResDto {
         this.workProficiency = todo.getWorkProficiency();
         this.workType = todo.getWorkType();
         this.workImportance = todo.getWorkImportance();
+        this.userEmail = todo.getUserTodo().getUser().getEmail();
     }
 }

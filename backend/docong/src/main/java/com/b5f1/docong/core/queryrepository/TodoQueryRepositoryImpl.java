@@ -31,9 +31,10 @@ public class TodoQueryRepositoryImpl implements TodoQueryRepository{
                         todo.realPomo,
                         todo.workProficiency,
                         todo.workType,
-                        todo.workImportance))
+                        todo.workImportance,
+                        todo.userTodo.user.email))
                 .from(todo)
-                .innerJoin(todo.userTodos, userTodo)
+                .innerJoin(todo.userTodo, userTodo)
                 .where(userTodo.user.seq.eq(userSeq)
                         .and(todo.team.isNull()))
                 .fetch();
@@ -51,7 +52,8 @@ public class TodoQueryRepositoryImpl implements TodoQueryRepository{
                         todo.realPomo,
                         todo.workProficiency,
                         todo.workType,
-                        todo.workImportance))
+                        todo.workImportance,
+                        todo.userTodo.user.email))
                 .from(todo)
                 .where(todo.team.seq.eq(groupSeq))
                 .fetch();

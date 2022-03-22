@@ -79,7 +79,7 @@ class TodoServiceTest {
     void testSaveTodo() {
         // given
         User user = userRepository.findByEmailAndActivateTrue("wjddma1214@naver.com");
-        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, user.getEmail(), null, null, null);
+        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, user.getEmail(), null, null, null, 4);
 
         // when
         Long todoSeq = todoService.saveTodo(reqDto);
@@ -90,9 +90,8 @@ class TodoServiceTest {
 
         assertThat(findTodo.getTitle()).isEqualTo("제목");
         assertThat(findTodo.getStatus()).isEqualTo(TodoStatus.TODO);
-        assertThat(findTodo.getUserTodos().size()).isEqualTo(1);
-        assertThat(findTodo.getUserTodos().get(0).getTodo()).isEqualTo(findTodo);
-        assertThat(findTodo.getUserTodos().get(0).getUser()).isEqualTo(user);
+        assertThat(findTodo.getUserTodo().getTodo()).isEqualTo(findTodo);
+        assertThat(findTodo.getUserTodo().getUser()).isEqualTo(user);
     }
 
     @Test
@@ -108,7 +107,7 @@ class TodoServiceTest {
         todo.addUserTodo(userTodo);
 
         Todo savedTodo = todoRepository.save(todo);
-        UserTodo savedUserTodo = savedTodo.getUserTodos().get(0);
+        UserTodo savedUserTodo = savedTodo.getUserTodo();
 
         // when
         todoService.deleteTodo(savedTodo.getSeq());
@@ -133,7 +132,7 @@ class TodoServiceTest {
                 .content("내용")
                 .build();
         Todo savedTodo = todoRepository.save(todo);
-        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목수정", "내용수정", null, user.getEmail(), null, null, null);
+        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목수정", "내용수정", null, user.getEmail(), null, null, null, 4);
 
         // when
         todoService.modifyTodo(savedTodo.getSeq(), reqDto);
@@ -176,7 +175,7 @@ class TodoServiceTest {
     private void createTodo(){
         User user = userRepository.findByEmailAndActivateTrue("wjddma1214@naver.com");
 
-        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, user.getEmail(), null, null, null);
+        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, user.getEmail(), null, null, null, 4);
         Todo todo = reqDto.toEntity();
         UserTodo userTodo = UserTodo.builder()
                 .build();
