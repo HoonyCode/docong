@@ -144,7 +144,7 @@ class TeamServiceImplTest {
         user.setName("남수");
         user.setBirth("2005-11-23");
         user.setGender("M");
-        user.setAddress("Busan");
+        user.setMbti("ENFJ");
         user.setJob("student");
         user.setPosition("student");
         userService.join(user);

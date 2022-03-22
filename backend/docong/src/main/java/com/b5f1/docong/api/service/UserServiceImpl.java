@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
                     .name(joinReqDto.getName())
                     .birth(joinReqDto.getBirth())
                     .gender(joinReqDto.getGender())
-                    .address(joinReqDto.getAddress())
+                    .mbti(joinReqDto.getMbti())
                     .job(joinReqDto.getJob())
                     .position(joinReqDto.getPosition())
                     .activate(true)
@@ -53,27 +53,16 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(seq).get();
 
         UserInfoResDto userRes =
-                new UserInfoResDto(user.getEmail(), user.getName(), user.getBirth(), user.getGender(), user.getAddress(), user.getJob(), user.getPosition());
+                new UserInfoResDto(user.getEmail(), user.getName(), user.getBirth(), user.getGender(), user.getMbti(), user.getJob(), user.getPosition());
 
         return userRes;
     }
 
     @Override
     public void setUserInfo(User user, UserInfoReqDto userInfoReqDto) {
-        // password가 null인지 체크
-        if (userInfoReqDto.getPassword() == null) {
-//            System.out.println("password가 null입니다.");
-            throw new CustomException(ErrorCode.NULL_PASSWORD);
-        }
-
         User userEntity = userRepository.findById(user.getSeq()).get();
 
         // user entity의 메서드 불러와서 set한 후 save
-        // 바꾸기 전 비밀번호 암호화
-        String rawPwd = userInfoReqDto.getPassword();
-        String encPwd = bCryptPasswordEncoder.encode(rawPwd);
-        userInfoReqDto.setPassword(encPwd);
-
         userEntity.updateUserInfo(userInfoReqDto);
     }
 

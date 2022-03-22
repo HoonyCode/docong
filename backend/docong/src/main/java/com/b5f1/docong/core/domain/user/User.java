@@ -1,16 +1,11 @@
 package com.b5f1.docong.core.domain.user;
 
 import com.b5f1.docong.api.dto.request.UserInfoReqDto;
-import com.b5f1.docong.core.domain.group.TeamUser;
 import com.b5f1.docong.core.domain.todo.UserTodo;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -40,7 +35,7 @@ public class User {
     private String gender;
 
     @Column
-    private String address;
+    private String mbti;
 
     @Column
     private String job;
@@ -65,13 +60,13 @@ public class User {
 
     @Builder
     public User(String email, String password, String name, String birth,
-                String gender, String address, String job, String position, boolean activate, String oauth_type) {
+                String gender, String mbti, String job, String position, boolean activate, String oauth_type) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.birth = birth;
         this.gender = gender;
-        this.address = address;
+        this.mbti = mbti;
         this.job = job;
         this.position = position;
         this.activate = activate;
@@ -85,11 +80,10 @@ public class User {
     // 여기서부터 추가
 
     public void updateUserInfo(UserInfoReqDto userInfoReqDto) {
-        this.password = userInfoReqDto.getPassword();
         this.name = userInfoReqDto.getName();
         this.birth = userInfoReqDto.getBirth();
         this.gender = userInfoReqDto.getGender();
-        this.address = userInfoReqDto.getAddress();
+        this.mbti = userInfoReqDto.getMbti();
         this.job = userInfoReqDto.getJob();
         this.position = userInfoReqDto.getPosition();
     }

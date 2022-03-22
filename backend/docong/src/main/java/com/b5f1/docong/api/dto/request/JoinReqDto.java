@@ -9,7 +9,7 @@ public class JoinReqDto {
     String name;
     String birth;
     String gender;
-    String address;
+    String mbti;
     String job;
     String position;
 }
