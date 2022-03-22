@@ -47,7 +47,7 @@ public class GoogleUserController {
                     .name(googleUser.getName())
                     .birth(null)
                     .gender(null)
-                    .address(null)
+                    .mbti(null)
                     .job(null)
                     .position(null)
                     .activate(true)

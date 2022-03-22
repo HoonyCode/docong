@@ -32,7 +32,7 @@ public class UserServiceTest {
                 .name("테스트코드용")
                 .birth("2022-03-15")
                 .gender("F")
-                .address("Busan")
+                .mbti("ISFP")
                 .job("student")
                 .position("student")
                 .activate(true)
@@ -45,7 +45,7 @@ public class UserServiceTest {
     void testChangeUserInfo() {
         User user = userRepository.findByEmailAndActivateTrue("testcode@naver.com");
         UserInfoReqDto userInfoReqDto =
-                new UserInfoReqDto("1234","혀승", "2005-11-23", "M", "Busan", "student", "student");
+                new UserInfoReqDto("혀승", "2005-11-23", "M", "ISFP", "student", "student");
 
         userService.setUserInfo(user, userInfoReqDto);
         user = userRepository.findByEmailAndActivateTrue("testcode@naver.com");
