@@ -9,8 +9,7 @@ import com.b5f1.docong.api.resolver.Auth;
 import com.b5f1.docong.api.service.PomodoroService;
 import com.b5f1.docong.core.domain.pomodoro.Pomodoro;
 import com.b5f1.docong.core.domain.user.User;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +28,7 @@ public class PomodoroController {
 
     @PostMapping
     @ApiOperation(value = "뽀모도로 저장하기", notes = "뽀모도로에 필요한 데이터를 저장합니다.")
-    public ResponseEntity<BaseResponseEntity> savePomodoro(@Auth User user, @RequestBody @Valid SavePomodoroReqDto reqDto) {
+    public ResponseEntity<BaseResponseEntity> savePomodoro(@Auth @ApiParam(hidden = true) User user, @RequestBody @Valid SavePomodoroReqDto reqDto) {
 
         // 예외 처리
         if (user == null) throw new CustomException(ErrorCode.NULL_USER);
@@ -40,7 +39,7 @@ public class PomodoroController {
 
     @GetMapping
     @ApiOperation(value = "뽀모도로 가져오기", notes = "해당 유저의 모든 뽀모도로 정보를 가져옵니다.")
-    public ResponseEntity<List<Pomodoro>> findAllPomodoro(@Auth User user) {
+    public ResponseEntity<List<Pomodoro>> findAllPomodoro(@Auth @ApiParam(hidden = true) User user) {
         if (user == null) throw new CustomException(ErrorCode.NULL_USER);
 
         List<Pomodoro> result = pomodoroService.findAll(user.getSeq());

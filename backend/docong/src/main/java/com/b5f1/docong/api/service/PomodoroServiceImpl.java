@@ -27,9 +27,13 @@ public class PomodoroServiceImpl implements PomodoroService {
 
     @Override
     public Long savePomodoro(SavePomodoroReqDto reqDto, User user) {
-        Todo todo = todoRepository.findById(reqDto.getTodo_seq()).orElseThrow(() -> {
-            throw new CustomException(ErrorCode.TODO_NOT_FOUND);
-        });
+
+        Todo todo = null;
+        if (reqDto.getTodo_seq() != null) {
+            todo = todoRepository.findById(reqDto.getTodo_seq()).orElseThrow(() -> {
+                throw new CustomException(ErrorCode.TODO_NOT_FOUND);
+            });
+        }
 
         Pomodoro pomodoro = Pomodoro.builder()
                 .user(user)
