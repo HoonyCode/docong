@@ -46,6 +46,5 @@ export interface UserData {
   gender: string
   job: string
   name: string
-  password: string
   position: string
 }

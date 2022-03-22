@@ -39,7 +39,6 @@ function EditUserForm({
     gender: userInfo ? userInfo.gender : '',
     job: userInfo ? userInfo.job : '',
     name: userInfo ? userInfo.name : '',
-    password: '',
     position: userInfo ? userInfo.position : '',
   })
 
@@ -50,13 +49,11 @@ function EditUserForm({
   useEffect(() => {
     if (isOpenEditUserForm === true) {
       setUserInfoInput({
-        // address: userInfo ? userInfo.address : '',
         address: '1',
         birth: userInfo ? userInfo.birth : '',
         gender: userInfo ? userInfo.gender : '',
         job: userInfo ? userInfo.job : '',
         name: userInfo ? userInfo.name : '',
-        password: '1',
         position: userInfo ? userInfo.position : '',
       })
       setDate(null)
@@ -65,7 +62,10 @@ function EditUserForm({
 
   const onChangeUserBirth = (newDate: any) => {
     setDate(newDate)
-    setUserInfoInput({ ...userInfoInput, birth: newDate.toISOString() })
+    setUserInfoInput({
+      ...userInfoInput,
+      birth: newDate.toISOString().slice(0, 10),
+    })
   }
 
   const onChangeUserGender = (e: SelectChangeEvent<string>) => {

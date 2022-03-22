@@ -24,7 +24,6 @@ export async function emailDuplicateCheck(email: string) {
 
 export async function userLogin(loginData: LoginData) {
   const response = await axios.post(`${BASE_URL}/api/user/login`, loginData)
-  console.log(response)
   return response.headers.authorization.split(' ')[1]
 }
 
