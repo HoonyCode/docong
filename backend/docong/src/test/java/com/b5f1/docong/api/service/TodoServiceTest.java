@@ -79,7 +79,7 @@ class TodoServiceTest {
     void testSaveTodo() {
         // given
         User user = userRepository.findByEmailAndActivateTrue("wjddma1214@naver.com");
-        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, user.getEmail(), null, null, null);
+        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, user.getEmail(), null, null, null, 4);
 
         // when
         Long todoSeq = todoService.saveTodo(reqDto);
@@ -132,7 +132,7 @@ class TodoServiceTest {
                 .content("내용")
                 .build();
         Todo savedTodo = todoRepository.save(todo);
-        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목수정", "내용수정", null, user.getEmail(), null, null, null);
+        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목수정", "내용수정", null, user.getEmail(), null, null, null, 4);
 
         // when
         todoService.modifyTodo(savedTodo.getSeq(), reqDto);
@@ -175,7 +175,7 @@ class TodoServiceTest {
     private void createTodo(){
         User user = userRepository.findByEmailAndActivateTrue("wjddma1214@naver.com");
 
-        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, user.getEmail(), null, null, null);
+        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, user.getEmail(), null, null, null, 4);
         Todo todo = reqDto.toEntity();
         UserTodo userTodo = UserTodo.builder()
                 .build();

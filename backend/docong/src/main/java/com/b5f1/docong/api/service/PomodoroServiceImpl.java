@@ -38,6 +38,8 @@ public class PomodoroServiceImpl implements PomodoroService {
                 .timeStatus(reqDto.getTimeStatus())
                 .build();
 
+        todo.addRealPomo();
+
         return pomodoroRepository.save(pomodoro).getSeq();
     }
 

@@ -54,6 +54,9 @@ public class Todo extends BaseEntity {
         this.userTodo = userTodo;
         userTodo.changeTodo(this);
     }
+    public void addRealPomo(){
+        this.realPomo ++;
+    }
     public void changeTodo(String title, String content, WorkImportance workImportance, WorkProficiency workProficiency, WorkType workType) {
         this.title = title;
         this.content = content;
@@ -65,6 +68,4 @@ public class Todo extends BaseEntity {
     public void changeStatus(TodoStatus todoStatus) {
         this.status = todoStatus;
     }
-
-
 }

@@ -66,6 +66,7 @@ class PomodoroServiceImplTest {
 
         //then
         assertThat(save.get().getSeq()).isEqualTo(saveSeq);
+        assertThat(savedTodo.getRealPomo()).isEqualTo(1);
 
     }
 
@@ -94,7 +95,7 @@ class PomodoroServiceImplTest {
 
     private void createTodo() {
 
-        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, savedUser.getEmail(), null, null, null);
+        SaveTodoReqDto reqDto = new SaveTodoReqDto("제목", "내용", null, savedUser.getEmail(), null, null, null, 4);
         Todo todo = reqDto.toEntity();
         UserTodo userTodo = UserTodo.builder()
                 .build();

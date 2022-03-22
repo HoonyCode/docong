@@ -17,6 +17,7 @@ public class SaveTodoReqDto {
     public WorkProficiency workProficiency;
     public WorkType workType;
     public WorkImportance workImportance;
+    public Integer predictedPomo;
 
     public Todo toEntity(){
         return Todo.builder()
@@ -25,6 +26,8 @@ public class SaveTodoReqDto {
                 .workProficiency(workProficiency)
                 .workImportance(workImportance)
                 .workType(workType)
+                .predictedPomo(predictedPomo)
+                .realPomo(0)
                 .status(TodoStatus.TODO)
                 .build();
     }
