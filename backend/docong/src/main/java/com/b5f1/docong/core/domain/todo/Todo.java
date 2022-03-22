@@ -57,12 +57,13 @@ public class Todo extends BaseEntity {
     public void addRealPomo(){
         this.realPomo ++;
     }
-    public void changeTodo(String title, String content, WorkImportance workImportance, WorkProficiency workProficiency, WorkType workType) {
+    public void changeTodo(String title, String content, WorkImportance workImportance, WorkProficiency workProficiency, WorkType workType, Integer predictedPomo) {
         this.title = title;
         this.content = content;
         this.workImportance = workImportance;
         this.workProficiency = workProficiency;
         this.workType = workType;
+        this.predictedPomo = predictedPomo;
     }
 
     public void changeStatus(TodoStatus todoStatus) {

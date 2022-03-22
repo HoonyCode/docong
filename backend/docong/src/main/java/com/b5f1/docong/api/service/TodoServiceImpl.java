@@ -57,7 +57,7 @@ public class TodoServiceImpl implements TodoService{
     public void modifyTodo(Long id, SaveTodoReqDto reqDto) {
         Todo todo = todoRepository.findById(id)
                 .orElseThrow(()->new IllegalStateException("없는 Todo 입니다."));
-        todo.changeTodo(reqDto.getTitle(), reqDto.getContent(), reqDto.getWorkImportance(),reqDto.getWorkProficiency(),reqDto.getWorkType());
+        todo.changeTodo(reqDto.getTitle(), reqDto.getContent(), reqDto.getWorkImportance(),reqDto.getWorkProficiency(),reqDto.getWorkType(), reqDto.getPredictedPomo());
     }
 
     @Override
