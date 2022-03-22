@@ -22,7 +22,7 @@ public class PomodoroController {
 
 
     @PostMapping
-    public ResponseEntity<BaseResponseEntity> savePomodoro(@RequestBody @Valid SavePomodoroReqDto reqDto, @Auth User user) {
+    public ResponseEntity<BaseResponseEntity> savePomodoro(@Auth User user, @RequestBody @Valid SavePomodoroReqDto reqDto) {
         pomodoroService.savePomodoro(reqDto, user);
         return ResponseEntity.ok().body(new BaseResponseEntity(200, "Success"));
     }
