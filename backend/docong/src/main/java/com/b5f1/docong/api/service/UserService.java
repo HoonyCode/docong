@@ -15,4 +15,6 @@ public interface UserService {
     void deleteUser(User user);
 
     boolean checkEmail(String email);
+
+    String newToken(String expiredAuthorization);
 }

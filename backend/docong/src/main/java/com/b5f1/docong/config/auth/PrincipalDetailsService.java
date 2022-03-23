@@ -27,7 +27,8 @@ public class PrincipalDetailsService implements UserDetailsService {
         }
         // 요청에 해당하는 user를 찾지 못하면 여기에 도달
         System.out.println("loadUserByUserName -> 요청에 해당하는 user를 찾지 못했습니다.");
+        throw new UsernameNotFoundException("User not found in the database");
 
-        return new PrincipalDetails(new User());
+//        return new PrincipalDetails(new User());
     }
 }
