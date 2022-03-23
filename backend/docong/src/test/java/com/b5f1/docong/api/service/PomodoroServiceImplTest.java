@@ -71,6 +71,19 @@ class PomodoroServiceImplTest {
     }
 
     @Test
+    void 뽀모도로저장하기_TODONULL(){
+        //given
+        SavePomodoroReqDto savePomodoroReqDto = new SavePomodoroReqDto(savedTodo.getSeq(), TimeStatus.BASIC, null, null, 0, noiseStatus.NOISE);
+
+        //when
+        Long saveSeq = pomodoroService.savePomodoro(savePomodoroReqDto, savedUser);
+        Optional<Pomodoro> pomo = pomodoroRepository.findById(saveSeq);
+
+        //then
+        assertThat(pomo.get().getSeq()).isEqualTo(saveSeq);
+    }
+
+    @Test
     void 유저아이디로뽀모도로리스트찾기() {
         //given
         Long seq = pomodoroService.savePomodoro(new SavePomodoroReqDto(savedTodo.getSeq(), TimeStatus.BASIC, null, null, 0, noiseStatus.NOISE), savedUser);

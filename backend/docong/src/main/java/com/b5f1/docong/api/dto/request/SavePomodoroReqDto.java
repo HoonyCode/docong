@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 @Data
 public class SavePomodoroReqDto {
 
-    @NotNull
     @ApiModelProperty(value = "할일 번호", required = true, example = "1")
     private Long todo_seq;
 

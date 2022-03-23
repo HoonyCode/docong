@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManagerFactory;
+import javax.validation.constraints.Null;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,7 @@ public class PomodoroServiceImpl implements PomodoroService {
             todo = todoRepository.findById(reqDto.getTodo_seq()).orElseThrow(() -> {
                 throw new CustomException(ErrorCode.TODO_NOT_FOUND);
             });
+            todo.addRealPomo();
         }
 
         Pomodoro pomodoro = Pomodoro.builder()
@@ -45,7 +47,6 @@ public class PomodoroServiceImpl implements PomodoroService {
                 .timeStatus(reqDto.getTimeStatus())
                 .build();
 
-        todo.addRealPomo();
 
         return pomodoroRepository.save(pomodoro).getSeq();
     }
