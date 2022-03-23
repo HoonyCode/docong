@@ -15,6 +15,7 @@ import {
   GET_USER_INFO,
   setUserInfoAsync,
   SET_USER_INFO,
+  initUserTimer,
 } from './actions'
 import {
   userSignup,
@@ -65,6 +66,7 @@ function* userLoginSaga(action: ReturnType<typeof userLoginAsync.request>) {
     const loginToken: string = yield call(userLogin, action.payload.loginInput)
     alert('로그인이 완료되었습니다.')
     localStorage.setItem('jwtToken', loginToken)
+    yield put(initUserTimer())
     yield action.payload.navigate('/timer')
     yield put(getUserInfoAsync.request(null))
   } catch (e: any) {
@@ -83,6 +85,7 @@ function* userGoogleLoginSaga(
     )
     alert('구글 로그인이 완료되었습니다.')
     localStorage.setItem('jwtToken', googleLoginResponseData.jwtToken)
+    yield put(initUserTimer())
     yield action.payload.navigate('/timer')
     yield put(getUserInfoAsync.request(null))
   } catch (e: any) {
@@ -127,6 +130,7 @@ function* startUserTimerSaga() {
   } catch (e) {
     console.error(e)
   } finally {
+    console.log(userTimerSelectedType)
     yield all([
       put(changeUserTimerStatus('stop')),
       put(changeUserTimerTime(userTimerSelectedType.time)),

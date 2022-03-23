@@ -30,6 +30,7 @@ export const SAVE_POMO = 'user/SAVE_POMO'
 export const SAVE_POMO_SUCCESS = 'user/SAVE_POMO_SUCCESS'
 export const SAVE_POMO_ERROR = 'user/SAVE_POMO_ERROR'
 
+export const INIT_USER_TIMER = 'user/INIT_USER_TIMER'
 export const CHANGE_USER_TIMER_TYPE = 'user/CHANGE_USER_TIMER_TYPE'
 export const CHANGE_USER_TIMER_TODO = 'user/CHANGE_USER_TIMER_TODO'
 export const CHANGE_USER_TIMER_STATUS = 'user/CHANGE_USER_TIMER_STATUS'
@@ -75,6 +76,7 @@ export const savePomoAsync = createAsyncAction(
   SAVE_POMO_ERROR
 )<PomoData, any, AxiosError>()
 
+export const initUserTimer = createAction(INIT_USER_TIMER)()
 export const changeUserTimerType = createAction(CHANGE_USER_TIMER_TYPE)<any>()
 export const changeUserTimerTodo = createAction(
   CHANGE_USER_TIMER_TODO
@@ -96,6 +98,7 @@ export const actions = {
   getUserInfoAsync,
   setUserInfoAsync,
   savePomoAsync,
+  initUserTimer,
   changeUserTimerType,
   changeUserTimerTodo,
   changeUserTimerStatus,

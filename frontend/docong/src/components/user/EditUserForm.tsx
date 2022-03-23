@@ -34,27 +34,56 @@ function EditUserForm({
   const [date, setDate] = useState<Date | null>(null)
 
   const [userInfoInput, setUserInfoInput] = useState({
-    address: userInfo ? userInfo.address : '',
+    mbti: userInfo ? userInfo.mbti : '',
     birth: userInfo ? userInfo.birth : '',
     gender: userInfo ? userInfo.gender : '',
     job: userInfo ? userInfo.job : '',
     name: userInfo ? userInfo.name : '',
-    position: userInfo ? userInfo.position : '',
+    position: userInfo ? userInfo.position : 0,
   })
 
   const genderList = ['Female', 'Male']
-  const jobList = ['Job1', 'Job2', 'Job3']
-  const positionList = ['Pos1', 'Pos2', 'Pos3']
+  const mbtiList = [
+    'ISTJ',
+    'ISFJ',
+    'INFJ',
+    'INTJ',
+    'ISTP',
+    'ISFP',
+    'INFP',
+    'INTP',
+    'ESTP',
+    'ESFP',
+    'ENFP',
+    'ENTP',
+    'ESTJ',
+    'ESFJ',
+    'ENFJ',
+    'ENTJ',
+  ]
+  const jobList = [
+    '경영/사무',
+    '마케팅/무역/유통',
+    '영업/고객상담',
+    'IT/인터넷',
+    '연구개발/설계',
+    '생산/제조',
+    '전문/특수직',
+    '디자인',
+    '미디어',
+    '서비스',
+    '건설',
+  ]
 
   useEffect(() => {
     if (isOpenEditUserForm === true) {
       setUserInfoInput({
-        address: '1',
+        mbti: userInfo ? userInfo.mbti : '',
         birth: userInfo ? userInfo.birth : '',
         gender: userInfo ? userInfo.gender : '',
         job: userInfo ? userInfo.job : '',
         name: userInfo ? userInfo.name : '',
-        position: userInfo ? userInfo.position : '',
+        position: userInfo ? userInfo.position : 0,
       })
       setDate(null)
     }
@@ -72,6 +101,10 @@ function EditUserForm({
     setUserInfoInput({ ...userInfoInput, gender: e.target.value })
   }
 
+  const onChangeUserMbti = (e: SelectChangeEvent<string>) => {
+    setUserInfoInput({ ...userInfoInput, mbti: e.target.value })
+  }
+
   const onChangeUserJob = (e: SelectChangeEvent<string>) => {
     setUserInfoInput({ ...userInfoInput, job: e.target.value })
   }
@@ -80,8 +113,8 @@ function EditUserForm({
     setUserInfoInput({ ...userInfoInput, name: e.target.value })
   }
 
-  const onChangeUserPosition = (e: SelectChangeEvent<string>) => {
-    setUserInfoInput({ ...userInfoInput, position: e.target.value })
+  const onChangeUserPosition = (e: ChangeEvent<HTMLInputElement>) => {
+    setUserInfoInput({ ...userInfoInput, position: Number(e.target.value) })
   }
 
   const onSubmitEditUser = (e: FormEvent<HTMLFormElement>) => {
@@ -126,6 +159,21 @@ function EditUserForm({
               </MenuItem>
             ))}
           </Select>
+          <InputLabel id="mbti">MBTI</InputLabel>
+          <Select
+            required
+            fullWidth
+            labelId="mbti"
+            id="mbti"
+            value={userInfoInput.mbti}
+            onChange={onChangeUserMbti}
+          >
+            {mbtiList.map((mbti, index) => (
+              <MenuItem key={index} value={mbti}>
+                {mbti}
+              </MenuItem>
+            ))}
+          </Select>
           <InputLabel id="job">Job</InputLabel>
           <Select
             required
@@ -136,26 +184,25 @@ function EditUserForm({
             onChange={onChangeUserJob}
           >
             {jobList.map((job, index) => (
-              <MenuItem key={index} value={job.toUpperCase()}>
+              <MenuItem key={index} value={job}>
                 {job}
               </MenuItem>
             ))}
           </Select>
-          <InputLabel id="position">Position</InputLabel>
-          <Select
+          <TextField
             required
             fullWidth
-            labelId="position"
-            id="position"
-            value={userInfoInput.position}
+            type="number"
+            InputProps={{
+              inputProps: {
+                max: 30,
+                min: 0,
+              },
+            }}
+            label="Position"
             onChange={onChangeUserPosition}
-          >
-            {positionList.map((position, index) => (
-              <MenuItem key={index} value={position.toUpperCase()}>
-                {position}
-              </MenuItem>
-            ))}
-          </Select>
+            value={userInfoInput.position}
+          />
         </DialogContent>
         <DialogActions>
           <Button type="submit">Edit</Button>

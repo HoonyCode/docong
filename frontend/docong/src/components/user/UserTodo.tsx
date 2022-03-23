@@ -22,7 +22,6 @@ import {
   Avatar,
   Grid,
 } from '@mui/material'
-import { styled, css } from '@mui/material/styles'
 import { green } from '@mui/material/colors'
 import AddIcon from '@mui/icons-material/Add'
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined'
@@ -81,16 +80,32 @@ function UserTodo({
   const [todoInput, setTodoInput] = useState({
     title: '',
     content: '',
+    predictedPomo: 1,
     teamId: null,
     userEmail: userInfo ? userInfo.email : null,
-    workImportance: 'MIDDLE',
-    workProficiency: 'INTERMEDIATE',
-    workType: 'TYPE1',
+    workImportance: '중',
+    workProficiency: '중급',
+    workType: '기타',
   })
 
-  const workImportanceList = ['Lower', 'Middle', 'Upper_Middle', 'Upper']
-  const workProficiencyList = ['Beginner', 'Intermediate', 'Advanced']
-  const workTypeList = ['Type1', 'Type2']
+  const workImportanceList = ['하', '중하', '중', '중상', '상']
+  const workProficiencyList = ['초급', '초중급', '중급', '중상급', '상급']
+  const workTypeList = [
+    '기획',
+    '설계',
+    '디자인',
+    '컨설팅',
+    '개발',
+    'QA',
+    '분석',
+    '운영',
+    '회계',
+    '제작',
+    '관리',
+    '홍보',
+    '인사',
+    '기타',
+  ]
   const todoStatus = ['TODO', 'IN_PROGRESS', 'DONE']
 
   useEffect(() => {
@@ -148,11 +163,12 @@ function UserTodo({
     setTodoInput({
       title: '',
       content: '',
+      predictedPomo: 1,
       teamId: null,
       userEmail: userInfo ? userInfo.email : null,
-      workImportance: 'MIDDLE',
-      workProficiency: 'INTERMEDIATE',
-      workType: 'TYPE1',
+      workImportance: '중',
+      workProficiency: '중급',
+      workType: '',
     })
   }
 
@@ -162,13 +178,17 @@ function UserTodo({
   }
 
   const onSelectTodo = (card: any) => {
-    if (!selectedTodo) {
-      setSelectedTodo({ ...card, seq: card.id })
+    if (card.status === 'DONE') {
+      alert('완료된 콩은 선택할 수 없습니다!')
     } else {
-      if (selectedTodo.seq !== card.id) {
+      if (!selectedTodo) {
         setSelectedTodo({ ...card, seq: card.id })
       } else {
-        setSelectedTodo(null)
+        if (selectedTodo.seq !== card.id) {
+          setSelectedTodo({ ...card, seq: card.id })
+        } else {
+          setSelectedTodo(null)
+        }
       }
     }
   }
@@ -186,6 +206,7 @@ function UserTodo({
     setTodoInput({
       title: card.title,
       content: card.content,
+      predictedPomo: card.predictedPomo,
       teamId: null,
       userEmail: userInfo ? userInfo.email : null,
       workImportance: card.workImportance,
@@ -209,6 +230,10 @@ function UserTodo({
 
   const onChangeTodoContent = (e: ChangeEvent<HTMLInputElement>) => {
     setTodoInput({ ...todoInput, content: e.target.value })
+  }
+
+  const onChangeTodoPredictedPomo = (e: ChangeEvent<HTMLInputElement>) => {
+    setTodoInput({ ...todoInput, predictedPomo: Number(e.target.value) })
   }
 
   const onChangeTodoImportance = (e: SelectChangeEvent<string>) => {
@@ -370,6 +395,20 @@ function UserTodo({
               onChange={onChangeTodoContent}
               value={todoInput.content}
             />
+            <TextField
+              required
+              fullWidth
+              type="number"
+              InputProps={{
+                inputProps: {
+                  max: 99,
+                  min: 1,
+                },
+              }}
+              label="Predicted Pomo"
+              onChange={onChangeTodoPredictedPomo}
+              value={todoInput.predictedPomo}
+            />
             <InputLabel id="work-importance">Work Importance</InputLabel>
             <Select
               fullWidth
@@ -379,7 +418,7 @@ function UserTodo({
               onChange={onChangeTodoImportance}
             >
               {workImportanceList.map((workImportance, index) => (
-                <MenuItem key={index} value={workImportance.toUpperCase()}>
+                <MenuItem key={index} value={workImportance}>
                   {workImportance}
                 </MenuItem>
               ))}
@@ -393,7 +432,7 @@ function UserTodo({
               onChange={onChangeTodoProficiency}
             >
               {workProficiencyList.map((workProficiency, index) => (
-                <MenuItem key={index} value={workProficiency.toUpperCase()}>
+                <MenuItem key={index} value={workProficiency}>
                   {workProficiency}
                 </MenuItem>
               ))}
@@ -407,7 +446,7 @@ function UserTodo({
               onChange={onChangeTodoType}
             >
               {workTypeList.map((workType, index) => (
-                <MenuItem key={index} value={workType.toUpperCase()}>
+                <MenuItem key={index} value={workType}>
                   {workType}
                 </MenuItem>
               ))}
@@ -441,6 +480,20 @@ function UserTodo({
               onChange={onChangeTodoContent}
               value={todoInput.content}
             />
+            <TextField
+              required
+              fullWidth
+              type="number"
+              InputProps={{
+                inputProps: {
+                  max: 99,
+                  min: 1,
+                },
+              }}
+              label="Predicted Pomo"
+              onChange={onChangeTodoPredictedPomo}
+              value={todoInput.predictedPomo}
+            />
             <InputLabel id="work-importance">Work Importance</InputLabel>
             <Select
               fullWidth
@@ -450,7 +503,7 @@ function UserTodo({
               onChange={onChangeTodoImportance}
             >
               {workImportanceList.map((workImportance, index) => (
-                <MenuItem key={index} value={workImportance.toUpperCase()}>
+                <MenuItem key={index} value={workImportance}>
                   {workImportance}
                 </MenuItem>
               ))}
@@ -464,7 +517,7 @@ function UserTodo({
               onChange={onChangeTodoProficiency}
             >
               {workProficiencyList.map((workProficiency, index) => (
-                <MenuItem key={index} value={workProficiency.toUpperCase()}>
+                <MenuItem key={index} value={workProficiency}>
                   {workProficiency}
                 </MenuItem>
               ))}
@@ -478,7 +531,7 @@ function UserTodo({
               onChange={onChangeTodoType}
             >
               {workTypeList.map((workType, index) => (
-                <MenuItem key={index} value={workType.toUpperCase()}>
+                <MenuItem key={index} value={workType}>
                   {workType}
                 </MenuItem>
               ))}
