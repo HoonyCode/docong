@@ -47,7 +47,6 @@ export function usePrompt(
   const blocker = useCallback(
     (tx: Transition) => {
       let response
-      console.log(message)
       if (typeof message === 'function') {
         response = message(tx.location, tx.action)
         if (typeof response === 'string') {
