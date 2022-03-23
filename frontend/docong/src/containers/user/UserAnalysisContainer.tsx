@@ -40,6 +40,7 @@ function UserAnalysisContainer() {
 
   const editUser = (userData: UserData) => {
     dispatch(setUserInfoAsync.request(userData))
+    setIsOpenEditUserForm(false)
   }
 
   return (

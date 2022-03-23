@@ -56,18 +56,14 @@ function UserTimerContainer() {
 
   const timerTypes = [
     { name: 'Short', time: 900 },
-    { name: 'Normal', time: 1500 },
+    { name: 'Basic', time: 5 },
     { name: 'Long', time: 3000 },
   ]
 
   useEffect(() => {
     Notification.requestPermission()
     if (status === 'play') {
-      if (localStatus) {
-        console.log('start')
-        // dispatch(startUserTimer())
-      } else {
-        console.log('stop!')
+      if (!localStatus) {
         dispatch(changeUserTimerStatus('stop'))
         dispatch(changeUserTimerTime(selectedType.time))
       }
@@ -78,7 +74,7 @@ function UserTimerContainer() {
     if (status === 'play' && localStatus && time === 0) {
       dispatch(stopUserTimer())
       try {
-        navigator.serviceWorker.register('service-worker.js').then((sw) => {
+        navigator.serviceWorker.register('./service-worker.js').then((sw) => {
           sw.showNotification(`${selectedType.name} finished!`)
         })
       } catch (e) {

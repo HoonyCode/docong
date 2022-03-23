@@ -85,16 +85,23 @@ function EditUserForm({
         name: userInfo ? userInfo.name : '',
         position: userInfo ? userInfo.position : 0,
       })
-      setDate(null)
+      setDate(userInfo ? new Date(userInfo.birth) : null)
     }
   }, [isOpenEditUserForm, userInfo])
 
   const onChangeUserBirth = (newDate: any) => {
     setDate(newDate)
-    setUserInfoInput({
-      ...userInfoInput,
-      birth: newDate.toISOString().slice(0, 10),
-    })
+    if (newDate !== null && String(newDate) !== 'Invalid Date') {
+      setUserInfoInput({
+        ...userInfoInput,
+        birth: newDate.toISOString(),
+      })
+    } else {
+      setUserInfoInput({
+        ...userInfoInput,
+        birth: '',
+      })
+    }
   }
 
   const onChangeUserGender = (e: SelectChangeEvent<string>) => {
@@ -119,7 +126,11 @@ function EditUserForm({
 
   const onSubmitEditUser = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    editUser(userInfoInput)
+    if (userInfoInput.birth !== '') {
+      editUser(userInfoInput)
+    } else {
+      alert('날짜 형식이 올바르지 않습니다.')
+    }
   }
 
   return (
@@ -136,12 +147,14 @@ function EditUserForm({
             onChange={onChangeUserName}
             value={userInfoInput.name}
           />
-          <LocalizationProvider required dateAdapter={AdapterDateFns}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
               label="Birth"
               value={date}
               onChange={onChangeUserBirth}
-              renderInput={(params) => <TextField {...params} />}
+              renderInput={(params) => (
+                <TextField required fullWidth {...params} />
+              )}
             />
           </LocalizationProvider>
           <InputLabel id="gender">Gender</InputLabel>

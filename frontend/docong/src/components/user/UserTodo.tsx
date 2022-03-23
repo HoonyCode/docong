@@ -29,9 +29,10 @@ import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
 import CloseIcon from '@mui/icons-material/Close'
 import { Todo, TodoInput } from '../../api/todo'
 import produce from 'immer'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../../modules'
 import { darken, lighten } from 'polished'
+import { changeUserTimerTodo } from '../../modules/user'
 
 interface UserTodoProps {
   userTodos: any
@@ -71,6 +72,7 @@ function UserTodo({
   })
 
   const userInfo = useSelector((state: RootState) => state.user.userInfo.data)
+  const userTimer = useSelector((state: RootState) => state.user.userTimer)
 
   const [isOpenCreateTodo, setIsOpenCreateTodo] = useState(false)
   const [isOpenModifyTodo, setIsOpenModifyTodo] = useState(false)
@@ -87,6 +89,8 @@ function UserTodo({
     workProficiency: '중급',
     workType: '기타',
   })
+
+  const dispatch = useDispatch()
 
   const workImportanceList = ['하', '중하', '중', '중상', '상']
   const workProficiencyList = ['초급', '초중급', '중급', '중상급', '상급']
@@ -265,6 +269,23 @@ function UserTodo({
     const updatedBoard = moveCard(board, source, destination)
     setBoard(updatedBoard)
     modifyTodoStatus(card.id, todoStatus[destination['toColumnId']])
+    if (selectedTodo) {
+      if (
+        todoStatus[destination['toColumnId']] === 'DONE' &&
+        selectedTodo.seq === card.id
+      ) {
+        alert('완료된 콩은 선택할 수 없습니다!')
+        setSelectedTodo(null)
+      }
+    }
+    if (userTimer.selectedTodo) {
+      if (
+        todoStatus[destination['toColumnId']] === 'DONE' &&
+        userTimer.selectedTodo.seq === card.id
+      ) {
+        dispatch(changeUserTimerTodo(null))
+      }
+    }
   }
 
   const handleCardRemove = (card: any) => {
