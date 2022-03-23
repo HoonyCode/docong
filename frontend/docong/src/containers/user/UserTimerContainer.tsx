@@ -56,7 +56,7 @@ function UserTimerContainer() {
 
   const timerTypes = [
     { name: 'Short', time: 900 },
-    { name: 'Basic', time: 5 },
+    { name: 'Basic', time: 1500 },
     { name: 'Long', time: 3000 },
   ]
 
