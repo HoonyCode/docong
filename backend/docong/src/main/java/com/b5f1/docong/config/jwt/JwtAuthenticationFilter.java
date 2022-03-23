@@ -7,6 +7,8 @@ import com.b5f1.docong.api.exception.CustomException;
 import com.b5f1.docong.api.exception.ErrorCode;
 import com.b5f1.docong.config.SecurityConfig;
 import com.b5f1.docong.config.auth.PrincipalDetails;
+import com.b5f1.docong.core.domain.user.User;
+import com.b5f1.docong.core.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,11 +39,13 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
      */
     private final AuthenticationManager authenticationManager;
     private final String secret;
+    private UserRepository userRepository;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, String secret) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, String secret, UserRepository userRepository) {
         super("/user/login");
         this.authenticationManager = authenticationManager;
         this.secret = secret;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -89,9 +93,10 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-
+        // attemptAuthentication이 성공적으로 완료된 후, token을 발급해주기 위해 들어오는 곳
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
+        // Access Token 발급
         String jwtToken = JWT.create()
                 .withSubject(principalDetails.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
@@ -99,7 +104,22 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
                 .withClaim("email", principalDetails.getUser().getEmail())
                 .sign(Algorithm.HMAC512(secret));
 
+        // Refresh Token 발급 (만료일자만 넣음) -> 사용자의 DB에 저장해야함
+        String refreshToken = JWT.create()
+                .withSubject(principalDetails.getUsername())
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.REFRESH_EXPIRATION_TIME))
+                .withClaim("email", principalDetails.getUser().getEmail())
+                .sign(Algorithm.HMAC512(secret));
+        // Refresh Token - DB에 저장
+        User userEntity = userRepository.findByEmailAndActivateTrue(principalDetails.getUsername());
+        userEntity.saveRefreshToken(refreshToken);
+        userRepository.save(userEntity);
+
         System.out.println("JWT TOKEN : " + jwtToken);
+        System.out.println("Refresh TOKEN : " + refreshToken);
+        // response의 header로 Access Token 보내기
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
+        // response의 header로 Refresh Token 보내기
+        response.addHeader(JwtProperties.REFRESH_TOKEN_HEADER_STRING, JwtProperties.TOKEN_PREFIX+refreshToken);
     }
 }

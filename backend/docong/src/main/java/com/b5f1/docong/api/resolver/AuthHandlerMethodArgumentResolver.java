@@ -5,6 +5,8 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.*;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.b5f1.docong.api.exception.CustomException;
+import com.b5f1.docong.api.exception.ErrorCode;
 import com.b5f1.docong.config.jwt.JwtProperties;
 import com.b5f1.docong.core.domain.user.User;
 import com.b5f1.docong.core.repository.UserRepository;
@@ -51,8 +53,8 @@ public class AuthHandlerMethodArgumentResolver implements HandlerMethodArgumentR
             System.out.println("Email : " + email);
             return userRepository.findByEmailAndActivateTrue(email);
         } else {
-//            throw new CustomException(ErrorCode.TOKEN_NOT_FOUND);
-            return null;
+            throw new CustomException(ErrorCode.TOKEN_NOT_FOUND);
+//            return null;
         }
     }
 

@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.b5f1.docong.config.auth.PrincipalDetails;
 import com.b5f1.docong.core.domain.user.User;
 import com.b5f1.docong.core.repository.UserRepository;
@@ -32,6 +33,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+        // 어느 요청이 들어오던 해당 메서드를 거친다. -> Authorization(JWT)이 유효한지 체크
+        System.out.println("JwtAuthorizationFilter 진입");
         String header = request.getHeader(JwtProperties.HEADER_STRING);
         System.out.println("header Authorization : " + header);
 
@@ -42,7 +45,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         try {
             String token = request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX, "");
-            String email = JWT.require(Algorithm.HMAC512(secret)).build().verify(token)
+            String email = JWT.require(Algorithm.HMAC512(secret)).build().verify(token) // 여기서 token 유효성 검사를 거침(verify(token))
                     .getClaim("email").asString();
             if (email != null) {
                 User user = userRepository.findByEmailAndActivateTrue(email);

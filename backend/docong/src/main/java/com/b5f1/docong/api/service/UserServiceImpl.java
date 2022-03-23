@@ -1,16 +1,24 @@
 package com.b5f1.docong.api.service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.b5f1.docong.api.dto.request.JoinReqDto;
 import com.b5f1.docong.api.dto.request.UserInfoReqDto;
 import com.b5f1.docong.api.dto.response.UserInfoResDto;
 import com.b5f1.docong.api.exception.CustomException;
 import com.b5f1.docong.api.exception.ErrorCode;
+import com.b5f1.docong.config.jwt.JwtProperties;
 import com.b5f1.docong.core.domain.user.User;
 import com.b5f1.docong.core.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 @Service
 @Transactional
@@ -21,6 +29,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Value("${spring.jwt.secret}")
+    public String secret;
 
     @Override
     public void join(JoinReqDto joinReqDto) {
@@ -87,5 +98,41 @@ public class UserServiceImpl implements UserService {
         }
 
         return false;
+    }
+
+    public String newToken(String expiredAuthorization) {
+        if(expiredAuthorization != null && expiredAuthorization.startsWith("Bearer ")) {
+            try{
+                String refreshToken = expiredAuthorization.substring("Bearer ".length()); // Bearer 를 제외한 나머지를 refreshToken으로 저장
+                String email = JWT.require(Algorithm.HMAC512(secret)).build().verify(refreshToken)
+                                .getClaim("email").asString();
+                System.out.println("email-> "+email);
+
+                User user = userRepository.findByEmailAndActivateTrue(email);
+
+                // user의 refreshToken이 맞는지 확인하기
+                if(!user.getRefresh_token().equals(refreshToken)) {
+                    throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
+                }
+
+                String newToken = JWT.create()
+                        .withSubject(user.getEmail())
+                        .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME))
+                        .withClaim("id", user.getSeq())
+                        .withClaim("email", user.getEmail())
+                        .sign(Algorithm.HMAC512(secret));
+
+                return "Bearer "+newToken;
+            }
+            catch (TokenExpiredException e) {
+                // Refresh Token이 만료되었을 때 (Expired Refresh Token 에러코드 만들기)
+                throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
+            }
+            catch(SignatureVerificationException e) {
+                // Refresh Token 값이 잘못되었을 때
+                throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
+            }
+        }
+        throw new CustomException(ErrorCode.TOKEN_NOT_FOUND);
     }
 }

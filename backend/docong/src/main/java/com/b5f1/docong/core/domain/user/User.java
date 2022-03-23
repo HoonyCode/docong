@@ -50,7 +50,7 @@ public class User {
     private String oauth_type;
 
     @Column
-    private String access_token;
+    private String refresh_token;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserTodo> userTodos = new ArrayList<>();
@@ -91,5 +91,9 @@ public class User {
     public void deleteUser() {
         this.activate = false;
         this.email = "deleteUser";
+    }
+
+    public void saveRefreshToken(String refresh_token) {
+        this.refresh_token = refresh_token;
     }
 }
