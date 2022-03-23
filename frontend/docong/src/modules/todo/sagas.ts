@@ -34,7 +34,6 @@ function* saveTodoSaga(action: ReturnType<typeof saveTodoAsync.request>) {
     yield put(findUserTodosAsync.request(null))
     console.log(saveTodoResponse)
   } catch (e: any) {
-    alert('Todo 저장 실패')
     console.error(e)
   }
 }
@@ -44,7 +43,6 @@ function* findTodoSaga(action: ReturnType<typeof findTodoAsync.request>) {
     const findTodoResponse: Todo = yield call(findTodo, action.payload)
     console.log(findTodoResponse)
   } catch (e: any) {
-    alert('Todo 정보 요청 실패')
     console.error(e)
   }
 }
@@ -59,7 +57,6 @@ function* modifyTodoSaga(action: ReturnType<typeof modifyTodoAsync.request>) {
     yield put(findUserTodosAsync.request(null))
     console.log(modifyTodoResponse)
   } catch (e: any) {
-    alert('Todo 수정 실패')
     console.error(e)
   }
 }
@@ -73,7 +70,6 @@ function* deleteTodoSaga(action: ReturnType<typeof deleteTodoAsync.request>) {
     yield put(findUserTodosAsync.request(null))
     console.log(deleteTodoResponse)
   } catch (e: any) {
-    alert('Todo 삭제 실패')
     console.error(e)
   }
 }
@@ -90,7 +86,6 @@ function* modifyTodoStatusSaga(
     console.log(modifyTodoStatusResponse)
     yield put(findUserTodosAsync.request(null))
   } catch (e: any) {
-    alert('Todo 상태 변경 실패')
     console.error(e)
   }
 }
@@ -102,7 +97,6 @@ function* findUserTodosSaga(
     const userTodos: Todos = yield call(findUserTodos)
     yield put(findUserTodosAsync.success(userTodos))
   } catch (e: any) {
-    alert('유저 Todo 요청 실패')
     yield put(findUserTodosAsync.failure(e))
     console.error(e)
   }

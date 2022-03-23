@@ -88,21 +88,27 @@ function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
 
   const onClickEmailCheck = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    try {
-      const emailCheckResponse = await axios.post(
-        `${BASE_URL}/api/user/duplicate`,
-        {
-          email: signupInput.email,
+    const regExp =
+      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
+    if (regExp.test(signupInput.email)) {
+      try {
+        const emailCheckResponse = await axios.post(
+          `${BASE_URL}/api/user/duplicate`,
+          {
+            email: signupInput.email,
+          }
+        )
+        if (emailCheckResponse.data.possible) {
+          alert('사용 가능한 이메일입니다.')
+          setIsCheckedEmail(true)
+        } else {
+          alert('이미 가입되어 있는 이메일입니다.')
         }
-      )
-      if (emailCheckResponse.data.possible) {
-        alert('사용 가능한 이메일입니다.')
-        setIsCheckedEmail(true)
-      } else {
-        alert('이미 가입되어 있는 이메일입니다.')
+      } catch (e: any) {
+        console.log(e)
       }
-    } catch (e: any) {
-      console.log(e)
+    } else {
+      alert('올바른 이메일 형식을 입력해주세요.')
     }
   }
 

@@ -55,7 +55,7 @@ function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
     // put : 특정 액션을 dispatch
     yield put(userSignupAsync.success(signupResponse))
   } catch (e: any) {
-    alert('회원가입 실패')
+    alert('회원가입에 실패했습니다.')
     yield put(userSignupAsync.failure(e))
     console.error(e)
   }
@@ -64,13 +64,12 @@ function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
 function* userLoginSaga(action: ReturnType<typeof userLoginAsync.request>) {
   try {
     const loginToken: string = yield call(userLogin, action.payload.loginInput)
-    alert('로그인이 완료되었습니다.')
     localStorage.setItem('jwtToken', loginToken)
     yield put(initUserTimer())
     yield action.payload.navigate('/timer')
     yield put(getUserInfoAsync.request(null))
   } catch (e: any) {
-    alert('로그인 실패')
+    alert('이메일 또는 비밀번호를 다시 확인해주세요.')
     console.error(e)
   }
 }
@@ -83,13 +82,12 @@ function* userGoogleLoginSaga(
       userGoogleLogin,
       action.payload.googleLoginResponse
     )
-    alert('구글 로그인이 완료되었습니다.')
     localStorage.setItem('jwtToken', googleLoginResponseData.jwtToken)
     yield put(initUserTimer())
     yield action.payload.navigate('/timer')
     yield put(getUserInfoAsync.request(null))
   } catch (e: any) {
-    alert('구글 로그인 실패')
+    alert('구글 로그인에 실패했습니다.')
     console.error(e)
   }
 }
@@ -99,7 +97,6 @@ function* getUserInfoSaga() {
     const userInfo: UserInfo = yield call(getUserInfo)
     yield put(getUserInfoAsync.success(userInfo))
   } catch (e: any) {
-    alert('유저 정보 요청실패')
     yield put(getUserInfoAsync.failure(e))
     console.error(e)
   }
