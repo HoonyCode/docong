@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
     public String newToken(String expiredAuthorization) {
         if(expiredAuthorization != null && expiredAuthorization.startsWith("Bearer ")) {
             try{
-                String refreshToken = expiredAuthorization.substring("Bearer ".length()); // Bearer 를 제외한 나머지를 refreshToken으로 저장
+                String refreshToken = expiredAuthorization.replace(JwtProperties.TOKEN_PREFIX, ""); // Bearer 를 제외한 나머지를 refreshToken으로 저장
                 String email = JWT.require(Algorithm.HMAC512(secret)).build().verify(refreshToken)
                                 .getClaim("email").asString();
                 System.out.println("email-> "+email);
@@ -126,13 +126,14 @@ public class UserServiceImpl implements UserService {
             }
             catch (TokenExpiredException e) {
                 // Refresh Token이 만료되었을 때 (Expired Refresh Token 에러코드 만들기)
-                throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
+                throw new CustomException(ErrorCode.EXPIRED_REFRESH_TOKEN);
             }
             catch(SignatureVerificationException e) {
                 // Refresh Token 값이 잘못되었을 때
                 throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
             }
         }
+        // 토큰이 없거나 정해진 형식을 따르지 않은 토큰일 때
         throw new CustomException(ErrorCode.TOKEN_NOT_FOUND);
     }
 }
