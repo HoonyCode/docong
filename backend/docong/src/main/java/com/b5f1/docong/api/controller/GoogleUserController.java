@@ -58,6 +58,7 @@ public class GoogleUserController {
             newUser = true;
         }
 
+        // Access Token 발급
         String jwtToken = JWT.create()
                 .withSubject(userEntity.getEmail())
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
@@ -65,8 +66,19 @@ public class GoogleUserController {
                 .withClaim("email", userEntity.getEmail())
                 .sign(Algorithm.HMAC512(secret));
 
+        // Refresh Token 발급
+        String refreshToken = JWT.create()
+                .withSubject(userEntity.getEmail())
+                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.REFRESH_EXPIRATION_TIME))
+                .withClaim("email", userEntity.getEmail())
+                .sign(Algorithm.HMAC512(secret));
+        // Refresh Token - DB에 저장
+        userEntity.saveRefreshToken(refreshToken);
+        userRepository.save(userEntity);
+
         System.out.println("Google JWT Token : " + jwtToken);
-        GoogleLoginResDto googleLoginResDto = new GoogleLoginResDto(jwtToken,newUser);
+        System.out.println("Google Refresh Token : " + refreshToken);
+        GoogleLoginResDto googleLoginResDto = new GoogleLoginResDto(jwtToken, refreshToken, newUser);
         return ResponseEntity.ok().body(googleLoginResDto);
     }
 
