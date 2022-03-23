@@ -61,7 +61,19 @@ function EditUserForm({
     'ENFJ',
     'ENTJ',
   ]
-  const jobList = ['Job1', 'Job2', 'Job3']
+  const jobList = [
+    '경영/사무',
+    '마케팅/무역/유통',
+    '영업/고객상담',
+    'IT/인터넷',
+    '연구개발/설계',
+    '생산/제조',
+    '전문/특수직',
+    '디자인',
+    '미디어',
+    '서비스',
+    '건설',
+  ]
 
   useEffect(() => {
     if (isOpenEditUserForm === true) {
@@ -172,13 +184,14 @@ function EditUserForm({
             onChange={onChangeUserJob}
           >
             {jobList.map((job, index) => (
-              <MenuItem key={index} value={job.toUpperCase()}>
+              <MenuItem key={index} value={job}>
                 {job}
               </MenuItem>
             ))}
           </Select>
           <TextField
             required
+            fullWidth
             type="number"
             InputProps={{
               inputProps: {

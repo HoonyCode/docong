@@ -7,6 +7,36 @@ import UserSignupPage from './pages/auth/UserSignupPage'
 import UserAnalysisPage from './pages/user/UserAnalysisPage'
 import UserTimerPage from './pages/user/UserTimerPage'
 import UserTodoPage from './pages/user/UserTodoPage'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+
+declare module '@mui/material/styles' {
+  interface Theme {
+    colors: {
+      lightGreen: string
+      Green: string
+      lightYellow: string
+      Yellow: string
+    }
+  }
+  // allow configuration using `createTheme`
+  interface ThemeOptions {
+    colors?: {
+      lightGreen?: string
+      Green: string
+      lightYellow: string
+      Yellow: string
+    }
+  }
+}
+
+const theme = createTheme({
+  colors: {
+    lightGreen: '#b2f2bb',
+    Green: '#69db7c',
+    lightYellow: '#ffec99',
+    Yellow: '#ffd43b',
+  },
+})
 
 function App() {
   const dispatch = useDispatch()
@@ -30,15 +60,17 @@ function App() {
   }, [location, dispatch, navigate])
 
   return (
-    <Background>
-      <Routes>
-        <Route path="/" element={<UserLoginPage />} />
-        <Route path="/timer" element={<UserTimerPage />} />
-        <Route path="/join" element={<UserSignupPage />} />
-        <Route path="/user/todo" element={<UserTodoPage />} />
-        <Route path="/user/analysis" element={<UserAnalysisPage />} />
-      </Routes>
-    </Background>
+    <ThemeProvider theme={theme}>
+      <Background>
+        <Routes>
+          <Route path="/" element={<UserLoginPage />} />
+          <Route path="/join" element={<UserSignupPage />} />
+          <Route path="/timer" element={<UserTimerPage />} />
+          <Route path="/user/todo" element={<UserTodoPage />} />
+          <Route path="/user/analysis" element={<UserAnalysisPage />} />
+        </Routes>
+      </Background>
+    </ThemeProvider>
   )
 }
 

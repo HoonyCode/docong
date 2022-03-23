@@ -22,7 +22,6 @@ import {
   Avatar,
   Grid,
 } from '@mui/material'
-import { styled, css } from '@mui/material/styles'
 import { green } from '@mui/material/colors'
 import AddIcon from '@mui/icons-material/Add'
 import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined'
@@ -179,13 +178,17 @@ function UserTodo({
   }
 
   const onSelectTodo = (card: any) => {
-    if (!selectedTodo) {
-      setSelectedTodo({ ...card, seq: card.id })
+    if (card.status === 'DONE') {
+      alert('완료된 콩은 선택할 수 없습니다!')
     } else {
-      if (selectedTodo.seq !== card.id) {
+      if (!selectedTodo) {
         setSelectedTodo({ ...card, seq: card.id })
       } else {
-        setSelectedTodo(null)
+        if (selectedTodo.seq !== card.id) {
+          setSelectedTodo({ ...card, seq: card.id })
+        } else {
+          setSelectedTodo(null)
+        }
       }
     }
   }
@@ -394,6 +397,7 @@ function UserTodo({
             />
             <TextField
               required
+              fullWidth
               type="number"
               InputProps={{
                 inputProps: {
@@ -478,6 +482,7 @@ function UserTodo({
             />
             <TextField
               required
+              fullWidth
               type="number"
               InputProps={{
                 inputProps: {
