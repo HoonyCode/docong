@@ -73,7 +73,7 @@ class PomodoroServiceImplTest {
     @Test
     void 뽀모도로저장하기_TODONULL(){
         //given
-        SavePomodoroReqDto savePomodoroReqDto = new SavePomodoroReqDto(savedTodo.getSeq(), TimeStatus.BASIC, null, null, 0, noiseStatus.NOISE);
+        SavePomodoroReqDto savePomodoroReqDto = new SavePomodoroReqDto(null, TimeStatus.BASIC, null, null, 0, noiseStatus.NOISE);
 
         //when
         Long saveSeq = pomodoroService.savePomodoro(savePomodoroReqDto, savedUser);
