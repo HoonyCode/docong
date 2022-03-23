@@ -1,6 +1,8 @@
 package com.b5f1.docong.api.service;
 
 import com.b5f1.docong.api.dto.request.SavePomodoroReqDto;
+import com.b5f1.docong.api.exception.CustomException;
+import com.b5f1.docong.api.exception.ErrorCode;
 import com.b5f1.docong.core.domain.pomodoro.Pomodoro;
 import com.b5f1.docong.core.domain.todo.Todo;
 import com.b5f1.docong.core.domain.user.User;
@@ -20,13 +22,18 @@ import java.util.Optional;
 @Transactional
 public class PomodoroServiceImpl implements PomodoroService {
     final private PomodoroRepository pomodoroRepository;
-    final private UserRepository userRepository;
     final private TodoRepository todoRepository;
 
 
     @Override
     public Long savePomodoro(SavePomodoroReqDto reqDto, User user) {
-        Todo todo = todoRepository.findById(reqDto.getTodo_seq()).orElseThrow(() -> new IllegalStateException("없는 todo 입니다."));
+
+        Todo todo = null;
+        if (reqDto.getTodo_seq() != null) {
+            todo = todoRepository.findById(reqDto.getTodo_seq()).orElseThrow(() -> {
+                throw new CustomException(ErrorCode.TODO_NOT_FOUND);
+            });
+        }
 
         Pomodoro pomodoro = Pomodoro.builder()
                 .user(user)
