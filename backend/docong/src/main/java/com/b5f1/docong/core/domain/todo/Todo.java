@@ -44,6 +44,8 @@ public class Todo extends BaseEntity {
     private WorkType workType;
     private WorkImportance workImportance;
 
+    private String jiraIssueId;
+
     @OneToOne(mappedBy="todo", fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     private UserTodo userTodo;
 
@@ -68,5 +70,9 @@ public class Todo extends BaseEntity {
 
     public void changeStatus(TodoStatus todoStatus) {
         this.status = todoStatus;
+    }
+
+    public void changeJiraIssueId(String jiraIssueId) {
+        this.jiraIssueId = jiraIssueId;
     }
 }

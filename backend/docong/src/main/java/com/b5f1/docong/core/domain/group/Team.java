@@ -22,7 +22,26 @@ public class Team extends BaseEntity {
     @Column
     private String name;
 
+    @Column
+    private String jiraDomain;
+
+    @Column
+    private String jiraUserId;
+
+    @Column
+    private String jiraAPIToken;
+
+    @Column
+    private String jiraProjectKey;
+
     public void changeName(String name){
         this.name = name;
+    }
+
+    public void changeJiraInfo(String jiraDomain, String jiraUserId, String jiraAPIToken, String jiraProjectKey) {
+        this.jiraDomain = jiraDomain;
+        this.jiraUserId = jiraUserId;
+        this.jiraAPIToken = jiraAPIToken;
+        this.jiraProjectKey = jiraProjectKey;
     }
 }
