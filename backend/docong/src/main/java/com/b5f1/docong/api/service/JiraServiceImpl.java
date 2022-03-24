@@ -2,6 +2,8 @@ package com.b5f1.docong.api.service;
 
 import com.b5f1.docong.api.dto.request.SaveJiraInfoReqDto;
 import com.b5f1.docong.api.dto.request.SaveTodoReqDto;
+import com.b5f1.docong.api.exception.CustomException;
+import com.b5f1.docong.api.exception.ErrorCode;
 import com.b5f1.docong.core.domain.group.Team;
 import com.b5f1.docong.core.domain.todo.Todo;
 import com.b5f1.docong.core.domain.user.User;
@@ -48,7 +50,7 @@ public class JiraServiceImpl implements JiraService{
     @Override
     public void saveTeamJira(Long id, Long userId, SaveJiraInfoReqDto reqDto) {
         Team team = teamRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("없는 team입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
 
         String encryptKey = encrypt(reqDto.getJiraAPIToken().getBytes());
 
@@ -63,7 +65,7 @@ public class JiraServiceImpl implements JiraService{
 
         // team jira 정보 가져오기
         Team team = teamRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("없는 team입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
 
         String domain = team.getJiraDomain();
         String userID = team.getJiraUserId();
@@ -122,7 +124,7 @@ public class JiraServiceImpl implements JiraService{
                 Long todoSeq = todoService.saveTodo(todoReqDto);
 
                 Todo todo = todoRepository.findById(todoSeq)
-                        .orElseThrow(() -> new IllegalStateException("없는 Todo입니다."));
+                        .orElseThrow(() -> new CustomException(ErrorCode.TODO_NOT_FOUND));
 
                 todo.changeJiraIssueId(issueId);
                 issueIds.add(issueId);

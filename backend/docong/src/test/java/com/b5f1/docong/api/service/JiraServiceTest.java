@@ -1,6 +1,8 @@
 package com.b5f1.docong.api.service;
 
 import com.b5f1.docong.api.dto.request.SaveJiraInfoReqDto;
+import com.b5f1.docong.api.exception.CustomException;
+import com.b5f1.docong.api.exception.ErrorCode;
 import com.b5f1.docong.core.domain.group.Team;
 import com.b5f1.docong.core.domain.todo.Todo;
 import com.b5f1.docong.core.domain.user.User;
@@ -50,7 +52,7 @@ class JiraServiceTest {
         jiraService.saveTeamJira(seq, userSeq, reqDto);
 
         Team team = teamRepository.findById(seq)
-                .orElseThrow(() -> new IllegalStateException("없는 Team입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
 
         assertThat(team.getJiraDomain()).isEqualTo("https://hyunse0.atlassian.net/");
         assertThat(team.getJiraUserId()).isEqualTo("hhs28166139@gmail.com");
