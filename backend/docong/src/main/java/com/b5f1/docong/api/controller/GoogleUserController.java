@@ -59,9 +59,6 @@ public class GoogleUserController {
             newUser = true;
         }
 
-        // 로그인 시마다 url update
-        userEntity.saveImage(googleUser.getImage());
-
         // Access Token 발급
         String jwtToken = JWT.create()
                 .withSubject(userEntity.getEmail())

@@ -13,5 +13,5 @@ public class UserInfoResDto {
     String mbti;
     String job;
     String position;
-
+    String image;
 }

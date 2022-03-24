@@ -46,7 +46,7 @@ public class UserServiceTest {
     void testChangeUserInfo() {
         User user = userRepository.findByEmailAndActivateTrue("testcode@naver.com");
         UserInfoReqDto userInfoReqDto =
-                new UserInfoReqDto("혀승", "2005-11-23", "M", "ISFP", "student", "student");
+                new UserInfoReqDto("혀승", "2005-11-23", "M", "ISFP", "student", "student", null);
 
         userService.setUserInfo(user, userInfoReqDto);
         user = userRepository.findByEmailAndActivateTrue("testcode@naver.com");

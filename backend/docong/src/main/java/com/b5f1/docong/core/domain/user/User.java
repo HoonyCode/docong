@@ -89,6 +89,7 @@ public class User {
         this.mbti = userInfoReqDto.getMbti();
         this.job = userInfoReqDto.getJob();
         this.position = userInfoReqDto.getPosition();
+        this.image = userInfoReqDto.getImage();
     }
 
     public void deleteUser() {
@@ -104,9 +105,5 @@ public class User {
     //패스워드 변경
     public void changePassword(String password){
         this.password = password;
-    }
-
-    public void saveImage(String image) {
-        this.image = image;
     }
 }

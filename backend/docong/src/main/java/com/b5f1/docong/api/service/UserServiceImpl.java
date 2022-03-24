@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(seq).get();
 
         UserInfoResDto userRes =
-                new UserInfoResDto(user.getEmail(), user.getName(), user.getBirth(), user.getGender(), user.getMbti(), user.getJob(), user.getPosition());
+                new UserInfoResDto(user.getEmail(), user.getName(), user.getBirth(), user.getGender(), user.getMbti(), user.getJob(), user.getPosition(), user.getImage());
 
         return userRes;
     }
