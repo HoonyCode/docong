@@ -21,6 +21,7 @@ import {
   AvatarGroup,
   Avatar,
   Grid,
+  DialogContentText,
 } from '@mui/material'
 import { green } from '@mui/material/colors'
 import AddIcon from '@mui/icons-material/Add'
@@ -38,7 +39,7 @@ interface UserTodoProps {
   userTodos: any
   createTodo: (todoInput: TodoInput) => void
   modifyTodo: (todoId: number, todoInput: TodoInput) => void
-  deleteTodo: (todoId: number) => void
+  deleteTodo: (todoId: any) => void
   modifyTodoStatus: (todoId: number, todoStatus: string) => void
   startTodoTimer: (selectedTodo: Todo) => void
 }
@@ -76,6 +77,7 @@ function UserTodo({
 
   const [isOpenCreateTodo, setIsOpenCreateTodo] = useState(false)
   const [isOpenModifyTodo, setIsOpenModifyTodo] = useState(false)
+  const [selectedDeleteTodo, setSelectedDeleteTodo] = useState(null)
   const [modifyTodoId, setModifyTodoId] = useState(0)
   const [selectedTodo, setSelectedTodo] = useState<null | Todo>(null)
 
@@ -182,24 +184,25 @@ function UserTodo({
   }
 
   const onSelectTodo = (card: any) => {
-    if (card.status === 'DONE') {
-      alert('완료된 콩은 선택할 수 없습니다!')
+    if (!selectedTodo) {
+      setSelectedTodo({ ...card, seq: card.id })
     } else {
-      if (!selectedTodo) {
+      if (selectedTodo.seq !== card.id) {
         setSelectedTodo({ ...card, seq: card.id })
       } else {
-        if (selectedTodo.seq !== card.id) {
-          setSelectedTodo({ ...card, seq: card.id })
-        } else {
-          setSelectedTodo(null)
-        }
+        setSelectedTodo(null)
       }
     }
   }
 
   const onClickStartTodoTimer = () => {
     if (selectedTodo) {
-      startTodoTimer(selectedTodo)
+      if (selectedTodo.status === 'DONE') {
+        alert('완료된 콩은 시작할 수 없습니다!')
+        setSelectedTodo(null)
+      } else {
+        startTodoTimer(selectedTodo)
+      }
     } else {
       alert('Todo 를 먼저 선택해주세요.')
     }
@@ -269,15 +272,6 @@ function UserTodo({
     const updatedBoard = moveCard(board, source, destination)
     setBoard(updatedBoard)
     modifyTodoStatus(card.id, todoStatus[destination['toColumnId']])
-    if (selectedTodo) {
-      if (
-        todoStatus[destination['toColumnId']] === 'DONE' &&
-        selectedTodo.seq === card.id
-      ) {
-        alert('완료된 콩은 선택할 수 없습니다!')
-        setSelectedTodo(null)
-      }
-    }
     if (userTimer.selectedTodo) {
       if (
         todoStatus[destination['toColumnId']] === 'DONE' &&
@@ -289,7 +283,7 @@ function UserTodo({
   }
 
   const handleCardRemove = (card: any) => {
-    deleteTodo(card.id)
+    setSelectedDeleteTodo(card.id)
   }
 
   return (
@@ -319,6 +313,7 @@ function UserTodo({
         disableColumnDrag
         renderCard={(card: any, { dragging }: any) => (
           <Card
+            key={card.id}
             sx={[
               {
                 minWidth: 275,
@@ -432,6 +427,7 @@ function UserTodo({
             />
             <InputLabel id="work-importance">Work Importance</InputLabel>
             <Select
+              required
               fullWidth
               labelId="work-importance"
               id="work-importance"
@@ -446,6 +442,7 @@ function UserTodo({
             </Select>
             <InputLabel id="work-proficiency">Work Proficiency</InputLabel>
             <Select
+              required
               fullWidth
               labelId="work-proficiency"
               id="work-proficiency"
@@ -460,6 +457,7 @@ function UserTodo({
             </Select>
             <InputLabel id="work-type">Work Type</InputLabel>
             <Select
+              required
               fullWidth
               labelId="work-type"
               id="work-type"
@@ -517,6 +515,7 @@ function UserTodo({
             />
             <InputLabel id="work-importance">Work Importance</InputLabel>
             <Select
+              required
               fullWidth
               labelId="work-importance"
               id="work-importance"
@@ -531,6 +530,7 @@ function UserTodo({
             </Select>
             <InputLabel id="work-proficiency">Work Proficiency</InputLabel>
             <Select
+              required
               fullWidth
               labelId="work-proficiency"
               id="work-proficiency"
@@ -545,6 +545,7 @@ function UserTodo({
             </Select>
             <InputLabel id="work-type">Work Type</InputLabel>
             <Select
+              required
               fullWidth
               labelId="work-type"
               id="work-type"
@@ -563,6 +564,36 @@ function UserTodo({
             <Button onClick={closeModifyTodo}>Cancel</Button>
           </DialogActions>
         </Box>
+      </Dialog>
+      <Dialog
+        open={Boolean(selectedDeleteTodo)}
+        keepMounted
+        onClose={() => setSelectedDeleteTodo(null)}
+        aria-describedby="stop-dialog"
+      >
+        <DialogTitle>{'Todo 삭제'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="stop-dialog">
+            정말로 삭제하시겠습니까?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            onClick={() => {
+              deleteTodo(selectedDeleteTodo)
+              setSelectedDeleteTodo(null)
+            }}
+          >
+            삭제
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => setSelectedDeleteTodo(null)}
+          >
+            취소
+          </Button>
+        </DialogActions>
       </Dialog>
     </>
   )

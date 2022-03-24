@@ -55,7 +55,7 @@ function UserTodoContainer() {
     dispatch(modifyTodoAsync.request({ todoId: todoId, todoInput: todoInput }))
   }
 
-  const deleteTodo = (todoId: number) => {
+  const deleteTodo = (todoId: any) => {
     dispatch(deleteTodoAsync.request(todoId))
   }
 

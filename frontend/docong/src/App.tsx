@@ -8,6 +8,7 @@ import UserAnalysisPage from './pages/user/UserAnalysisPage'
 import UserTimerPage from './pages/user/UserTimerPage'
 import UserTodoPage from './pages/user/UserTodoPage'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import NavBarPage from './pages/NavBarPage'
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -65,9 +66,11 @@ function App() {
         <Routes>
           <Route path="/" element={<UserLoginPage />} />
           <Route path="/join" element={<UserSignupPage />} />
-          <Route path="/timer" element={<UserTimerPage />} />
-          <Route path="/user/todo" element={<UserTodoPage />} />
-          <Route path="/user/analysis" element={<UserAnalysisPage />} />
+          <Route path="/*" element={<NavBarPage />}>
+            <Route path="timer" element={<UserTimerPage />} />
+            <Route path="user/todo" element={<UserTodoPage />} />
+            <Route path="user/analysis" element={<UserAnalysisPage />} />
+          </Route>
         </Routes>
       </Background>
     </ThemeProvider>
