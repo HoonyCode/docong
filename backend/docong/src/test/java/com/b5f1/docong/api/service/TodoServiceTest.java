@@ -113,14 +113,8 @@ class TodoServiceTest {
         todoService.deleteTodo(savedTodo.getSeq());
 
         // then
-        assertThatThrownBy(() -> {
-            todoRepository.findById(savedTodo.getSeq())
-                    .orElseThrow(() -> new IllegalStateException());
-        }).isInstanceOf(IllegalStateException.class);
-        assertThatThrownBy(() -> {
-            userTodoRepository.findById(savedUserTodo.getSeq())
-                    .orElseThrow(() -> new IllegalStateException());
-        }).isInstanceOf(IllegalStateException.class);
+        Todo deletedTodo = todoRepository.findById(savedTodo.getSeq()).orElseThrow(()->new IllegalStateException());
+        assertThat(deletedTodo.getDeleted()).isEqualTo(true);
     }
 
     @Test
