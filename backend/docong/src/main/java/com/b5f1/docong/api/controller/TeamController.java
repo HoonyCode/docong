@@ -23,20 +23,20 @@ public class TeamController {
 
 
     @PostMapping
-    public ResponseEntity<Long> createTeam(@RequestBody @Validated SaveTeamReqDto teamReqDto) {
+    public ResponseEntity<Long> createTeam(@Auth User user, @RequestBody @Validated SaveTeamReqDto teamReqDto) {
         System.out.println("teamReqDto.getName() = " + teamReqDto.getName());
         Long result = teamService.createTeam(teamReqDto);
         return ResponseEntity.ok().body(result);
     }
 
     @PutMapping
-    public ResponseEntity<Long> updateTeam(@RequestBody @Validated UpdateTeamReqDto teamReqDto) {
+    public ResponseEntity<Long> updateTeam(@Auth User user, @RequestBody @Validated UpdateTeamReqDto teamReqDto) {
         Long result = teamService.updateTeam(teamReqDto);
         return ResponseEntity.ok().body(result);
     }
 
     @GetMapping("/{team_id}")
-    public ResponseEntity<FindTeamResDto> findTeam(@PathVariable Long team_id) {
+    public ResponseEntity<FindTeamResDto> findTeam(@Auth User user, @PathVariable Long team_id) {
         FindTeamResDto teamResDto = teamService.findTeam(team_id);
         return ResponseEntity.ok().body(teamResDto);
     }
@@ -49,7 +49,7 @@ public class TeamController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<BaseResponseEntity> deleteTeam(@PathVariable Long id) {
+    public ResponseEntity<BaseResponseEntity> deleteTeam(@Auth User user, @PathVariable Long id) {
         teamService.deleteTeam(id);
         return ResponseEntity.ok().body(new BaseResponseEntity(200,"Success"));
     }

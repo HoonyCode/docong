@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -66,15 +67,15 @@ public class AuthHandlerMethodArgumentResolver implements HandlerMethodArgumentR
         try {
             verifier.verify(token.replace(JwtProperties.TOKEN_PREFIX, ""));
         } catch (AlgorithmMismatchException ex) {
-            throw ex;
+            throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
         } catch (InvalidClaimException ex) {
-            throw ex;
+            throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
         } catch (SignatureGenerationException ex) {
-            throw ex;
+            throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
         } catch (SignatureVerificationException ex) {
             throw ex;
         } catch (TokenExpiredException ex) {
-            throw ex;
+            throw new CustomException(ErrorCode.EXPIRED_TOKEN);
         } catch (JWTCreationException ex) {
             throw ex;
         } catch (JWTDecodeException ex) {

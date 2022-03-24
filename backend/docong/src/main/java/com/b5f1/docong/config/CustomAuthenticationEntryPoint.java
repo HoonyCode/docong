@@ -1,5 +1,6 @@
 package com.b5f1.docong.config;
 
+import com.b5f1.docong.api.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,10 +26,10 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
         if("token expired".equals(exception)) {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setStatus(HttpStatus.SERVICE_UNAVAILABLE.value());
+            response.setStatus(ErrorCode.EXPIRED_TOKEN.getHttpStatus().value());
             response.getWriter().println("{ \"message\" : \"" + exception
-                    + "\", \"code\" : \"" + HttpStatus.UNAUTHORIZED.value()
-                    + "\", \"status\" : " + HttpStatus.UNAUTHORIZED.name()
+                    + "\", \"code\" : \"" + ErrorCode.EXPIRED_TOKEN.getHttpStatus().value()
+                    + "\", \"status\" : " + ErrorCode.EXPIRED_TOKEN.getDetail()
                     + ", \"errors\" : [ ] }");
         }
         // response에 넣기

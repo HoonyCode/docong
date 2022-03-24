@@ -63,6 +63,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/user/info", "/user/delete")
                 .access("hasRole('ROLE_USER')")
+                .antMatchers("/pomo")
+                .access("hasRole('ROLE_USER')")
+                .antMatchers("/team")
+                .access("hasRole('ROLE_USER')")
+                .antMatchers("/todo")
+                .access("hasRole('ROLE_USER')")
                 .anyRequest().permitAll();
 
     }
