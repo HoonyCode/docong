@@ -60,7 +60,8 @@ spring:
     port: 587
     username:  docongs003@gmail.com
     to-name:  docongs003@gmail.com
-    password:  docong1234!
+    #docong1234!
+    password:  fdykfvmczaxcyzxm
     properties:
       mail:
         smtp:

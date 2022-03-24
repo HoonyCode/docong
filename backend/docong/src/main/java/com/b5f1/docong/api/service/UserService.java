@@ -16,5 +16,7 @@ public interface UserService {
 
     boolean checkEmail(String email);
 
+    void changePassword(String email, String password);
+
     String newToken(String expiredAuthorization);
 }
