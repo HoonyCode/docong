@@ -52,11 +52,15 @@ public class GoogleUserController {
                     .position(null)
                     .activate(true)
                     .oauth_type(googleUser.getProvider())
+                    .image(googleUser.getImage())
                     .build();
 
             userEntity = userRepository.save(userRequest);
             newUser = true;
         }
+
+        // 로그인 시마다 url update
+        userEntity.saveImage(googleUser.getImage());
 
         // Access Token 발급
         String jwtToken = JWT.create()

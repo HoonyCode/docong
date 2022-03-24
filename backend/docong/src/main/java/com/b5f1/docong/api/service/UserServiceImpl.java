@@ -53,6 +53,7 @@ public class UserServiceImpl implements UserService {
                     .position(joinReqDto.getPosition())
                     .activate(true)
                     .oauth_type("native")
+                    .image(null)
                     .build();
             userRepository.save(user);
         }
@@ -101,34 +102,32 @@ public class UserServiceImpl implements UserService {
     }
 
     public String newToken(String expiredAuthorization) {
-        if(expiredAuthorization != null && expiredAuthorization.startsWith("Bearer ")) {
-            try{
+        if (expiredAuthorization != null && expiredAuthorization.startsWith("Bearer ")) {
+            try {
                 String refreshToken = expiredAuthorization.replace(JwtProperties.TOKEN_PREFIX, ""); // Bearer 를 제외한 나머지를 refreshToken으로 저장
                 String email = JWT.require(Algorithm.HMAC512(secret)).build().verify(refreshToken)
-                                .getClaim("email").asString();
-                System.out.println("email-> "+email);
+                        .getClaim("email").asString();
+                System.out.println("email-> " + email);
 
                 User user = userRepository.findByEmailAndActivateTrue(email);
 
                 // user의 refreshToken이 맞는지 확인하기
-                if(!user.getRefresh_token().equals(refreshToken)) {
+                if (!user.getRefresh_token().equals(refreshToken)) {
                     throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
                 }
 
                 String newToken = JWT.create()
                         .withSubject(user.getEmail())
-                        .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME))
+                        .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
                         .withClaim("id", user.getSeq())
                         .withClaim("email", user.getEmail())
                         .sign(Algorithm.HMAC512(secret));
 
-                return "Bearer "+newToken;
-            }
-            catch (TokenExpiredException e) {
+                return "Bearer " + newToken;
+            } catch (TokenExpiredException e) {
                 // Refresh Token이 만료되었을 때 (Expired Refresh Token 에러코드 만들기)
                 throw new CustomException(ErrorCode.EXPIRED_REFRESH_TOKEN);
-            }
-            catch(SignatureVerificationException e) {
+            } catch (SignatureVerificationException e) {
                 // Refresh Token 값이 잘못되었을 때
                 throw new CustomException(ErrorCode.INVALID_AUTH_TOKEN);
             }

@@ -52,6 +52,9 @@ public class User {
     @Column
     private String refresh_token;
 
+    @Column
+    private String image;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserTodo> userTodos = new ArrayList<>();
 
@@ -60,7 +63,7 @@ public class User {
 
     @Builder
     public User(String email, String password, String name, String birth,
-                String gender, String mbti, String job, String position, boolean activate, String oauth_type) {
+                String gender, String mbti, String job, String position, boolean activate, String oauth_type, String image) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -71,6 +74,7 @@ public class User {
         this.position = position;
         this.activate = activate;
         this.oauth_type = oauth_type;
+        this.image = image;
     }
 
     public void addUserTodo(UserTodo userTodo) {
@@ -95,5 +99,9 @@ public class User {
 
     public void saveRefreshToken(String refresh_token) {
         this.refresh_token = refresh_token;
+    }
+
+    public void saveImage(String image) {
+        this.image = image;
     }
 }
