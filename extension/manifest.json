@@ -1,10 +1,10 @@
 {
     "name": "Docong",
     "description": "Docong Extension",
-    "version": "1.0",
+    "version": "2.1",
     "manifest_version": 3,
     "background":{
-        "service_worker": "js/background.js"
+        "service_worker": "background.js"
     },
     "action": {
         "default_popup": "popup.html",
@@ -22,7 +22,7 @@
         "128": "img/icon128.png"
     },
     "permissions": [
-        "storage","tabs","scripting"
+        "storage","tabs","scripting", "alarms"
     ],
     "host_permissions":[
         "http://*/",

@@ -2,36 +2,44 @@
 let docongTabId = "";
 let now = 0;
 let iconRed = false;
-let timerStatus = false;
-setInterval(()=>{ 
-    if(docongTabId!=""){
-        chrome.scripting.executeScript({
-            target: {tabId: docongTabId},
-            func: ()=>{return localStorage["persist:root"];}
-        }, (result)=>{
-            timerStatus = JSON.parse(JSON.parse(result[0].result).user).userTimer;
-            if(timerStatus.status == "play"){
-                playTimer(timerStatus);
-                timerStatus = true;
-            } else {
-                timerStatus = false;
+let timer = false;
+chrome.alarms.create({ when:Date.now(), periodInMinutes: 1/60});
+chrome.alarms.onAlarm.addListener(() => {
+    chrome.storage.local.get(['docongTab'],(result)=>{
+        chrome.tabs.get(result.docongTab, (tab)=>{
+            if(tab.url.includes("j6s003.p.ssafy.io")){
+                chrome.scripting.executeScript({
+                    target: {tabId: result.docongTab},
+                    func: ()=>{return localStorage["persist:root"];}
+                }, (result)=>{
+                    timerStatus = JSON.parse(JSON.parse(result[0].result).user).userTimer;
+                    if(timerStatus.status == "play"){
+                        timer = true;
+                        playTimer(timerStatus);
+                    } else {
+                        timer = false;
+                        chrome.action.setIcon({
+                            path:"img/icon16.png"
+                        });
+                    }
+                });
             }
-        });
-    }
-}, 1000);
+        })
+    })
+});
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab)=>{
     if(changeInfo.status === 'complete'){
         chrome.storage.sync.get((result) => {
             for(value in result){
-                if(tab.url.includes(value) && timerStatus){
+                if(tab.url.includes(value) && timer){
                     toggleMuteState(tabId, tab);
                     break;
                 }
             }
         });
         if(tab.url.includes("j6s003.p.ssafy.io")){
-            docongTabId = tabId;
+           chrome.storage.local.set({docongTab:tabId});
         }
     }
 });
@@ -69,22 +77,8 @@ function blockURLWarning(){
 
 
 function playTimer(timerStatus){
-    // time = Math.floor(timerStatus.time / 60);
-    // if(now != time){
-        toogleIcon();
-        // now = time;
-    // }
-}
-
-function toogleIcon(){
-    if(iconRed){
-        chrome.action.setIcon({
-            path:"../img/icon16.png"
-        });
-    } else{
-        chrome.action.setIcon({
-            path:"../img/icon16_red.png"
-        });
-    }
-    iconRed = !iconRed;
+    var time = Math.floor(timerStatus.time / 60)+1;
+    chrome.action.setIcon({
+        path:"img/min16/"+time+".png"
+    });
 }
