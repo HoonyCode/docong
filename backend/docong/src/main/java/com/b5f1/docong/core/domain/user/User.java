@@ -100,8 +100,4 @@ public class User {
     public void saveRefreshToken(String refresh_token) {
         this.refresh_token = refresh_token;
     }
-
-    public void saveImage(String image) {
-        this.image = image;
-    }
 }
