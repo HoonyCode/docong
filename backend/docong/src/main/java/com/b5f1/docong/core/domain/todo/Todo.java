@@ -29,6 +29,8 @@ public class Todo extends BaseEntity {
         this.workProficiency = workProficiency;
         this.workType = workType;
         this.workImportance = workImportance;
+        this.activate = false;
+        this.deleted = false;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -49,6 +51,9 @@ public class Todo extends BaseEntity {
     @OneToOne(mappedBy="todo", fetch=FetchType.LAZY, cascade = CascadeType.ALL)
     private UserTodo userTodo;
 
+    private Boolean activate;
+    private Boolean deleted;
+
     public void addTeam(Team team) {
         this.team = team;
     }
@@ -68,11 +73,19 @@ public class Todo extends BaseEntity {
         this.predictedPomo = predictedPomo;
     }
 
+    public void changeActivation(Boolean activate){
+        this.activate = activate;
+    }
+
     public void changeStatus(TodoStatus todoStatus) {
         this.status = todoStatus;
     }
 
     public void changeJiraIssueId(String jiraIssueId) {
         this.jiraIssueId = jiraIssueId;
+    }
+
+    public void deleteTodo(){
+        this.deleted = true;
     }
 }

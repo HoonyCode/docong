@@ -1,5 +1,6 @@
 package com.b5f1.docong.api.service;
 
+import com.b5f1.docong.api.dto.request.ModifyTodoActivateReqDto;
 import com.b5f1.docong.api.dto.request.ModifyTodoStatusReqDto;
 import com.b5f1.docong.api.dto.request.SaveTodoReqDto;
 import com.b5f1.docong.api.dto.response.FindTodoResDto;
@@ -51,7 +52,7 @@ public class TodoServiceImpl implements TodoService{
     @Override
     public void deleteTodo(Long id) {
         Todo todo = getTodo(id);
-        todoRepository.delete(todo);
+        todo.deleteTodo();
     }
 
     @Override
@@ -64,6 +65,12 @@ public class TodoServiceImpl implements TodoService{
     public void modifyStatus(Long id, ModifyTodoStatusReqDto reqDto) {
         Todo todo = getTodo(id);
         todo.changeStatus(reqDto.getTodoStatus());
+    }
+
+    @Override
+    public void modifyActivate(Long id, ModifyTodoActivateReqDto reqDto) {
+        Todo todo = getTodo(id);
+        todo.changeActivation(reqDto.getActivate());
     }
 
     @Override
@@ -81,6 +88,8 @@ public class TodoServiceImpl implements TodoService{
     public List<FindTodoResDto> findGroupTodos(Long groupSeq) {
         return todoQueryRepository.findAllWithGroupId(groupSeq);
     }
+
+
 
     private Todo getTodo(Long id){
         return todoRepository.findById(id)
