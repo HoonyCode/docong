@@ -101,6 +101,17 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+    @Override
+    public void changePassword(String email, String password) {
+        User user = userRepository.findByEmailAndActivateTrue(email);
+
+        if (user == null) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        user.changePassword(bCryptPasswordEncoder.encode(password));
+    }
+
     public String newToken(String expiredAuthorization) {
         if (expiredAuthorization != null && expiredAuthorization.startsWith("Bearer ")) {
             try {

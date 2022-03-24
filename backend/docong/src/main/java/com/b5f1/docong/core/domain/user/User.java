@@ -82,7 +82,6 @@ public class User {
         userTodo.changeUser(this);
     }
     // 여기서부터 추가
-
     public void updateUserInfo(UserInfoReqDto userInfoReqDto) {
         this.name = userInfoReqDto.getName();
         this.birth = userInfoReqDto.getBirth();
@@ -99,5 +98,11 @@ public class User {
 
     public void saveRefreshToken(String refresh_token) {
         this.refresh_token = refresh_token;
+    }
+
+
+    //패스워드 변경
+    public void changePassword(String password){
+        this.password = password;
     }
 }
