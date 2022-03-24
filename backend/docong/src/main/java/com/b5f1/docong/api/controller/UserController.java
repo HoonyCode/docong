@@ -7,6 +7,7 @@ import com.b5f1.docong.api.dto.response.BaseResponseEntity;
 import com.b5f1.docong.api.dto.response.EmailCheckResDto;
 import com.b5f1.docong.api.dto.response.UserInfoResDto;
 import com.b5f1.docong.api.resolver.Auth;
+import com.b5f1.docong.api.service.MailService;
 import com.b5f1.docong.api.service.UserService;
 import com.b5f1.docong.config.jwt.JwtProperties;
 import com.b5f1.docong.core.domain.user.User;
@@ -26,6 +27,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    private final MailService mailService;
 
     @PostMapping("/join")
     public ResponseEntity<BaseResponseEntity> join(@RequestBody JoinReqDto joinReqDto) {
@@ -63,11 +66,36 @@ public class UserController {
     }
 
     @GetMapping("/refreshToken")
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String refreshToken = request.getHeader(JwtProperties.REFRESH_TOKEN_HEADER_STRING); // refresh token을 받음 (RefreshToken)
 
         String newToken = userService.newToken(refreshToken);
 
         response.addHeader(JwtProperties.HEADER_STRING, newToken);
     }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<String> certificationEmail(@PathVariable("email") String email) {
+        String number = mailService.getCertificationNumber(5);
+        String subject = "Docong 인증 번호 안내";
+        String content = "Docong 인증 번호 : " + number + " 입니다";
+
+        mailService.sendSimpleMail(email, subject, content);
+
+        return ResponseEntity.ok().body(number);
+    }
+
+    @GetMapping("/password/{email}")
+    public ResponseEntity<BaseResponseEntity> searchPassword(@PathVariable("email") String email) {
+        String password = mailService.getRandomPassword(10);
+        String subject = "Docong 비밀번호 변경 안내";
+        String content = "Docong 변경된 비밀번호 : " + password + " 입니다";
+
+        userService.changePassword(email, password);
+
+        mailService.sendSimpleMail(email, subject, content);
+
+        return ResponseEntity.status(200).body(new BaseResponseEntity(200, "Success"));
+    }
+
 }
