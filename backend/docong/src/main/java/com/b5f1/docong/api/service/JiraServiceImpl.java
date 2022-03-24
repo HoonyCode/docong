@@ -71,11 +71,6 @@ public class JiraServiceImpl implements JiraService{
         String apiToken = decrypt(getAPIToken.getBytes());
         String projectKey = team.getJiraProjectKey();
 
-//        String domain = "https://hyunse0.atlassian.net/";
-//        String userID = "hhs28166139@gmail.com";
-//        String apiToken = "wlcChmchTtIrlBtr7V0h5684";
-//        String projectKey = "TEST";
-
         // 모든 이슈 가져오기
         HttpResponse<JsonNode> issueResponse = null;
         try {
