@@ -105,4 +105,8 @@ public class User {
     public void changePassword(String password){
         this.password = password;
     }
+
+    public void saveImage(String image) {
+        this.image = image;
+    }
 }
