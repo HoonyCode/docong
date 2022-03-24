@@ -61,7 +61,7 @@ function UserTimerContainer() {
   ]
 
   useEffect(() => {
-    Notification.requestPermission()
+    Notification.requestPermission().then(function(permission) {})
     if (status === 'play') {
       if (!localStatus) {
         dispatch(changeUserTimerStatus('stop'))
@@ -74,9 +74,12 @@ function UserTimerContainer() {
     if (status === 'play' && localStatus && time === 0) {
       dispatch(stopUserTimer())
       try {
-        navigator.serviceWorker.register('./service-worker.js').then((sw) => {
-          sw.showNotification(`${selectedType.name} finished!`)
-        })
+        Notification.requestPermission(function(result) {
+        if (result === 'granted') {
+          navigator.serviceWorker.ready.then((sw) => {
+            sw.showNotification(`${selectedType.name} finished!`)
+          })
+        }})
       } catch (e) {
         console.log('Notification error', e)
       }
