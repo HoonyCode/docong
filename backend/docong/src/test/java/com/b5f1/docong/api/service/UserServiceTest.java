@@ -37,6 +37,7 @@ public class UserServiceTest {
                 .position("student")
                 .activate(true)
                 .oauth_type("native")
+                .image(null)
                 .build();
         userRepository.save(user);
     }
@@ -45,19 +46,20 @@ public class UserServiceTest {
     void testChangeUserInfo() {
         User user = userRepository.findByEmailAndActivateTrue("testcode@naver.com");
         UserInfoReqDto userInfoReqDto =
-                new UserInfoReqDto("혀승", "2005-11-23", "M", "ISFP", "student", "student");
+                new UserInfoReqDto("혀승", "2005-11-23", "M", "ISFP", "student", "student", null);
 
         userService.setUserInfo(user, userInfoReqDto);
         user = userRepository.findByEmailAndActivateTrue("testcode@naver.com");
 
         assertThat(user.getName()).isEqualTo("혀승");
     }
+
     @Test
     void testDeleteUser() {
         User user = userRepository.findByEmailAndActivateTrue("testcode@naver.com");
         userService.deleteUser(user);
-        System.out.println("test email -> "+user.getEmail());
-        System.out.println("test activate -> "+user.isActivate());
+        System.out.println("test email -> " + user.getEmail());
+        System.out.println("test activate -> " + user.isActivate());
 
         assertThat(!user.isActivate());
     }

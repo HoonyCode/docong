@@ -8,4 +8,6 @@ public interface OAuthUserInfo {
     String getEmail();
 
     String getName();
+
+    String getImage();
 }

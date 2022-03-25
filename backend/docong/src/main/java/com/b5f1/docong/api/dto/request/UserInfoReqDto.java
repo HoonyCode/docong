@@ -14,4 +14,5 @@ public class UserInfoReqDto {
     String mbti;
     String job;
     String position;
+    String image;
 }

@@ -53,6 +53,7 @@ public class UserServiceImpl implements UserService {
                     .position(joinReqDto.getPosition())
                     .activate(true)
                     .oauth_type("native")
+                    .image(null)
                     .build();
             userRepository.save(user);
         }
@@ -64,7 +65,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(seq).get();
 
         UserInfoResDto userRes =
-                new UserInfoResDto(user.getEmail(), user.getName(), user.getBirth(), user.getGender(), user.getMbti(), user.getJob(), user.getPosition());
+                new UserInfoResDto(user.getEmail(), user.getName(), user.getBirth(), user.getGender(), user.getMbti(), user.getJob(), user.getPosition(), user.getImage());
 
         return userRes;
     }

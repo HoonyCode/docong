@@ -52,6 +52,7 @@ public class GoogleUserController {
                     .position(null)
                     .activate(true)
                     .oauth_type(googleUser.getProvider())
+                    .image(googleUser.getImage())
                     .build();
 
             userEntity = userRepository.save(userRequest);
