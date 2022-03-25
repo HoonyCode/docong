@@ -13,6 +13,7 @@ import rootReducer, { rootSaga } from './modules'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { persistStore } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const sagaMiddleware = createSagaMiddleware()
 
@@ -55,3 +56,4 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals()
+serviceWorkerRegistration.register();
