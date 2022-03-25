@@ -14,7 +14,7 @@ public class FindTodoResDto {
     String content;
     TodoStatus status;
     Integer predictedPomo;
-    Integer realPomo;
+    Double realPomo;
     WorkProficiency workProficiency;
     WorkType workType;
     WorkImportance workImportance;
@@ -26,7 +26,7 @@ public class FindTodoResDto {
         this.content = todo.getContent();
         this.status =todo.getStatus();
         this.predictedPomo = todo.getPredictedPomo();
-        this.realPomo = todo.getRealPomo();
+        this.realPomo = todo.getRealPomo()*1.0/2;
         this.workProficiency = todo.getWorkProficiency();
         this.workType = todo.getWorkType();
         this.workImportance = todo.getWorkImportance();
