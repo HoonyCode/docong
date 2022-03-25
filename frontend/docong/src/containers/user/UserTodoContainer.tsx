@@ -1,4 +1,4 @@
-import { Button } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -25,21 +25,9 @@ function UserTodoContainer() {
     findUserTodos()
   }, [])
 
-  const onClickToTimer = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    navigate('/timer')
-  }
-
   const onClickToUserAnalysis = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     navigate('/user/analysis')
-  }
-
-  const onClickLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    localStorage.removeItem('jwtToken')
-    localStorage.removeItem('persist:root')
-    navigate('/')
   }
 
   const createTodo = (todoInput: TodoInput) => {
@@ -74,23 +62,61 @@ function UserTodoContainer() {
 
   return (
     <>
-      <Button variant="outlined" onClick={onClickToTimer}>
-        Timer
-      </Button>
-      <Button variant="outlined" onClick={onClickToUserAnalysis}>
-        Analysis
-      </Button>
-      <Button variant="outlined" onClick={onClickLogout}>
-        Logout
-      </Button>
-      <UserTodo
-        userTodos={userTodos}
-        createTodo={createTodo}
-        modifyTodo={modifyTodo}
-        deleteTodo={deleteTodo}
-        modifyTodoStatus={modifyTodoStatus}
-        startTodoTimer={startTodoTimer}
-      />
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'end',
+          height: '9%',
+        }}
+      >
+        <Button
+          sx={{
+            fontSize: '24px',
+            color: (theme) => theme.colors.greenText,
+            mx: '0.8vw',
+            borderBottom: (theme) => `2px solid ${theme.colors.greenText}`,
+            borderRadius: '0px',
+          }}
+          variant="text"
+          color="success"
+          onClick={(e: any) => e.preventDefault()}
+        >
+          BOARD
+        </Button>
+        <Button
+          sx={{
+            fontSize: '24px',
+            color: (theme) => theme.colors.greenText,
+            mx: '0.8vw',
+            borderRadius: '0px',
+            mb: '2px',
+          }}
+          variant="text"
+          color="success"
+          onClick={onClickToUserAnalysis}
+        >
+          ANALYSIS
+        </Button>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          height: '91%',
+          my: '3vh',
+        }}
+      >
+        <UserTodo
+          userTodos={userTodos}
+          createTodo={createTodo}
+          modifyTodo={modifyTodo}
+          deleteTodo={deleteTodo}
+          modifyTodoStatus={modifyTodoStatus}
+          startTodoTimer={startTodoTimer}
+        />
+      </Box>
     </>
   )
 }

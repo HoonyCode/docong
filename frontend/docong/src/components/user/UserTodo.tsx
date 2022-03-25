@@ -10,7 +10,6 @@ import {
   DialogTitle,
   Fab,
   MenuItem,
-  InputLabel,
   Select,
   TextField,
   Tooltip,
@@ -18,22 +17,20 @@ import {
   Card,
   Typography,
   Chip,
-  AvatarGroup,
   Avatar,
   Grid,
   DialogContentText,
 } from '@mui/material'
-import { green } from '@mui/material/colors'
 import AddIcon from '@mui/icons-material/Add'
-import PlayArrowOutlinedIcon from '@mui/icons-material/PlayArrowOutlined'
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
 import CloseIcon from '@mui/icons-material/Close'
 import { Todo, TodoInput } from '../../api/todo'
 import produce from 'immer'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../../modules'
-import { darken, lighten } from 'polished'
+import { darken } from 'polished'
 import { changeUserTimerTodo } from '../../modules/user'
+import './UserTodo.scss'
+import TableRowsIcon from '@mui/icons-material/TableRows'
 
 interface UserTodoProps {
   userTodos: any
@@ -110,6 +107,9 @@ function UserTodo({
     '관리',
     '홍보',
     '인사',
+    '문서화',
+    '학습',
+    '독서',
     '기타',
   ]
   const todoStatus = ['TODO', 'IN_PROGRESS', 'DONE']
@@ -288,46 +288,45 @@ function UserTodo({
 
   return (
     <>
-      <Box sx={{ '& > :not(style)': { m: 3 } }}>
-        <Tooltip title="CreateTodo">
-          <Fab color="primary" aria-label="add" onClick={openCreateTodoForm}>
-            <AddIcon />
-          </Fab>
-        </Tooltip>
-      </Box>
-      <Box sx={{ '& > :not(style)': { m: 3 } }}>
-        <Tooltip title="StartTodo">
-          <Fab
-            color="primary"
-            aria-label="start"
-            onClick={onClickStartTodoTimer}
-          >
-            <PlayArrowOutlinedIcon />
-          </Fab>
-        </Tooltip>
-      </Box>
       <Board
         allowRemoveCard
         onCardDragEnd={handleCardMove}
         onCardRemove={handleCardRemove}
         disableColumnDrag
+        renderColumnHeader={(column: any) => (
+          <Box
+            sx={{
+              textAlign: 'center',
+              fontSize: '34px',
+              fontWeight: 'bold',
+              color: (theme) => theme.colors.greenText,
+              mb: '3vh',
+            }}
+          >
+            {column.title}
+          </Box>
+        )}
         renderCard={(card: any, { dragging }: any) => (
           <Card
             key={card.id}
             sx={[
               {
-                minWidth: 275,
-                p: 1,
+                width: '330px',
+                height: '130px',
                 cursor: 'pointer',
+                borderRadius: '12px',
+                mb: '1vh',
+                p: '18px',
+                background: (theme) => theme.colors.todoCard,
                 '&:hover': {
-                  background: `${lighten(0.1, '#BAE691')}`,
+                  background: (theme) => `${darken(0.1, theme.colors.doCard)}`,
                 },
                 '&:active': {
-                  background: `${darken(0.1, '#BAE691')}`,
+                  background: (theme) => `${darken(0.3, theme.colors.doCard)}`,
                 },
               },
               card.id === (selectedTodo ? selectedTodo.seq : null) && {
-                background: `${lighten(0.1, '#BAE691')}`,
+                background: (theme) => `${darken(0.1, theme.colors.doCard)}`,
               },
             ]}
             onClick={() => onSelectTodo(card)}
@@ -335,53 +334,67 @@ function UserTodo({
             <Grid container>
               <Grid item xs={10}>
                 <Typography
-                  sx={{ display: 'inline-block', fontSize: 16 }}
-                  color="text.secondary"
+                  sx={{
+                    display: 'inline-block',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                    color: (theme) => theme.colors.basicText,
+                  }}
                   gutterBottom
                 >
                   {card.title}
                 </Typography>
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={2} sx={{ display: 'flex' }}>
+                <TableRowsIcon
+                  sx={{
+                    display: 'block',
+                    ml: 'auto',
+                    cursor: 'pointer',
+                    fontSize: '26px',
+                    color: (theme) => `${darken(0.2, theme.colors.gray)}`,
+                  }}
+                  onClick={() => openModifyTodoForm(card)}
+                />
                 <CloseIcon
-                  sx={{ display: 'block', ml: 'auto', cursor: 'pointer' }}
+                  sx={{
+                    display: 'block',
+                    ml: 'auto',
+                    cursor: 'pointer',
+                    fontSize: '26px',
+                    color: (theme) => `${darken(0.2, theme.colors.gray)}`,
+                  }}
                   onClick={() => handleCardRemove(card)}
                 />
               </Grid>
             </Grid>
-            <Chip
-              sx={{ mb: 1 }}
-              label={card.workType}
-              color="primary"
-              size="small"
-            />
+            <Box
+              sx={{
+                mb: '10px',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                color: (theme) => theme.colors.lightGreenText,
+              }}
+            >{`예상 ${card.predictedPomo}콩`}</Box>
             <Grid container>
               <Grid item xs={6}>
-                <Avatar
+                <Chip
                   sx={{
-                    bgcolor: green[500],
-                    width: 28,
-                    height: 28,
-                    cursor: 'pointer',
+                    color: (theme) => theme.colors.basicText,
+                    fontWeight: 'bold',
+                    background: (theme) => theme.colors.badge1,
                   }}
-                  onClick={() => openModifyTodoForm(card)}
-                >
-                  <BorderColorOutlinedIcon fontSize="small" />
-                </Avatar>
+                  label={card.workType}
+                  color="primary"
+                  size="small"
+                />
               </Grid>
-              <Grid item xs={6}>
-                <AvatarGroup max={4}>
-                  <Avatar
-                    sx={{ width: 28, height: 28 }}
-                    alt="Remy Sharp"
-                    src="https://cdn.hellodd.com/news/photo/202005/71835_craw1.jpg"
-                  />
-                  <Avatar
-                    sx={{ width: 28, height: 28 }}
-                    alt="Travis Howard"
-                    src="https://blog.kakaocdn.net/dn/ej7HHN/btqEpJAha97/cSWVSFX8PrV03o15PZ8Bd1/img.jpg"
-                  />
-                </AvatarGroup>
+              <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'end' }}>
+                <Avatar
+                  sx={{ width: 28, height: 28 }}
+                  alt="Remy Sharp"
+                  src="https://cdn.hellodd.com/news/photo/202005/71835_craw1.jpg"
+                />
               </Grid>
             </Grid>
           </Card>
@@ -389,179 +402,492 @@ function UserTodo({
       >
         {board}
       </Board>
+      <Box
+        sx={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          px: '5px',
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            width: '360px',
+            mx: '1vw',
+            px: '15px',
+          }}
+        >
+          <Tooltip title="Todo 추가">
+            <Fab
+              sx={{
+                color: (theme) => `${darken(0.5, theme.colors.todoCard)}`,
+                background: (theme) => theme.colors.doCard,
+              }}
+              aria-label="add"
+              onClick={openCreateTodoForm}
+            >
+              <AddIcon />
+            </Fab>
+          </Tooltip>
+        </Box>
+        <Box sx={{ width: '360px', m: '1vw 1vw 1vw 2.5vw' }}></Box>
+        <Box sx={{ width: '360px', m: '1vw 1vw 1vw 2.5vw' }}></Box>
+      </Box>
+      <Box sx={{ display: 'flex', p: 3, flexGrow: 1, alignItems: 'end' }}>
+        <Button
+          sx={{
+            fontSize: '24px',
+            color: (theme) => theme.colors.lightGreenText,
+            mb: '5vh',
+          }}
+          variant={'text'}
+          color="success"
+          onClick={onClickStartTodoTimer}
+        >
+          선택한 두콩 시작하기
+        </Button>
+      </Box>
       <Dialog open={isOpenCreateTodo} onClose={closeCreateTodo}>
-        <DialogTitle>CreateTodo</DialogTitle>
+        <DialogTitle
+          sx={{
+            fontSize: '24px',
+            fontWeight: 'bold',
+            p: '28px',
+            pb: '4px',
+            color: (theme) => theme.colors.greenText,
+          }}
+        >
+          To Do 생성하기
+        </DialogTitle>
         <Box component="form" onSubmit={onSubmitCreateTodo}>
           <DialogContent>
-            <TextField
-              required
-              fullWidth
-              id="title"
-              label="Title"
-              variant="outlined"
-              onChange={onChangeTodoTitle}
-              value={todoInput.title}
-            />
-            <TextField
-              required
-              fullWidth
-              id="content"
-              label="Content"
-              variant="outlined"
-              onChange={onChangeTodoContent}
-              value={todoInput.content}
-            />
-            <TextField
-              required
-              fullWidth
-              type="number"
-              InputProps={{
-                inputProps: {
-                  max: 99,
-                  min: 1,
-                },
-              }}
-              label="Predicted Pomo"
-              onChange={onChangeTodoPredictedPomo}
-              value={todoInput.predictedPomo}
-            />
-            <InputLabel id="work-importance">Work Importance</InputLabel>
-            <Select
-              required
-              fullWidth
-              labelId="work-importance"
-              id="work-importance"
-              value={todoInput.workImportance}
-              onChange={onChangeTodoImportance}
-            >
-              {workImportanceList.map((workImportance, index) => (
-                <MenuItem key={index} value={workImportance}>
-                  {workImportance}
-                </MenuItem>
-              ))}
-            </Select>
-            <InputLabel id="work-proficiency">Work Proficiency</InputLabel>
-            <Select
-              required
-              fullWidth
-              labelId="work-proficiency"
-              id="work-proficiency"
-              value={todoInput.workProficiency}
-              onChange={onChangeTodoProficiency}
-            >
-              {workProficiencyList.map((workProficiency, index) => (
-                <MenuItem key={index} value={workProficiency}>
-                  {workProficiency}
-                </MenuItem>
-              ))}
-            </Select>
-            <InputLabel id="work-type">Work Type</InputLabel>
-            <Select
-              required
-              fullWidth
-              labelId="work-type"
-              id="work-type"
-              value={todoInput.workType}
-              onChange={onChangeTodoType}
-            >
-              {workTypeList.map((workType, index) => (
-                <MenuItem key={index} value={workType}>
-                  {workType}
-                </MenuItem>
-              ))}
-            </Select>
+            <Grid container>
+              <Grid item xs={3}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    height: '56px',
+                    ml: '10px',
+                    mb: '14px',
+                    justifyContent: 'start',
+                    alignItems: 'center',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  <div>제목</div>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    height: '125px',
+                    pt: '6px',
+                    ml: '10px',
+                    mb: '14px',
+                    justifyContent: 'start',
+                    alignItems: 'start',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  <div>내용</div>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    height: '56px',
+                    ml: '10px',
+                    mb: '14px',
+                    justifyContent: 'start',
+                    alignItems: 'center',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  <div>업무 종류</div>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    height: '56px',
+                    ml: '10px',
+                    mb: '14px',
+                    justifyContent: 'start',
+                    alignItems: 'center',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  <div>중요도</div>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    height: '56px',
+                    ml: '10px',
+                    mb: '14px',
+                    justifyContent: 'start',
+                    alignItems: 'center',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  <div>능숙도</div>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    height: '56px',
+                    ml: '10px',
+                    mb: '14px',
+                    justifyContent: 'start',
+                    alignItems: 'center',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  <div>예상 콩</div>
+                </Box>
+              </Grid>
+              <Grid item xs={9}>
+                <TextField
+                  required
+                  fullWidth
+                  id="title"
+                  variant="outlined"
+                  onChange={onChangeTodoTitle}
+                  value={todoInput.title}
+                  color="success"
+                  sx={{ mb: '14px' }}
+                />
+                <TextField
+                  required
+                  fullWidth
+                  multiline
+                  rows={4}
+                  id="content"
+                  variant="outlined"
+                  onChange={onChangeTodoContent}
+                  value={todoInput.content}
+                  color="success"
+                  sx={{ mb: '14px' }}
+                />
+                <Select
+                  required
+                  fullWidth
+                  id="work-importance"
+                  value={todoInput.workImportance}
+                  onChange={onChangeTodoImportance}
+                  color="success"
+                  sx={{ mb: '14px' }}
+                >
+                  {workImportanceList.map((workImportance, index) => (
+                    <MenuItem key={index} value={workImportance}>
+                      {workImportance}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <Select
+                  required
+                  fullWidth
+                  id="work-proficiency"
+                  value={todoInput.workProficiency}
+                  onChange={onChangeTodoProficiency}
+                  color="success"
+                  sx={{ mb: '14px' }}
+                >
+                  {workProficiencyList.map((workProficiency, index) => (
+                    <MenuItem key={index} value={workProficiency}>
+                      {workProficiency}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <Select
+                  required
+                  fullWidth
+                  id="work-type"
+                  value={todoInput.workType}
+                  onChange={onChangeTodoType}
+                  color="success"
+                  sx={{ mb: '14px' }}
+                >
+                  {workTypeList.map((workType, index) => (
+                    <MenuItem key={index} value={workType}>
+                      {workType}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <TextField
+                  required
+                  fullWidth
+                  type="number"
+                  InputProps={{
+                    inputProps: {
+                      max: 99,
+                      min: 1,
+                    },
+                  }}
+                  onChange={onChangeTodoPredictedPomo}
+                  value={todoInput.predictedPomo}
+                  color="success"
+                  sx={{ mb: '14px' }}
+                />
+              </Grid>
+            </Grid>
           </DialogContent>
-          <DialogActions>
-            <Button type="submit">Create</Button>
-            <Button onClick={closeCreateTodo}>Cancel</Button>
+          <DialogActions sx={{ p: '0 24px 20px 24px' }}>
+            <Button
+              sx={{
+                width: '22%',
+                fontSize: '16px',
+                color: (theme) => theme.colors.pageBg,
+                background: (theme) => theme.colors.greenButton,
+                borderRadius: '8px',
+                mr: '8px',
+              }}
+              variant="contained"
+              color="success"
+              type="submit"
+            >
+              생성하기
+            </Button>
+            <Button
+              sx={{
+                width: '22%',
+                fontSize: '16px',
+                color: (theme) => theme.colors.pageBg,
+                background: (theme) => theme.colors.gray,
+                borderRadius: '8px',
+              }}
+              onClick={closeCreateTodo}
+              variant="contained"
+              color="success"
+            >
+              취소
+            </Button>
           </DialogActions>
         </Box>
       </Dialog>
       <Dialog open={isOpenModifyTodo} onClose={closeModifyTodo}>
-        <DialogTitle>ModifyTodo</DialogTitle>
+        <DialogTitle
+          sx={{
+            fontSize: '24px',
+            fontWeight: 'bold',
+            p: '28px',
+            pb: '4px',
+            color: (theme) => theme.colors.greenText,
+          }}
+        >
+          To Do 수정하기
+        </DialogTitle>
         <Box component="form" onSubmit={onSubmitModifyTodo}>
           <DialogContent>
-            <TextField
-              required
-              fullWidth
-              id="title"
-              label="Title"
-              variant="outlined"
-              onChange={onChangeTodoTitle}
-              value={todoInput.title}
-            />
-            <TextField
-              required
-              fullWidth
-              id="content"
-              label="Content"
-              variant="outlined"
-              onChange={onChangeTodoContent}
-              value={todoInput.content}
-            />
-            <TextField
-              required
-              fullWidth
-              type="number"
-              InputProps={{
-                inputProps: {
-                  max: 99,
-                  min: 1,
-                },
-              }}
-              label="Predicted Pomo"
-              onChange={onChangeTodoPredictedPomo}
-              value={todoInput.predictedPomo}
-            />
-            <InputLabel id="work-importance">Work Importance</InputLabel>
-            <Select
-              required
-              fullWidth
-              labelId="work-importance"
-              id="work-importance"
-              value={todoInput.workImportance}
-              onChange={onChangeTodoImportance}
-            >
-              {workImportanceList.map((workImportance, index) => (
-                <MenuItem key={index} value={workImportance}>
-                  {workImportance}
-                </MenuItem>
-              ))}
-            </Select>
-            <InputLabel id="work-proficiency">Work Proficiency</InputLabel>
-            <Select
-              required
-              fullWidth
-              labelId="work-proficiency"
-              id="work-proficiency"
-              value={todoInput.workProficiency}
-              onChange={onChangeTodoProficiency}
-            >
-              {workProficiencyList.map((workProficiency, index) => (
-                <MenuItem key={index} value={workProficiency}>
-                  {workProficiency}
-                </MenuItem>
-              ))}
-            </Select>
-            <InputLabel id="work-type">Work Type</InputLabel>
-            <Select
-              required
-              fullWidth
-              labelId="work-type"
-              id="work-type"
-              value={todoInput.workType}
-              onChange={onChangeTodoType}
-            >
-              {workTypeList.map((workType, index) => (
-                <MenuItem key={index} value={workType}>
-                  {workType}
-                </MenuItem>
-              ))}
-            </Select>
+            <Grid container>
+              <Grid item xs={3}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    height: '56px',
+                    ml: '10px',
+                    mb: '14px',
+                    justifyContent: 'start',
+                    alignItems: 'center',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  <div>제목</div>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    height: '125px',
+                    pt: '6px',
+                    ml: '10px',
+                    mb: '14px',
+                    justifyContent: 'start',
+                    alignItems: 'start',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  <div>내용</div>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    height: '56px',
+                    ml: '10px',
+                    mb: '14px',
+                    justifyContent: 'start',
+                    alignItems: 'center',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  <div>업무 종류</div>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    height: '56px',
+                    ml: '10px',
+                    mb: '14px',
+                    justifyContent: 'start',
+                    alignItems: 'center',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  <div>중요도</div>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    height: '56px',
+                    ml: '10px',
+                    mb: '14px',
+                    justifyContent: 'start',
+                    alignItems: 'center',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  <div>능숙도</div>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    height: '56px',
+                    ml: '10px',
+                    mb: '14px',
+                    justifyContent: 'start',
+                    alignItems: 'center',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  <div>예상 콩</div>
+                </Box>
+              </Grid>
+              <Grid item xs={9}>
+                <TextField
+                  required
+                  fullWidth
+                  id="title"
+                  variant="outlined"
+                  onChange={onChangeTodoTitle}
+                  value={todoInput.title}
+                  color="success"
+                  sx={{ mb: '14px' }}
+                />
+                <TextField
+                  required
+                  fullWidth
+                  multiline
+                  rows={4}
+                  id="content"
+                  variant="outlined"
+                  onChange={onChangeTodoContent}
+                  value={todoInput.content}
+                  color="success"
+                  sx={{ mb: '14px' }}
+                />
+                <Select
+                  required
+                  fullWidth
+                  id="work-importance"
+                  value={todoInput.workImportance}
+                  onChange={onChangeTodoImportance}
+                  color="success"
+                  sx={{ mb: '14px' }}
+                >
+                  {workImportanceList.map((workImportance, index) => (
+                    <MenuItem key={index} value={workImportance}>
+                      {workImportance}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <Select
+                  required
+                  fullWidth
+                  id="work-proficiency"
+                  value={todoInput.workProficiency}
+                  onChange={onChangeTodoProficiency}
+                  color="success"
+                  sx={{ mb: '14px' }}
+                >
+                  {workProficiencyList.map((workProficiency, index) => (
+                    <MenuItem key={index} value={workProficiency}>
+                      {workProficiency}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <Select
+                  required
+                  fullWidth
+                  id="work-type"
+                  value={todoInput.workType}
+                  onChange={onChangeTodoType}
+                  color="success"
+                  sx={{ mb: '14px' }}
+                >
+                  {workTypeList.map((workType, index) => (
+                    <MenuItem key={index} value={workType}>
+                      {workType}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <TextField
+                  required
+                  fullWidth
+                  type="number"
+                  InputProps={{
+                    inputProps: {
+                      max: 99,
+                      min: 1,
+                    },
+                  }}
+                  onChange={onChangeTodoPredictedPomo}
+                  value={todoInput.predictedPomo}
+                  color="success"
+                  sx={{ mb: '14px' }}
+                />
+              </Grid>
+            </Grid>
           </DialogContent>
-          <DialogActions>
-            <Button type="submit">Modify</Button>
-            <Button onClick={closeModifyTodo}>Cancel</Button>
+          <DialogActions sx={{ p: '0 24px 20px 24px' }}>
+            <Button
+              sx={{
+                width: '22%',
+                fontSize: '16px',
+                color: (theme) => theme.colors.pageBg,
+                background: (theme) => theme.colors.greenButton,
+                borderRadius: '8px',
+                mr: '8px',
+              }}
+              variant="contained"
+              color="success"
+              type="submit"
+            >
+              수정하기
+            </Button>
+            <Button
+              sx={{
+                width: '22%',
+                fontSize: '16px',
+                color: (theme) => theme.colors.pageBg,
+                background: (theme) => theme.colors.gray,
+                borderRadius: '8px',
+              }}
+              onClick={closeModifyTodo}
+              variant="contained"
+              color="success"
+            >
+              취소
+            </Button>
           </DialogActions>
         </Box>
       </Dialog>
@@ -571,15 +897,30 @@ function UserTodo({
         onClose={() => setSelectedDeleteTodo(null)}
         aria-describedby="stop-dialog"
       >
-        <DialogTitle>{'Todo 삭제'}</DialogTitle>
+        <DialogTitle
+          sx={{
+            fontSize: '24px',
+            fontWeight: 'bold',
+            p: '18px',
+            color: (theme) => theme.colors.greenText,
+          }}
+        >
+          {'Todo 삭제'}
+        </DialogTitle>
         <DialogContent>
-          <DialogContentText id="stop-dialog">
+          <DialogContentText sx={{ fontSize: '16px' }} id="stop-dialog">
             정말로 삭제하시겠습니까?
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ pb: '16px', pr: '16px' }}>
           <Button
+            sx={{
+              color: (theme) => theme.colors.pageBg,
+              background: (theme) => theme.colors.greenButton,
+              borderRadius: '8px',
+            }}
             variant="contained"
+            color="success"
             onClick={() => {
               deleteTodo(selectedDeleteTodo)
               setSelectedDeleteTodo(null)
@@ -588,7 +929,13 @@ function UserTodo({
             삭제
           </Button>
           <Button
-            variant="outlined"
+            sx={{
+              color: (theme) => theme.colors.pageBg,
+              background: (theme) => theme.colors.gray,
+              borderRadius: '8px',
+            }}
+            variant="contained"
+            color="success"
             onClick={() => setSelectedDeleteTodo(null)}
           >
             취소

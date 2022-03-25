@@ -13,41 +13,69 @@ import NavBarPage from './pages/NavBarPage'
 declare module '@mui/material/styles' {
   interface Theme {
     colors: {
-      lightGreen: string
-      Green: string
-      lightYellow: string
-      Yellow: string
+      navBg: string
+      pageBg: string
+      greenButton: string
+      gray: string
+      lightGray: string
+      darkGreenText: string
+      greenText: string
+      lightGreenText: string
+      basicText: string
+      todoCard: string
+      doCard: string
+      congTimer: string
+      badge1: string
     }
   }
   // allow configuration using `createTheme`
   interface ThemeOptions {
-    colors?: {
-      lightGreen?: string
-      Green: string
-      lightYellow: string
-      Yellow: string
+    colors: {
+      navBg: string
+      pageBg: string
+      greenButton: string
+      gray: string
+      lightGray: string
+      darkGreenText: string
+      greenText: string
+      lightGreenText: string
+      basicText: string
+      todoCard: string
+      doCard: string
+      congTimer: string
+      badge1: string
     }
   }
 }
 
 const theme = createTheme({
   colors: {
-    lightGreen: '#b2f2bb',
-    Green: '#69db7c',
-    lightYellow: '#ffec99',
-    Yellow: '#ffd43b',
+    navBg: '#FAFAFA',
+    pageBg: '#FFFFFF',
+    greenButton: '#497248',
+    gray: '#C4C4C4',
+    lightGray: '#f9f7f7',
+    darkGreenText: '#242424',
+    greenText: '#455A47',
+    lightGreenText: '#8A9788',
+    basicText: '#000000',
+    todoCard: '#FAFAFA',
+    doCard: '#f9f7f7',
+    congTimer: '#386129',
+    badge1: '#BBDBE2',
   },
 })
+
+const Background = styled.div`
+  width: 100%;
+  height: 100%;
+  background: ${theme.colors.navBg};
+`
 
 function App() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-
-  const Background = styled.div`
-    height: 100%;
-    background: white;
-  `
 
   useEffect(() => {
     if (localStorage.getItem('jwtToken')) {
@@ -59,6 +87,12 @@ function App() {
       alert('docong 은 로그인 후 이용 가능합니다.')
     }
   }, [location, dispatch, navigate])
+
+  useEffect(() => {
+    if (location.pathname !== '/timer') {
+      document.title = `docong`
+    }
+  }, [location.pathname])
 
   return (
     <ThemeProvider theme={theme}>

@@ -1,0 +1,11 @@
+.react-kanban-column {
+  width: 360px;
+  min-height: 200px !important;
+  max-height: 500px;
+  margin: 0 1vw;
+  background-color: white;
+
+  & + & {
+    margin-left: 2.5vw;
+  }
+}
