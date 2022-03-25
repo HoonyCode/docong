@@ -66,7 +66,7 @@ class PomodoroServiceImplTest {
 
         //then
         assertThat(save.get().getSeq()).isEqualTo(saveSeq);
-        assertThat(savedTodo.getRealPomo()).isEqualTo(1);
+        assertThat(savedTodo.getRealPomo()).isEqualTo(2);
 
     }
 

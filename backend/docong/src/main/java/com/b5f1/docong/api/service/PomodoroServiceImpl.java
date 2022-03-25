@@ -34,7 +34,7 @@ public class PomodoroServiceImpl implements PomodoroService {
             todo = todoRepository.findById(reqDto.getTodo_seq()).orElseThrow(() -> {
                 throw new CustomException(ErrorCode.TODO_NOT_FOUND);
             });
-            todo.addRealPomo();
+            todo.addRealPomo(reqDto.getTimeStatus());
         }
 
         Pomodoro pomodoro = Pomodoro.builder()

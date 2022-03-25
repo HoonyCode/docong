@@ -2,6 +2,7 @@ package com.b5f1.docong.core.domain.todo;
 
 import com.b5f1.docong.core.domain.BaseEntity;
 import com.b5f1.docong.core.domain.group.Team;
+import com.b5f1.docong.core.domain.pomodoro.TimeStatus;
 import com.querydsl.core.annotations.QueryEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -61,8 +62,15 @@ public class Todo extends BaseEntity {
         this.userTodo = userTodo;
         userTodo.changeTodo(this);
     }
-    public void addRealPomo(){
-        this.realPomo ++;
+    public void addRealPomo(TimeStatus timeStatus)
+    {
+      if(timeStatus == TimeStatus.SHORT){
+          realPomo++;
+      } else if(timeStatus == TimeStatus.BASIC){
+          realPomo+=2;
+      } else if(timeStatus == TimeStatus.LONG){
+          realPomo+=4;
+      }
     }
     public void changeTodo(String title, String content, WorkImportance workImportance, WorkProficiency workProficiency, WorkType workType, Integer predictedPomo) {
         this.title = title;
