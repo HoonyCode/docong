@@ -36,7 +36,7 @@ spring:
 
   # 데이터 베이스 연결 설정
   datasource:
-    url: jdbc:mariadb://3.38.97.82:3306/docong_test_v1?characterEncoding=utf-8&createDatabaseIfNotExist=true #데이터 베이스 이름 수정 필요
+    url: jdbc:mariadb://3.38.97.82:3306/docong_test_v2?characterEncoding=utf-8&createDatabaseIfNotExist=true #데이터 베이스 이름 수정 필요
     driver-class-name: org.mariadb.jdbc.Driver
     username: ssafy
     password: ssafy
