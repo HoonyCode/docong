@@ -10,6 +10,8 @@ import { userGoogleLoginAsync, userLoginAsync } from '../../modules/user'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { RootState } from '../../modules'
+import HeaderLogo from '../../components/auth/HeaderLogo'
+import { Box } from '@mui/material'
 
 function UserLoginContainer() {
   const dispatch = useDispatch()
@@ -46,13 +48,32 @@ function UserLoginContainer() {
 
   return (
     <>
-      <UserLoginForm onLoginSubmit={onLoginSubmit} />
-      <GoogleLogin
-        clientId="402744381856-cvss5niacafgsm9c6i4baua6ofeqej10"
-        onSuccess={onSuccessGoogleLogin}
-        onFailure={onFailureGoogleLogin}
-        cookiePolicy="single_host_origin"
-      />
+      <HeaderLogo size="35%" />
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <UserLoginForm onLoginSubmit={onLoginSubmit} />
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            width: '18%',
+            minWidth: 300,
+            p: '1vh',
+          }}
+        >
+          <GoogleLogin
+            clientId="402744381856-cvss5niacafgsm9c6i4baua6ofeqej10"
+            onSuccess={onSuccessGoogleLogin}
+            onFailure={onFailureGoogleLogin}
+            cookiePolicy="single_host_origin"
+          />
+        </Box>
+      </Box>
     </>
   )
 }

@@ -101,9 +101,9 @@ function UserTimerContainer() {
       dispatch(
         savePomoAsync.request({
           otherTime: 0,
-          endTime: start_date.toISOString(),
+          endTime: end_date.toISOString(),
           noise: 'COMMON',
-          startTime: end_date.toISOString(),
+          startTime: start_date.toISOString(),
           timeStatus: selectedType.name.toUpperCase(),
           todo_seq: todo_seq,
         })

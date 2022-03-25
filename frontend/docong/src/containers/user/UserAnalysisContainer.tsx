@@ -1,4 +1,4 @@
-import { Button } from '@mui/material'
+import { Box, Button, Tab, Tabs } from '@mui/material'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -13,21 +13,9 @@ function UserAnalysisContainer() {
 
   const [isOpenEditUserForm, setIsOpenEditUserForm] = useState(false)
 
-  const onClickToTimer = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    navigate('/timer')
-  }
-
   const onClickToTodos = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     navigate('/user/todo')
-  }
-
-  const onClickLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    localStorage.removeItem('jwtToken')
-    localStorage.removeItem('persist:root')
-    navigate('/')
   }
 
   const openEditUserForm = () => {
@@ -45,16 +33,54 @@ function UserAnalysisContainer() {
 
   return (
     <>
-      <Button variant="outlined" onClick={onClickToTimer}>
-        Timer
-      </Button>
-      <Button variant="outlined" onClick={onClickToTodos}>
-        Todo
-      </Button>
-      <Button variant="outlined" onClick={onClickLogout}>
-        Logout
-      </Button>
-      <UserAnalysis openEditUserForm={openEditUserForm} />
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'end',
+          height: '9%',
+        }}
+      >
+        <Button
+          sx={{
+            fontSize: '24px',
+            color: (theme) => theme.colors.greenText,
+            mx: '0.8vw',
+            borderRadius: '0px',
+            mb: '2px',
+          }}
+          variant="text"
+          color="success"
+          onClick={onClickToTodos}
+        >
+          BOARD
+        </Button>
+        <Button
+          sx={{
+            fontSize: '24px',
+            color: (theme) => theme.colors.greenText,
+            mx: '0.8vw',
+            borderBottom: (theme) => `2px solid ${theme.colors.greenText}`,
+            borderRadius: '0px',
+          }}
+          variant="text"
+          color="success"
+          onClick={(e: any) => e.preventDefault()}
+        >
+          ANALYSIS
+        </Button>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          mx: '5vw',
+          my: '5vh',
+        }}
+      >
+        <UserAnalysis openEditUserForm={openEditUserForm} />
+      </Box>
       <EditUserForm
         isOpenEditUserForm={isOpenEditUserForm}
         closeEditUserForm={closeEditUserForm}

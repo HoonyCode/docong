@@ -10,6 +10,7 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
+  Grid,
 } from '@mui/material'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
@@ -135,91 +136,225 @@ function EditUserForm({
 
   return (
     <Dialog open={isOpenEditUserForm} onClose={closeEditUserForm}>
-      <DialogTitle>EditUserInfo</DialogTitle>
+      <DialogTitle
+        sx={{
+          fontSize: '24px',
+          fontWeight: 'bold',
+          p: '28px',
+          pb: '4px',
+          color: (theme) => theme.colors.greenText,
+        }}
+      >
+        내 정보 수정하기
+      </DialogTitle>
       <Box component="form" onSubmit={onSubmitEditUser}>
         <DialogContent>
-          <TextField
-            required
-            fullWidth
-            id="name"
-            label="Name"
-            variant="outlined"
-            onChange={onChangeUserName}
-            value={userInfoInput.name}
-          />
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
-              label="Birth"
-              value={date}
-              onChange={onChangeUserBirth}
-              renderInput={(params) => (
-                <TextField required fullWidth {...params} />
-              )}
-            />
-          </LocalizationProvider>
-          <InputLabel id="gender">Gender</InputLabel>
-          <Select
-            required
-            fullWidth
-            labelId="gender"
-            id="gender"
-            value={userInfoInput.gender}
-            onChange={onChangeUserGender}
-          >
-            {genderList.map((gender, index) => (
-              <MenuItem key={index} value={gender.toUpperCase()}>
-                {gender}
-              </MenuItem>
-            ))}
-          </Select>
-          <InputLabel id="mbti">MBTI</InputLabel>
-          <Select
-            required
-            fullWidth
-            labelId="mbti"
-            id="mbti"
-            value={userInfoInput.mbti}
-            onChange={onChangeUserMbti}
-          >
-            {mbtiList.map((mbti, index) => (
-              <MenuItem key={index} value={mbti}>
-                {mbti}
-              </MenuItem>
-            ))}
-          </Select>
-          <InputLabel id="job">Job</InputLabel>
-          <Select
-            required
-            fullWidth
-            labelId="job"
-            id="job"
-            value={userInfoInput.job}
-            onChange={onChangeUserJob}
-          >
-            {jobList.map((job, index) => (
-              <MenuItem key={index} value={job}>
-                {job}
-              </MenuItem>
-            ))}
-          </Select>
-          <TextField
-            required
-            fullWidth
-            type="number"
-            InputProps={{
-              inputProps: {
-                max: 30,
-                min: 0,
-              },
-            }}
-            label="Position"
-            onChange={onChangeUserPosition}
-            value={userInfoInput.position}
-          />
+          <Grid container>
+            <Grid item xs={3}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  height: '56px',
+                  ml: '10px',
+                  mb: '14px',
+                  justifyContent: 'start',
+                  alignItems: 'center',
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                }}
+              >
+                <div>이름</div>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  height: '56px',
+                  ml: '10px',
+                  mb: '14px',
+                  justifyContent: 'start',
+                  alignItems: 'center',
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                }}
+              >
+                <div>생년월일</div>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  height: '56px',
+                  ml: '10px',
+                  mb: '14px',
+                  justifyContent: 'start',
+                  alignItems: 'center',
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                }}
+              >
+                <div>성별</div>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  height: '56px',
+                  ml: '10px',
+                  mb: '14px',
+                  justifyContent: 'start',
+                  alignItems: 'center',
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                }}
+              >
+                <div>MBTI</div>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  height: '56px',
+                  ml: '10px',
+                  mb: '14px',
+                  justifyContent: 'start',
+                  alignItems: 'center',
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                }}
+              >
+                <div>직업</div>
+              </Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  height: '56px',
+                  ml: '10px',
+                  mb: '14px',
+                  justifyContent: 'start',
+                  alignItems: 'center',
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                }}
+              >
+                <div>경력</div>
+              </Box>
+            </Grid>
+            <Grid item xs={9}>
+              <TextField
+                required
+                fullWidth
+                id="name"
+                variant="outlined"
+                onChange={onChangeUserName}
+                value={userInfoInput.name}
+                color="success"
+                sx={{ mb: '14px' }}
+              />
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  value={date}
+                  onChange={onChangeUserBirth}
+                  renderInput={(params) => (
+                    <TextField
+                      required
+                      fullWidth
+                      sx={{ mb: '14px' }}
+                      color="success"
+                      {...params}
+                    />
+                  )}
+                />
+              </LocalizationProvider>
+              <Select
+                required
+                fullWidth
+                id="gender"
+                value={userInfoInput.gender}
+                onChange={onChangeUserGender}
+                color="success"
+                sx={{ mb: '14px' }}
+              >
+                {genderList.map((gender, index) => (
+                  <MenuItem key={index} value={gender.toUpperCase()}>
+                    {gender}
+                  </MenuItem>
+                ))}
+              </Select>
+              <Select
+                required
+                fullWidth
+                id="mbti"
+                value={userInfoInput.mbti}
+                onChange={onChangeUserMbti}
+                color="success"
+                sx={{ mb: '14px' }}
+              >
+                {mbtiList.map((mbti, index) => (
+                  <MenuItem key={index} value={mbti}>
+                    {mbti}
+                  </MenuItem>
+                ))}
+              </Select>
+              <Select
+                required
+                fullWidth
+                id="job"
+                value={userInfoInput.job}
+                onChange={onChangeUserJob}
+                color="success"
+                sx={{ mb: '14px' }}
+              >
+                {jobList.map((job, index) => (
+                  <MenuItem key={index} value={job}>
+                    {job}
+                  </MenuItem>
+                ))}
+              </Select>
+              <TextField
+                required
+                fullWidth
+                type="number"
+                InputProps={{
+                  inputProps: {
+                    max: 30,
+                    min: 0,
+                  },
+                }}
+                onChange={onChangeUserPosition}
+                value={userInfoInput.position}
+                color="success"
+                sx={{ mb: '14px' }}
+              />
+            </Grid>
+          </Grid>
         </DialogContent>
-        <DialogActions>
-          <Button type="submit">Edit</Button>
-          <Button onClick={closeEditUserForm}>Cancel</Button>
+        <DialogActions sx={{ p: '0 24px 20px 24px' }}>
+          <Button
+            sx={{
+              width: '22%',
+              fontSize: '16px',
+              color: (theme) => theme.colors.pageBg,
+              background: (theme) => theme.colors.greenButton,
+              borderRadius: '8px',
+              mr: '8px',
+            }}
+            variant="contained"
+            color="success"
+            type="submit"
+          >
+            수정하기
+          </Button>
+          <Button
+            sx={{
+              width: '22%',
+              fontSize: '16px',
+              color: (theme) => theme.colors.pageBg,
+              background: (theme) => theme.colors.gray,
+              borderRadius: '8px',
+            }}
+            onClick={closeEditUserForm}
+            variant="contained"
+            color="success"
+          >
+            취소
+          </Button>
         </DialogActions>
       </Box>
     </Dialog>

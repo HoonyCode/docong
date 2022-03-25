@@ -10,6 +10,8 @@ import {
 import { userGoogleLoginAsync, userSignupAsync } from '../../modules/user'
 import { useEffect } from 'react'
 import { RootState } from '../../modules'
+import HeaderLogo from '../../components/auth/HeaderLogo'
+import { Box } from '@mui/material'
 
 function UserSignupContainer() {
   const dispatch = useDispatch()
@@ -50,13 +52,32 @@ function UserSignupContainer() {
 
   return (
     <>
-      <UserSignupForm onSignupSubmit={onSignupSubmit} />
-      <GoogleLogin
-        clientId="402744381856-cvss5niacafgsm9c6i4baua6ofeqej10.apps.googleusercontent.com"
-        onSuccess={onSuccessGoogleLogin}
-        onFailure={onFailureGoogleLogin}
-        cookiePolicy="single_host_origin"
-      />
+      <HeaderLogo size="26%" />
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <UserSignupForm onSignupSubmit={onSignupSubmit} />
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            width: '18%',
+            minWidth: 300,
+            p: '1vh',
+          }}
+        >
+          <GoogleLogin
+            clientId="402744381856-cvss5niacafgsm9c6i4baua6ofeqej10.apps.googleusercontent.com"
+            onSuccess={onSuccessGoogleLogin}
+            onFailure={onFailureGoogleLogin}
+            cookiePolicy="single_host_origin"
+          />
+        </Box>
+      </Box>
     </>
   )
 }

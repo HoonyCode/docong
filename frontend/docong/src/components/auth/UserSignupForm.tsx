@@ -6,7 +6,6 @@ import {
   FormControl,
   IconButton,
   InputAdornment,
-  InputLabel,
   OutlinedInput,
   TextField,
 } from '@mui/material'
@@ -119,86 +118,201 @@ function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
 
   return (
     <Box
-      component="form"
       sx={{
-        width: 500,
-        maxWidth: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        width: '100%',
+        minWidth: '600px',
       }}
-      onSubmit={onSubmit}
     >
-      <TextField
-        required
-        fullWidth
-        id="email"
-        label="Email"
-        variant="outlined"
-        onChange={onChangeEmail}
-        value={signupInput.email}
-      />
-      <TextField
-        required
-        fullWidth
-        id="name"
-        label="Name"
-        variant="outlined"
-        onChange={onChangeName}
-        value={signupInput.name}
-      />
-      <FormControl required fullWidth variant="outlined">
-        <InputLabel htmlFor="password">Password</InputLabel>
-        <OutlinedInput
-          id="password"
-          type={passwordData.showPassword ? 'text' : 'password'}
-          value={signupInput.password}
-          onChange={onChangePassword}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={onClickShowPassword}
-                edge="end"
-              >
-                {passwordData.showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
-          label="Password"
+      <Box sx={{ width: '12%', minWidth: '200px', py: '1vh' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            height: '40px',
+            mb: '2vh',
+            justifyContent: 'end',
+            alignItems: 'center',
+            fontWeight: 'bold',
+          }}
+        >
+          <div>이메일</div>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            height: '40px',
+            mb: '2vh',
+            justifyContent: 'end',
+            alignItems: 'center',
+            fontWeight: 'bold',
+          }}
+        >
+          <div>이름</div>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            height: '40px',
+            mb: '2vh',
+            justifyContent: 'end',
+            alignItems: 'center',
+            fontWeight: 'bold',
+          }}
+        >
+          <div>비밀번호</div>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            height: '40px',
+            justifyContent: 'end',
+            alignItems: 'center',
+            fontWeight: 'bold',
+          }}
+        >
+          <div>비밀번호 확인</div>
+        </Box>
+      </Box>
+      <Box
+        component="form"
+        sx={{
+          width: '18%',
+          minWidth: '300px',
+          p: '1vh',
+        }}
+        onSubmit={onSubmit}
+      >
+        <TextField
+          required
+          fullWidth
+          size="small"
+          id="email"
+          placeholder="docong@email.com"
+          variant="outlined"
+          onChange={onChangeEmail}
+          value={signupInput.email}
+          color="success"
+          sx={{ background: 'white', mb: '2vh' }}
         />
-      </FormControl>
-      <FormControl required fullWidth variant="outlined">
-        <InputLabel htmlFor="confirm-password">Confirm Password</InputLabel>
-        <OutlinedInput
-          id="confirm-password"
-          type={passwordData.showConfirmPassword ? 'text' : 'password'}
-          value={passwordData.confirmPassword}
-          onChange={onChangeConfirmPassword}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={onClickShowConfirmPassword}
-                edge="end"
-              >
-                {passwordData.showConfirmPassword ? (
-                  <VisibilityOff />
-                ) : (
-                  <Visibility />
-                )}
-              </IconButton>
-            </InputAdornment>
-          }
-          label="Confirm Password"
+        <TextField
+          required
+          fullWidth
+          size="small"
+          id="name"
+          placeholder="김두콩"
+          variant="outlined"
+          onChange={onChangeName}
+          value={signupInput.name}
+          color="success"
+          sx={{ background: 'white', mb: '2vh' }}
         />
-      </FormControl>
-      <Button variant="outlined" type="submit">
-        Register
-      </Button>
-      <Button variant="outlined" onClick={onClickEmailCheck}>
-        Email Check
-      </Button>
-      <Button variant="outlined" onClick={onClickToLogin}>
-        Log In
-      </Button>
+        <FormControl
+          required
+          fullWidth
+          size="small"
+          variant="outlined"
+          color="success"
+          sx={{ background: 'white', mb: '2vh' }}
+        >
+          <OutlinedInput
+            id="password"
+            type={passwordData.showPassword ? 'text' : 'password'}
+            value={signupInput.password}
+            onChange={onChangePassword}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={onClickShowPassword}
+                  edge="end"
+                >
+                  {passwordData.showPassword ? (
+                    <VisibilityOff />
+                  ) : (
+                    <Visibility />
+                  )}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </FormControl>
+        <FormControl
+          required
+          fullWidth
+          size="small"
+          variant="outlined"
+          color="success"
+          sx={{ background: 'white', mb: '3vh' }}
+        >
+          <OutlinedInput
+            id="confirm-password"
+            type={passwordData.showConfirmPassword ? 'text' : 'password'}
+            value={passwordData.confirmPassword}
+            onChange={onChangeConfirmPassword}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={onClickShowConfirmPassword}
+                  edge="end"
+                >
+                  {passwordData.showConfirmPassword ? (
+                    <VisibilityOff />
+                  ) : (
+                    <Visibility />
+                  )}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+        </FormControl>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Button
+            sx={{
+              width: '46%',
+              fontSize: '16px',
+              py: '3px',
+              background: (theme) => theme.colors.greenButton,
+            }}
+            variant="contained"
+            type="submit"
+            color="success"
+          >
+            회원가입
+          </Button>
+          <Button
+            sx={{
+              width: '46%',
+              fontSize: '16px',
+              py: '3px',
+              background: (theme) => theme.colors.gray,
+            }}
+            variant="contained"
+            onClick={onClickToLogin}
+            color="success"
+          >
+            로그인
+          </Button>
+        </Box>
+      </Box>
+      <Box sx={{ width: '12%', minWidth: '200px' }}>
+        <Button
+          sx={{
+            width: '50%',
+            fontSize: '16px',
+            mt: '1.5vh',
+            py: '2px',
+            background: (theme) =>
+              isCheckedEmail ? theme.colors.gray : theme.colors.greenButton,
+          }}
+          variant="contained"
+          onClick={onClickEmailCheck}
+          color="success"
+        >
+          {isCheckedEmail ? '확인완료' : '중복확인'}
+        </Button>
+      </Box>
     </Box>
   )
 }

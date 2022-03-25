@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import './UserTimerType.css'
+import './UserTimerType.scss'
 
 interface UserTimerTypeProps {
   types: any
