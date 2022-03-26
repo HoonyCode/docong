@@ -64,6 +64,9 @@ const theme = createTheme({
     congTimer: '#386129',
     badge1: '#BBDBE2',
   },
+  palette: {
+    primary: { main: '#455A47' },
+  },
 })
 
 const Background = styled.div`

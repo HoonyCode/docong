@@ -12,6 +12,7 @@ const LogoImage = styled.img`
 
 function NavBarContainer() {
   const userInfo = useSelector((state: RootState) => state.user.userInfo.data)
+  const userTimer = useSelector((state: RootState) => state.user.userTimer)
 
   const navigate = useNavigate()
 
@@ -39,9 +40,13 @@ function NavBarContainer() {
 
   const onClickLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    localStorage.removeItem('jwtToken')
-    localStorage.removeItem('persist:root')
-    navigate('/')
+    if (userTimer.status === 'play') {
+      alert('타이머 진행중에는 로그아웃이 불가능합니다.')
+    } else {
+      localStorage.removeItem('jwtToken')
+      localStorage.removeItem('persist:root')
+      navigate('/')
+    }
   }
 
   return (

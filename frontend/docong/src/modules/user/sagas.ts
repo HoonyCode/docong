@@ -16,6 +16,7 @@ import {
   setUserInfoAsync,
   SET_USER_INFO,
   initUserTimer,
+  changeUserTimerTodo,
 } from './actions'
 import {
   userSignup,
@@ -41,6 +42,7 @@ import { buffers, EventChannel, Task } from 'redux-saga'
 import { closeChannel, subscribe } from './channel'
 import { DefaultResponse, savePomo } from '../../api/pomo'
 import { getUserInfo, setUserInfo, UserInfo } from '../../api/user'
+import { findTodo, Todo } from '../../api/todo'
 
 function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
   try {
@@ -163,8 +165,11 @@ function* savePomoSaga(action: ReturnType<typeof savePomoAsync.request>) {
       savePomo,
       action.payload
     )
-    alert('Pomo 저장이 완료되었습니다.')
     console.log(savePomoResponse)
+    if (action.payload.todo_seq) {
+      const selectedTodo: Todo = yield call(findTodo, action.payload.todo_seq)
+      yield put(changeUserTimerTodo(selectedTodo))
+    }
   } catch (e: any) {
     alert('Pomo 저장 실패')
     console.error(e)
