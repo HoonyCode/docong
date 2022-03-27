@@ -27,6 +27,10 @@ export const FIND_USER_TODOS = 'todo/FIND_USER_TODOS'
 export const FIND_USER_TODOS_SUCCESS = 'todo/FIND_USER_TODOS_SUCCESS'
 export const FIND_USER_TODOS_ERROR = 'todo/FIND_USER_TODOS_ERROR'
 
+export const CHANGE_TODO_ACTIVATE = 'todo/CHANGE_TODO_ACTIVATE'
+export const CHANGE_TODO_ACTIVATE_SUCCESS = 'todo/CHANGE_TODO_ACTIVATE_SUCCESS'
+export const CHANGE_TODO_ACTIVATE_ERROR = 'todo/CHANGE_TODO_ACTIVATE_ERROR'
+
 // 액션 생성함수 선언
 export const saveTodoAsync = createAsyncAction(
   SAVE_TODO,
@@ -64,6 +68,12 @@ export const findUserTodosAsync = createAsyncAction(
   FIND_USER_TODOS_ERROR
 )<null, Todos, AxiosError>()
 
+export const changeTodoActivateAsync = createAsyncAction(
+  CHANGE_TODO_ACTIVATE,
+  CHANGE_TODO_ACTIVATE_SUCCESS,
+  CHANGE_TODO_ACTIVATE_ERROR
+)<any, any, AxiosError>()
+
 export const actions = {
   saveTodoAsync,
   findTodoAsync,
@@ -71,4 +81,5 @@ export const actions = {
   deleteTodoAsync,
   modifyTodoStatusAsync,
   findUserTodosAsync,
+  changeTodoActivateAsync,
 }

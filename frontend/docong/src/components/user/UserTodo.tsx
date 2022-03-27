@@ -162,6 +162,15 @@ function UserTodo({
           draft.columns[2].cards = done
         })
       )
+      if (userTimer.selectedTodo) {
+        dispatch(
+          changeUserTimerTodo(
+            userTodos.find(
+              (userTodo: Todo) => userTodo.seq === userTimer.selectedTodo.seq
+            )
+          )
+        )
+      }
     }
   }, [userTodos])
 
@@ -295,6 +304,7 @@ function UserTodo({
         disableColumnDrag
         renderColumnHeader={(column: any) => (
           <Box
+            key={column.id}
             sx={{
               textAlign: 'center',
               fontSize: '34px',
@@ -339,6 +349,10 @@ function UserTodo({
                     fontSize: '20px',
                     fontWeight: 'bold',
                     color: (theme) => theme.colors.basicText,
+                    width: '250px',
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
                   }}
                   gutterBottom
                 >
@@ -375,7 +389,7 @@ function UserTodo({
                 fontWeight: 'bold',
                 color: (theme) => theme.colors.lightGreenText,
               }}
-            >{`예상 ${card.predictedPomo}콩`}</Box>
+            >{`${card.realPomo} / ${card.predictedPomo} 콩`}</Box>
             <Grid container>
               <Grid item xs={6}>
                 <Chip
@@ -577,6 +591,21 @@ function UserTodo({
                 <Select
                   required
                   fullWidth
+                  id="work-type"
+                  value={todoInput.workType}
+                  onChange={onChangeTodoType}
+                  color="success"
+                  sx={{ mb: '14px' }}
+                >
+                  {workTypeList.map((workType, index) => (
+                    <MenuItem key={index} value={workType}>
+                      {workType}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <Select
+                  required
+                  fullWidth
                   id="work-importance"
                   value={todoInput.workImportance}
                   onChange={onChangeTodoImportance}
@@ -601,21 +630,6 @@ function UserTodo({
                   {workProficiencyList.map((workProficiency, index) => (
                     <MenuItem key={index} value={workProficiency}>
                       {workProficiency}
-                    </MenuItem>
-                  ))}
-                </Select>
-                <Select
-                  required
-                  fullWidth
-                  id="work-type"
-                  value={todoInput.workType}
-                  onChange={onChangeTodoType}
-                  color="success"
-                  sx={{ mb: '14px' }}
-                >
-                  {workTypeList.map((workType, index) => (
-                    <MenuItem key={index} value={workType}>
-                      {workType}
                     </MenuItem>
                   ))}
                 </Select>
@@ -798,6 +812,21 @@ function UserTodo({
                 <Select
                   required
                   fullWidth
+                  id="work-type"
+                  value={todoInput.workType}
+                  onChange={onChangeTodoType}
+                  color="success"
+                  sx={{ mb: '14px' }}
+                >
+                  {workTypeList.map((workType, index) => (
+                    <MenuItem key={index} value={workType}>
+                      {workType}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <Select
+                  required
+                  fullWidth
                   id="work-importance"
                   value={todoInput.workImportance}
                   onChange={onChangeTodoImportance}
@@ -822,21 +851,6 @@ function UserTodo({
                   {workProficiencyList.map((workProficiency, index) => (
                     <MenuItem key={index} value={workProficiency}>
                       {workProficiency}
-                    </MenuItem>
-                  ))}
-                </Select>
-                <Select
-                  required
-                  fullWidth
-                  id="work-type"
-                  value={todoInput.workType}
-                  onChange={onChangeTodoType}
-                  color="success"
-                  sx={{ mb: '14px' }}
-                >
-                  {workTypeList.map((workType, index) => (
-                    <MenuItem key={index} value={workType}>
-                      {workType}
                     </MenuItem>
                   ))}
                 </Select>

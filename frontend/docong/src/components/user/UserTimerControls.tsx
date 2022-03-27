@@ -1,39 +1,50 @@
+import { Button } from '@mui/material'
 import React, { memo } from 'react'
-import './UserTimerControls.scss'
 
 interface UserTimerControlsProps {
   start: any
   reset: any
-  pause: any
   status: any
 }
 
-function UserTimerControls({
-  start,
-  reset,
-  pause,
-  status,
-}: UserTimerControlsProps) {
+function UserTimerControls({ start, reset, status }: UserTimerControlsProps) {
   return (
-    <div className="Controls">
+    <>
       {!status && (
-        <button onClick={start} className="start">
-          Start Timer
-        </button>
+        <Button
+          sx={{
+            width: '150px',
+            height: '50px',
+            fontSize: '20px',
+            color: (theme) => theme.colors.pageBg,
+            background: (theme) => theme.colors.greenButton,
+            borderRadius: '8px',
+          }}
+          variant="contained"
+          color="success"
+          onClick={start}
+        >
+          START
+        </Button>
       )}
-
-      {status === 'Finished' && (
-        <button onClick={start} className="start">
-          Start Timer
-        </button>
+      {status === 'Running' && (
+        <Button
+          sx={{
+            width: '150px',
+            height: '50px',
+            fontSize: '20px',
+            color: (theme) => theme.colors.basicText,
+            background: (theme) => theme.colors.gray,
+            borderRadius: '8px',
+          }}
+          variant="contained"
+          color="success"
+          onClick={reset}
+        >
+          STOP
+        </Button>
       )}
-
-      {(status === 'Paused' || status === 'Running') && (
-        <button onClick={reset} className="pause">
-          Stop Timer
-        </button>
-      )}
-    </div>
+    </>
   )
 }
 

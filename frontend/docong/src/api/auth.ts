@@ -24,7 +24,10 @@ export async function emailDuplicateCheck(email: string) {
 
 export async function userLogin(loginData: LoginData) {
   const response = await axios.post(`${BASE_URL}/api/user/login`, loginData)
-  return response.headers.authorization.split(' ')[1]
+  return {
+    authorization: response.headers.authorization.split(' ')[1],
+    refreshToken: response.headers.refreshtoken.split(' ')[1],
+  }
 }
 
 export async function userGoogleLogin(
@@ -61,6 +64,11 @@ export interface EmailDuplicateCheckResponse {
 export interface LoginData {
   email: string
   password: string
+}
+
+export interface LoginResponseHeaders {
+  authorization: string
+  refreshToken: string
 }
 
 export interface GoogleLoginResponseData {

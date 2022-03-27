@@ -60,6 +60,20 @@ export async function findUserTodos() {
   return response.data
 }
 
+export async function changeTodoActivate(
+  todoId: number,
+  activateData: ActivateData
+) {
+  const response = await axios.put(
+    `${BASE_URL}/api/todo/activate/${todoId}`,
+    activateData,
+    {
+      headers: setHeader(),
+    }
+  )
+  return response.data
+}
+
 export interface TodoInput {
   content: string
   predictedPomo: number
@@ -90,3 +104,7 @@ export interface Todo {
 }
 
 export interface Todos extends Array<Todo> {}
+
+export interface ActivateData {
+  activate: boolean
+}

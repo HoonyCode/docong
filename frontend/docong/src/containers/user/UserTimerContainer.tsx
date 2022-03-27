@@ -1,6 +1,6 @@
 import {
   Avatar,
-  AvatarGroup,
+  Box,
   Button,
   Card,
   Chip,
@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-import React, { useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import UserTimerControls from '../../components/user/UserTimerControls'
@@ -30,10 +30,12 @@ import {
   startUserTimer,
   stopUserTimer,
 } from '../../modules/user'
-import './UserTimerContainer.css'
-import { lighten } from 'polished'
+import { darken, lighten } from 'polished'
 import { usePrompt } from './Blocker'
 import { TransitionProps } from '@mui/material/transitions'
+import CircleIcon from '@mui/icons-material/Circle'
+import { changeTodoActivateAsync } from '../../modules/todo'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -55,31 +57,47 @@ function UserTimerContainer() {
   const dispatch = useDispatch()
 
   const timerTypes = [
-    { name: 'Short', time: 900 },
-    { name: 'Basic', time: 1500 },
-    { name: 'Long', time: 3000 },
+    { index: 0, name: 'Short', time: 900 },
+    { index: 1, name: 'Basic', time: 1500 },
+    { index: 2, name: 'Long', time: 3000 },
   ]
 
   useEffect(() => {
-    Notification.requestPermission().then(function(permission) {})
+    Notification.requestPermission().then(function (permission) {})
     if (status === 'play') {
       if (!localStatus) {
         dispatch(changeUserTimerStatus('stop'))
         dispatch(changeUserTimerTime(selectedType.time))
+        if (selectedTodo) {
+          changeTodoActivate(false)
+        }
       }
     }
-  }, [status, localStatus, dispatch, selectedType])
+  }, [status, localStatus, dispatch, selectedType, selectedTodo])
+
+  useEffect(() => {
+    return () => {
+      if (status == 'play') {
+        dispatch(changeUserTimerStatus('stop'))
+        dispatch(changeUserTimerTime(selectedType.time))
+        if (selectedTodo) {
+          changeTodoActivate(false)
+        }
+      }
+    }
+  }, [])
 
   useEffect(() => {
     if (status === 'play' && localStatus && time === 0) {
       dispatch(stopUserTimer())
       try {
-        Notification.requestPermission(function(result) {
-        if (result === 'granted') {
-          navigator.serviceWorker.ready.then((sw) => {
-            sw.showNotification(`${selectedType.name} finished!`)
-          })
-        }})
+        Notification.requestPermission(function (result) {
+          if (result === 'granted') {
+            navigator.serviceWorker.ready.then((sw) => {
+              sw.showNotification(`${selectedType.name} finished!`)
+            })
+          }
+        })
       } catch (e) {
         console.log('Notification error', e)
       }
@@ -108,6 +126,9 @@ function UserTimerContainer() {
           todo_seq: todo_seq,
         })
       )
+      if (selectedTodo) {
+        changeTodoActivate(false)
+      }
     } else if (status === 'stop') {
       dispatch(stopUserTimer())
     }
@@ -120,19 +141,11 @@ function UserTimerContainer() {
 
   const onClickToTodos = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    navigate('/user/todo')
-  }
-
-  const onClickToUserAnalysis = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    navigate('/user/analysis')
-  }
-
-  const onClickLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    localStorage.removeItem('jwtToken')
-    localStorage.removeItem('persist:root')
-    navigate('/')
+    if (status === 'play') {
+      alert('타이머 진행중에는 선택할 수 없습니다.')
+    } else {
+      navigate('/user/todo')
+    }
   }
 
   const changeType = (type: any) => {
@@ -147,12 +160,27 @@ function UserTimerContainer() {
   const stopInterval = () => {
     setOpenStopDialog(false)
     dispatch(stopUserTimer())
+    if (selectedTodo) {
+      changeTodoActivate(false)
+    }
     setLocalStatus(false)
+  }
+
+  const changeTodoActivate = (activate: boolean) => {
+    dispatch(
+      changeTodoActivateAsync.request({
+        todoId: selectedTodo.seq,
+        activateData: { activate: activate },
+      })
+    )
   }
 
   const startTimer = () => {
     dispatch(changeUserTimerStatus('play'))
     dispatch(startUserTimer())
+    if (selectedTodo) {
+      changeTodoActivate(true)
+    }
     setLocalStatus(true)
   }
 
@@ -164,11 +192,7 @@ function UserTimerContainer() {
     setOpenStopDialog(false)
   }
 
-  const pauseTimer = () => {}
-
   const getStatus = () => {
-    if (time === 0) return 'Finished'
-    if (status === 'pause') return 'Paused'
     if (status === 'play') return 'Running'
   }
 
@@ -182,102 +206,275 @@ function UserTimerContainer() {
     dispatch(changeUserTimerTodo(null))
   }
 
+  const congRender = () => {
+    let congs = []
+    if (selectedTodo) {
+      for (let i = 0; i < Math.min(selectedTodo.realPomo, 12); i++) {
+        congs.push(
+          <CircleIcon
+            key={i}
+            sx={{
+              width: '45px',
+              height: '45px',
+              color: (theme) => theme.colors.greenText,
+              mr: '10px',
+              mb: '10px',
+            }}
+          />
+        )
+      }
+      if (selectedTodo.realPomo >= 13) {
+        congs.push(
+          <MoreHorizIcon
+            key={12}
+            sx={{
+              width: '45px',
+              height: '45px',
+              color: (theme) => theme.colors.greenText,
+              mr: '10px',
+              mb: '10px',
+            }}
+          />
+        )
+      }
+      const leftPomo = selectedTodo.predictedPomo - selectedTodo.realPomo
+      if (leftPomo >= 1) {
+        for (
+          let i = selectedTodo.realPomo;
+          i < selectedTodo.realPomo + leftPomo;
+          i++
+        ) {
+          if (congs.length >= 12) {
+            break
+          } else {
+            congs.push(
+              <CircleIcon
+                key={i}
+                sx={{
+                  width: '45px',
+                  height: '45px',
+                  color: (theme) => `${lighten(0.6, theme.colors.greenText)}`,
+                  mr: '10px',
+                  mb: '10px',
+                }}
+              />
+            )
+          }
+        }
+      }
+      if (selectedTodo.predictedPomo >= 13 && selectedTodo.realPomo <= 12) {
+        congs.push(
+          <MoreHorizIcon
+            key={12}
+            sx={{
+              width: '45px',
+              height: '45px',
+              color: (theme) => `${lighten(0.6, theme.colors.greenText)}`,
+              mr: '10px',
+              mb: '10px',
+            }}
+          />
+        )
+      }
+      return congs
+    }
+  }
+
   return (
     <>
-      {status !== 'play' && (
-        <Button variant="outlined" onClick={onClickToTodos}>
-          Todo
-        </Button>
-      )}
-      {status !== 'play' && (
-        <Button variant="outlined" onClick={onClickToUserAnalysis}>
-          Analysis
-        </Button>
-      )}
-      {status !== 'play' && (
-        <Button variant="outlined" onClick={onClickLogout}>
-          Logout
-        </Button>
-      )}
-      <div className="Content">
-        <div className="Pomodoro">
-          {status !== 'play' && (
-            <UserTimerType
-              types={timerTypes}
-              selected={selectedType}
-              changeType={changeType}
-            />
-          )}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'end',
+          height: '10%',
+          mb: '8vh',
+        }}
+      >
+        {status !== 'play' && (
+          <UserTimerType
+            types={timerTypes}
+            selected={selectedType}
+            changeType={changeType}
+          />
+        )}
+      </Box>
+      <Grid container sx={{ py: '5vh' }}>
+        <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'center' }}>
           <UserTimerDisplay
             time={time}
             status={getStatus()}
             progress={getProgress()}
           />
-          <UserTimerControls
-            start={startTimer}
-            reset={resetTimer}
-            pause={pauseTimer}
-            status={getStatus()}
-          />
-          {selectedTodo && status !== 'play' && (
-            <Card
+        </Grid>
+        <Grid
+          item
+          xs={6}
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Box
+            sx={{
+              width: '75%',
+              minWidth: '300px',
+              height: '380px',
+              textAlign: 'start',
+            }}
+          >
+            <Box
               sx={{
-                minWidth: 275,
-                p: 1,
-                background: `${lighten(0.1, '#BAE691')}`,
-                textAlign: 'left',
-                m: 1,
+                fontSize: '30px',
+                fontWeight: 'bold',
+                color: (theme) => theme.colors.greenText,
+                mb: '14px',
               }}
             >
-              <Grid container>
-                <Grid item xs={10}>
-                  <Typography
-                    sx={{ display: 'inline-block', fontSize: 16 }}
-                    color="text.secondary"
-                    gutterBottom
-                  >
-                    {selectedTodo.title}
-                  </Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <CloseIcon
-                    sx={{ display: 'block', ml: 'auto', cursor: 'pointer' }}
-                    onClick={() => handleCardRemove()}
-                  />
-                </Grid>
-              </Grid>
-              <Chip
-                sx={{ mb: 1 }}
-                label={selectedTodo.workType}
-                color="primary"
-                size="small"
-              />
-              <Grid container>
-                <Grid item xs={6}></Grid>
-                <Grid item xs={6}>
-                  <AvatarGroup max={4}>
-                    <Avatar
-                      sx={{ width: 28, height: 28 }}
-                      alt="Remy Sharp"
-                      src="https://cdn.hellodd.com/news/photo/202005/71835_craw1.jpg"
-                    />
-                    <Avatar
-                      sx={{ width: 28, height: 28 }}
-                      alt="Travis Howard"
-                      src="https://blog.kakaocdn.net/dn/ej7HHN/btqEpJAha97/cSWVSFX8PrV03o15PZ8Bd1/img.jpg"
-                    />
-                  </AvatarGroup>
-                </Grid>
-              </Grid>
-            </Card>
-          )}
-          {!selectedTodo && status !== 'play' && (
-            <Button variant="contained" onClick={onClickToTodos}>
-              Todo 선택하기
-            </Button>
-          )}
-        </div>
-      </div>
+              <div>To Do</div>
+            </Box>
+            <Box sx={{ minHeight: '150px', mb: '10px' }}>
+              {selectedTodo && (
+                <Card
+                  sx={[
+                    {
+                      width: '330px',
+                      height: '130px',
+                      cursor: 'pointer',
+                      borderRadius: '12px',
+                      mb: '1vh',
+                      p: '18px',
+                      background: (theme) => theme.colors.todoCard,
+                      '&:hover': {
+                        background: (theme) =>
+                          `${darken(0.1, theme.colors.doCard)}`,
+                      },
+                      '&:active': {
+                        background: (theme) =>
+                          `${darken(0.3, theme.colors.doCard)}`,
+                      },
+                    },
+                  ]}
+                >
+                  <Grid container>
+                    <Grid item xs={10}>
+                      <Typography
+                        sx={{
+                          display: 'inline-block',
+                          fontSize: '20px',
+                          fontWeight: 'bold',
+                          color: (theme) => theme.colors.basicText,
+                          width: '280px',
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden',
+                          whiteSpace: 'nowrap',
+                        }}
+                        gutterBottom
+                      >
+                        {selectedTodo.title}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={2} sx={{ display: 'flex' }}>
+                      {status !== 'play' && (
+                        <CloseIcon
+                          sx={{
+                            display: 'block',
+                            ml: 'auto',
+                            cursor: 'pointer',
+                            fontSize: '26px',
+                            color: (theme) =>
+                              `${darken(0.2, theme.colors.gray)}`,
+                          }}
+                          onClick={() => handleCardRemove()}
+                        />
+                      )}
+                    </Grid>
+                  </Grid>
+                  <Box
+                    sx={{
+                      mb: '10px',
+                      fontSize: '14px',
+                      fontWeight: 'bold',
+                      color: (theme) => theme.colors.lightGreenText,
+                    }}
+                  >{`${selectedTodo.realPomo} / ${selectedTodo.predictedPomo} 콩`}</Box>
+                  <Grid container>
+                    <Grid item xs={6}>
+                      <Chip
+                        sx={{
+                          color: (theme) => theme.colors.basicText,
+                          fontWeight: 'bold',
+                          background: (theme) => theme.colors.badge1,
+                        }}
+                        label={selectedTodo.workType}
+                        color="primary"
+                        size="small"
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={6}
+                      sx={{ display: 'flex', justifyContent: 'end' }}
+                    >
+                      <Avatar
+                        sx={{ width: 28, height: 28 }}
+                        alt="Remy Sharp"
+                        src="https://cdn.hellodd.com/news/photo/202005/71835_craw1.jpg"
+                      />
+                    </Grid>
+                  </Grid>
+                </Card>
+              )}
+              {!selectedTodo && (
+                <Button
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '330px',
+                    height: '130px',
+                    borderRadius: '12px',
+                    borderStyle: 'dashed',
+                    borderWidth: '2px',
+                    fontSize: '45px',
+                  }}
+                  variant="outlined"
+                  onClick={onClickToTodos}
+                >
+                  +
+                </Button>
+              )}
+            </Box>
+            <Box
+              sx={{
+                fontSize: '30px',
+                fontWeight: 'bold',
+                color: (theme) => theme.colors.greenText,
+                mb: '14px',
+              }}
+            >
+              {selectedTodo && (
+                <div>
+                  Cong ({selectedTodo.realPomo}/{selectedTodo.predictedPomo})
+                </div>
+              )}
+              {!selectedTodo && <div>Cong</div>}
+            </Box>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', width: '330px' }}>
+              {congRender()}
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
+      <Box sx={{ display: 'flex', justifyContent: 'center', pt: '2vh' }}>
+        <UserTimerControls
+          start={startTimer}
+          reset={resetTimer}
+          status={getStatus()}
+        />
+      </Box>
+
       <Dialog
         open={openStopDialog}
         TransitionComponent={Transition}
@@ -304,4 +501,4 @@ function UserTimerContainer() {
   )
 }
 
-export default UserTimerContainer
+export default memo(UserTimerContainer)

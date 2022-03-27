@@ -1,5 +1,6 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 import {
+  changeTodoActivate,
   DefaultResponse,
   deleteTodo,
   findTodo,
@@ -11,6 +12,8 @@ import {
   Todos,
 } from '../../api/todo'
 import {
+  changeTodoActivateAsync,
+  CHANGE_TODO_ACTIVATE,
   deleteTodoAsync,
   DELETE_TODO,
   findTodoAsync,
@@ -102,6 +105,21 @@ function* findUserTodosSaga(
   }
 }
 
+function* changeTodoActivateSaga(
+  action: ReturnType<typeof changeTodoActivateAsync.request>
+) {
+  try {
+    const response: {} = yield call(
+      changeTodoActivate,
+      action.payload.todoId,
+      action.payload.activateData
+    )
+    console.log(response)
+  } catch (e: any) {
+    console.error(e)
+  }
+}
+
 export function* todoSaga() {
   yield takeEvery(SAVE_TODO, saveTodoSaga)
   yield takeEvery(FIND_TODO, findTodoSaga)
@@ -109,4 +127,5 @@ export function* todoSaga() {
   yield takeEvery(DELETE_TODO, deleteTodoSaga)
   yield takeEvery(MODIFY_TODO_STATUS, modifyTodoStatusSaga)
   yield takeEvery(FIND_USER_TODOS, findUserTodosSaga)
+  yield takeEvery(CHANGE_TODO_ACTIVATE, changeTodoActivateSaga)
 }

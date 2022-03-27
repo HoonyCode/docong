@@ -19,7 +19,7 @@ const initialState: UserState = {
   userInfo: asyncState.initial(),
   // 개인 타이머 상태
   userTimer: {
-    selectedType: { name: 'Basic', time: 1500 },
+    selectedType: { index: 1, name: 'Basic', time: 1500 },
     selectedTodo: null,
     status: 'stop',
     time: 1500,
