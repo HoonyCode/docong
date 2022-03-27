@@ -44,6 +44,7 @@ function NavBarContainer() {
       alert('타이머 진행중에는 로그아웃이 불가능합니다.')
     } else {
       localStorage.removeItem('jwtToken')
+      localStorage.removeItem('refreshToken')
       localStorage.removeItem('persist:root')
       navigate('/')
     }

@@ -24,6 +24,7 @@ import {
   userGoogleLogin,
   SignupResponse,
   GoogleLoginResponseData,
+  LoginResponseHeaders,
 } from '../../api/auth'
 import {
   all,
@@ -65,8 +66,12 @@ function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
 
 function* userLoginSaga(action: ReturnType<typeof userLoginAsync.request>) {
   try {
-    const loginToken: string = yield call(userLogin, action.payload.loginInput)
-    localStorage.setItem('jwtToken', loginToken)
+    const loginTokens: LoginResponseHeaders = yield call(
+      userLogin,
+      action.payload.loginInput
+    )
+    localStorage.setItem('jwtToken', loginTokens.authorization)
+    localStorage.setItem('refreshToken', loginTokens.refreshToken)
     yield put(initUserTimer())
     yield action.payload.navigate('/timer')
     yield put(getUserInfoAsync.request(null))
