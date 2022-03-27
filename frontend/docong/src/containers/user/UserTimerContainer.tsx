@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-import React, { useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import UserTimerControls from '../../components/user/UserTimerControls'
@@ -34,7 +34,6 @@ import { darken, lighten } from 'polished'
 import { usePrompt } from './Blocker'
 import { TransitionProps } from '@mui/material/transitions'
 import CircleIcon from '@mui/icons-material/Circle'
-import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined'
 import { changeTodoActivateAsync } from '../../modules/todo'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 
@@ -78,10 +77,12 @@ function UserTimerContainer() {
 
   useEffect(() => {
     return () => {
-      dispatch(changeUserTimerStatus('stop'))
-      dispatch(changeUserTimerTime(selectedType.time))
-      if (selectedTodo) {
-        changeTodoActivate(false)
+      if (status == 'play') {
+        dispatch(changeUserTimerStatus('stop'))
+        dispatch(changeUserTimerTime(selectedType.time))
+        if (selectedTodo) {
+          changeTodoActivate(false)
+        }
       }
     }
   }, [])
@@ -225,7 +226,7 @@ function UserTimerContainer() {
       if (selectedTodo.realPomo >= 13) {
         congs.push(
           <MoreHorizIcon
-            key={11}
+            key={12}
             sx={{
               width: '45px',
               height: '45px',
@@ -247,12 +248,12 @@ function UserTimerContainer() {
             break
           } else {
             congs.push(
-              <CircleOutlinedIcon
+              <CircleIcon
                 key={i}
                 sx={{
                   width: '45px',
                   height: '45px',
-                  color: (theme) => theme.colors.greenText,
+                  color: (theme) => `${lighten(0.6, theme.colors.greenText)}`,
                   mr: '10px',
                   mb: '10px',
                 }}
@@ -260,6 +261,20 @@ function UserTimerContainer() {
             )
           }
         }
+      }
+      if (selectedTodo.predictedPomo >= 13 && selectedTodo.realPomo <= 12) {
+        congs.push(
+          <MoreHorizIcon
+            key={12}
+            sx={{
+              width: '45px',
+              height: '45px',
+              color: (theme) => `${lighten(0.6, theme.colors.greenText)}`,
+              mr: '10px',
+              mb: '10px',
+            }}
+          />
+        )
       }
       return congs
     }
@@ -350,6 +365,10 @@ function UserTimerContainer() {
                           fontSize: '20px',
                           fontWeight: 'bold',
                           color: (theme) => theme.colors.basicText,
+                          width: '280px',
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden',
+                          whiteSpace: 'nowrap',
                         }}
                         gutterBottom
                       >
@@ -482,4 +501,4 @@ function UserTimerContainer() {
   )
 }
 
-export default UserTimerContainer
+export default memo(UserTimerContainer)

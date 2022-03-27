@@ -12,6 +12,7 @@ import {
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import EmailCheckForm from './EmailCheckForm'
 
 interface UserSignupFormProps {
   onSignupSubmit: (signupInput: SignupData, isCheckedEmail: boolean) => void
@@ -36,6 +37,8 @@ function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
   })
 
   const [isCheckedEmail, setIsCheckedEmail] = useState(false)
+  const [isOpenEmailCheckForm, setIsOpenEmailCheckForm] = useState(false)
+  const [realCheckNumber, setRealCheckNumber] = useState('')
 
   const navigate = useNavigate()
 
@@ -46,7 +49,15 @@ function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (signupInput.password === passwordData.confirmPassword) {
-      onSignupSubmit(signupInput, isCheckedEmail)
+      const passwordRegExp =
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@!%*#?&])[A-Za-z\d@!%*#?&]{8,15}$/
+      if (passwordRegExp.test(signupInput.password)) {
+        onSignupSubmit(signupInput, isCheckedEmail)
+      } else {
+        alert(
+          '비밀번호는 문자, 숫자, 특수문자를 포함한 8~15자리 형태여야 합니다.'
+        )
+      }
     } else {
       alert('패스워드가 동일하지 않습니다.')
     }
@@ -89,26 +100,40 @@ function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
     e.preventDefault()
     const regExp =
       /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
+    const gmailRegExp =
+      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@gmail.[a-zA-Z]{2,3}$/i
     if (regExp.test(signupInput.email)) {
-      try {
-        const emailCheckResponse = await axios.post(
-          `${BASE_URL}/api/user/duplicate`,
-          {
-            email: signupInput.email,
+      if (gmailRegExp.test(signupInput.email)) {
+        alert('gmail은 하단의 버튼으로 로그인 가능합니다.')
+      } else {
+        try {
+          const emailCheckResponse: any = await axios.post(
+            `${BASE_URL}/api/user/duplicate`,
+            {
+              email: signupInput.email,
+            }
+          )
+          if (emailCheckResponse.data.possible) {
+            alert('사용 가능한 이메일입니다.')
+            setIsOpenEmailCheckForm(true)
+          } else {
+            alert('이미 가입되어 있는 이메일입니다.')
           }
-        )
-        if (emailCheckResponse.data.possible) {
-          alert('사용 가능한 이메일입니다.')
-          setIsCheckedEmail(true)
-        } else {
-          alert('이미 가입되어 있는 이메일입니다.')
+        } catch (e: any) {
+          console.error(e)
         }
-      } catch (e: any) {
-        console.log(e)
       }
     } else {
       alert('올바른 이메일 형식을 입력해주세요.')
     }
+  }
+
+  const closeEmailCheckForm = () => {
+    setIsOpenEmailCheckForm(false)
+  }
+
+  const checkEmail = () => {
+    setIsCheckedEmail(true)
   }
 
   const onClickToLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -297,22 +322,46 @@ function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
         </Box>
       </Box>
       <Box sx={{ width: '12%', minWidth: '200px' }}>
-        <Button
-          sx={{
-            width: '50%',
-            fontSize: '16px',
-            mt: '1.5vh',
-            py: '2px',
-            background: (theme) =>
-              isCheckedEmail ? theme.colors.gray : theme.colors.greenButton,
-          }}
-          variant="contained"
-          onClick={onClickEmailCheck}
-          color="success"
-        >
-          {isCheckedEmail ? '확인완료' : '중복확인'}
-        </Button>
+        {!isCheckedEmail && (
+          <Button
+            sx={{
+              width: '50%',
+              fontSize: '16px',
+              mt: '1.5vh',
+              py: '2px',
+              background: (theme) => theme.colors.greenButton,
+            }}
+            variant="contained"
+            onClick={onClickEmailCheck}
+            color="success"
+          >
+            중복확인
+          </Button>
+        )}
+        {isCheckedEmail && (
+          <Button
+            sx={{
+              width: '50%',
+              fontSize: '16px',
+              mt: '1.5vh',
+              py: '2px',
+              background: (theme) => theme.colors.gray,
+            }}
+            variant="contained"
+            color="success"
+          >
+            확인완료
+          </Button>
+        )}
       </Box>
+      <EmailCheckForm
+        email={signupInput.email}
+        realCheckNumber={realCheckNumber}
+        isOpenEmailCheckForm={isOpenEmailCheckForm}
+        closeEmailCheckForm={closeEmailCheckForm}
+        checkEmail={checkEmail}
+        setRealCheckNumber={setRealCheckNumber}
+      />
     </Box>
   )
 }

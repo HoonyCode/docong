@@ -162,6 +162,15 @@ function UserTodo({
           draft.columns[2].cards = done
         })
       )
+      if (userTimer.selectedTodo) {
+        dispatch(
+          changeUserTimerTodo(
+            userTodos.find(
+              (userTodo: Todo) => userTodo.seq === userTimer.selectedTodo.seq
+            )
+          )
+        )
+      }
     }
   }, [userTodos])
 
@@ -295,6 +304,7 @@ function UserTodo({
         disableColumnDrag
         renderColumnHeader={(column: any) => (
           <Box
+            key={column.id}
             sx={{
               textAlign: 'center',
               fontSize: '34px',
@@ -339,6 +349,10 @@ function UserTodo({
                     fontSize: '20px',
                     fontWeight: 'bold',
                     color: (theme) => theme.colors.basicText,
+                    width: '250px',
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
                   }}
                   gutterBottom
                 >
