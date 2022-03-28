@@ -32,7 +32,8 @@ public class TodoQueryRepositoryImpl implements TodoQueryRepository{
                         todo.workProficiency,
                         todo.workType,
                         todo.workImportance,
-                        todo.userTodo.user.email))
+                        todo.userTodo.user.email,
+                        todo.activate))
                 .from(todo)
                 .innerJoin(todo.userTodo, userTodo)
                 .where(userTodo.user.seq.eq(userSeq)
@@ -53,7 +54,8 @@ public class TodoQueryRepositoryImpl implements TodoQueryRepository{
                         todo.workProficiency,
                         todo.workType,
                         todo.workImportance,
-                        todo.userTodo.user.email))
+                        todo.userTodo.user.email,
+                        todo.activate))
                 .from(todo)
                 .where(todo.team.seq.eq(groupSeq).and(
                         todo.deleted.eq(false)
