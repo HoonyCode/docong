@@ -47,7 +47,7 @@ class JiraServiceTest {
     public void saveTeamJiraTest() throws Exception {
         Long seq = savedTeam.getSeq();
         Long userSeq = savedUser.getSeq();
-        SaveJiraInfoReqDto reqDto = new SaveJiraInfoReqDto("https://hyunse0.atlassian.net/", "hhs28166139@gmail.com", "wlcChmchTtIrlBtr7V0h5684", "TEST");
+        SaveJiraInfoReqDto reqDto = new SaveJiraInfoReqDto("https://hyunse0.atlassian.net/", "hhs28166139@gmail.com", "jlDdT1ysSdcNME0VJ2FP1FBF", "TEST");
 
         jiraService.saveTeamJira(seq, userSeq, reqDto);
 
@@ -63,7 +63,7 @@ class JiraServiceTest {
     public void saveIssueTest() throws Exception {
         Long seq = savedTeam.getSeq();
         Long userSeq = savedUser.getSeq();
-        SaveJiraInfoReqDto reqDto = new SaveJiraInfoReqDto("https://hyunse0.atlassian.net/", "hhs28166139@gmail.com", "wlcChmchTtIrlBtr7V0h5684", "TEST");
+        SaveJiraInfoReqDto reqDto = new SaveJiraInfoReqDto("https://hyunse0.atlassian.net/", "hhs28166139@gmail.com", "jlDdT1ysSdcNME0VJ2FP1FBF", "TEST2");
 
         jiraService.saveTeamJira(seq, userSeq, reqDto);
 
@@ -77,7 +77,7 @@ class JiraServiceTest {
 
     @Test
     public void encodingTest() throws Exception {
-        String token = "wlcChmchTtIrlBtr7V0h5684";
+        String token = "jlDdT1ysSdcNME0VJ2FP1FBF";
 
         String encodeToken = jiraService.encrypt(token.getBytes());
         System.out.println(encodeToken);
