@@ -19,6 +19,7 @@ public class FindTodoResDto {
     WorkType workType;
     WorkImportance workImportance;
     String userEmail;
+    Boolean activate;
 
     public FindTodoResDto(Todo todo) {
         this.seq = todo.getSeq();
@@ -31,5 +32,6 @@ public class FindTodoResDto {
         this.workType = todo.getWorkType();
         this.workImportance = todo.getWorkImportance();
         this.userEmail = todo.getUserTodo().getUser().getEmail();
+        this.activate = todo.getActivate();
     }
 }

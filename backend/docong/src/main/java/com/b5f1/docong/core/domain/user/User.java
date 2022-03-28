@@ -1,6 +1,7 @@
 package com.b5f1.docong.core.domain.user;
 
 import com.b5f1.docong.api.dto.request.UserInfoReqDto;
+import com.b5f1.docong.core.domain.pomodoro.Pomodoro;
 import com.b5f1.docong.core.domain.todo.UserTodo;
 import lombok.*;
 
@@ -58,6 +59,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserTodo> userTodos = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Pomodoro> pomodoros = new ArrayList<>();
+
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<TeamUser> teamUsers = new ArrayList<>();
 
@@ -105,5 +109,9 @@ public class User {
     //패스워드 변경
     public void changePassword(String password){
         this.password = password;
+    }
+
+    public void addPomodoro(Pomodoro pomodoro) {
+        this.pomodoros.add(pomodoro);
     }
 }

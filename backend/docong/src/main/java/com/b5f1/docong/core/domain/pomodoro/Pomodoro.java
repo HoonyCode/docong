@@ -55,4 +55,7 @@ public class Pomodoro extends BaseEntity {
     private noiseStatus noise;
 
 
+    public void addUserPomodoro(User user) {
+        user.addPomodoro(this);
+    }
 }
