@@ -5,6 +5,8 @@ import com.b5f1.docong.api.dto.request.SaveAndDeleteTeamUserReqDto;
 import com.b5f1.docong.api.dto.request.UpdateTeamReqDto;
 import com.b5f1.docong.api.dto.response.FindAllTeamResDto;
 import com.b5f1.docong.api.dto.response.FindTeamResDto;
+import com.b5f1.docong.api.exception.CustomException;
+import com.b5f1.docong.api.exception.ErrorCode;
 import com.b5f1.docong.core.domain.group.Team;
 import com.b5f1.docong.core.domain.group.TeamUser;
 import com.b5f1.docong.core.domain.user.User;
@@ -50,7 +52,7 @@ public class TeamServiceImpl implements TeamService {
         User user = getUserByEmail(teamReqDto.getUserEmail());
         TeamUser teamUser = getTeamUser(user.getSeq(), teamReqDto.getTeamId());
         if (!teamUser.isLeader()) {
-            throw new IllegalStateException("리더가 아닙니다.");
+            throw new CustomException(ErrorCode.INVALID_USER);
         }
         //team_id가 존재하는지 확인
         //존재한다면 team정보 수정
@@ -109,13 +111,13 @@ public class TeamServiceImpl implements TeamService {
         TeamUser findReqTeamUser = getTeamUser(reqUserId, teamUserReqDto.getTeamId());
 
         if (!findReqTeamUser.isLeader()) {
-            throw new IllegalStateException("리더만 팀원을 추가할 수 있습니다.");
+            throw new CustomException(ErrorCode.INVALID_USER);
         }
 
         //같은 유저를 넣으려고할 경우
         Optional<TeamUser> findTeamUser = teamUserQueryRepository.findTeamUserWithUserIdAndTeamId(user.getSeq(), teamUserReqDto.getTeamId());
         if (findTeamUser.isPresent()) {
-            throw new IllegalStateException("이미 그룹에 포함된 멤버입니다.");
+            throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
         }
         //회원이면 TeamUser에 멤버추가
         TeamUser teamUser = teamUserBuilder(team, user, false);
@@ -133,7 +135,7 @@ public class TeamServiceImpl implements TeamService {
         //삭제 요청한 사람과 member_id가 같거나 삭제 요청한 사람이 팀장이면 member_id 삭제
         TeamUser findReqTeamUser = getTeamUser(reqUserId, teamUserReqDto.getTeamId());
         if (!findReqTeamUser.isLeader() && findReqTeamUser.getUser().getSeq() != user.getSeq()) {
-            throw new IllegalStateException("팀장이 아니거나 본인만 그룹을 나갈 수 있습니다.");
+            throw new CustomException(ErrorCode.INVALID_USER);
         }
         //팀목록에서 멤버 삭제(TeamUser에서 해당 row삭제)
         teamUserRepository.delete(findeamUser);
@@ -148,20 +150,23 @@ public class TeamServiceImpl implements TeamService {
 
     private User getUserById(Long userSeq) {
         return userRepository.findById(userSeq)
-                .orElseThrow(() -> new IllegalStateException("없는 user 입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
     private User getUserByEmail(String userEmail) {
-        return userRepository.findByEmailAndActivateTrue(userEmail);
-//                .orElseThrow(() -> new IllegalStateException("없는 user 입니다."));
+        User user = userRepository.findByEmailAndActivateTrue(userEmail);
+        if (user == null) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+        return user;
     }
     private Team getTeam(Long teamSeq) {
         return teamRepository.findById(teamSeq)
-                .orElseThrow(() -> new IllegalStateException("없는 team입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
     }
 
     private TeamUser getTeamUser(Long userSeq, Long teamSeq) {
         TeamUser teamUser = teamUserQueryRepository.findTeamUserWithUserIdAndTeamId(userSeq,teamSeq)
-                .orElseThrow(() -> new IllegalStateException("없는 teamUser 입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_USER_NOT_FOUND));
         return teamUser;
     }
 

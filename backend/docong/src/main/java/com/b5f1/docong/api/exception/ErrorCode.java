@@ -17,10 +17,12 @@ public enum ErrorCode {
     WRONG_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 불일치합니다."),
     EXPIRED_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 Refresh Token입니다."),
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 Token입니다."),
+    INVALID_USER(HttpStatus.UNAUTHORIZED, "권한이 없는 사용자입니다."),
 
     /* 404 NOT_FOUND : Resource를 찾을 수 없음 */
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 정보의 사용자를 찾을 수 없습니다."),
     TEAM_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 정보의 Team을 찾을 수 없습니다."),
+    TEAM_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 정보의 TeamUser을 찾을 수 없습니다."),
     TODO_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 정보의 ToDo를 찾을 수 없습니다."),
     TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "요청 헤더에 토큰이 없습니다"),
 
