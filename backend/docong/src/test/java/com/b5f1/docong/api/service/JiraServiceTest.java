@@ -63,7 +63,7 @@ class JiraServiceTest {
     public void saveIssueTest() throws Exception {
         Long seq = savedTeam.getSeq();
         Long userSeq = savedUser.getSeq();
-        SaveJiraInfoReqDto reqDto = new SaveJiraInfoReqDto("https://hyunse0.atlassian.net/", "hhs28166139@gmail.com", "jlDdT1ysSdcNME0VJ2FP1FBF", "TEST2");
+        SaveJiraInfoReqDto reqDto = new SaveJiraInfoReqDto("https://hyunse0.atlassian.net/", "hhs28166139@gmail.com", "jlDdT1ysSdcNME0VJ2FP1FBF", "TEST");
 
         jiraService.saveTeamJira(seq, userSeq, reqDto);
 
