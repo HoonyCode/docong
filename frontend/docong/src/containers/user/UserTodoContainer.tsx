@@ -105,7 +105,7 @@ function UserTodoContainer() {
           flexDirection: 'column',
           alignItems: 'center',
           height: '91%',
-          my: '3vh',
+          mb: '3vh',
         }}
       >
         <UserTodo

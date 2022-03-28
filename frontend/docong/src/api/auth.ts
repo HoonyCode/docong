@@ -74,4 +74,5 @@ export interface LoginResponseHeaders {
 export interface GoogleLoginResponseData {
   jwtToken: string
   newUser: boolean
+  refreshToken: string
 }

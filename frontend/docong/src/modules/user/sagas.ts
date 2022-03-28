@@ -90,6 +90,7 @@ function* userGoogleLoginSaga(
       action.payload.googleLoginResponse
     )
     localStorage.setItem('jwtToken', googleLoginResponseData.jwtToken)
+    localStorage.setItem('refreshToken', googleLoginResponseData.refreshToken)
     yield put(initUserTimer())
     yield action.payload.navigate('/timer')
     yield put(getUserInfoAsync.request(null))
