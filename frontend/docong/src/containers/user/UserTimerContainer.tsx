@@ -36,7 +36,6 @@ import { usePrompt } from './Blocker'
 import { TransitionProps } from '@mui/material/transitions'
 import CircleIcon from '@mui/icons-material/Circle'
 import { changeTodoActivateAsync } from '../../modules/todo'
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -210,7 +209,7 @@ function UserTimerContainer() {
   const congRender = () => {
     let congs = []
     if (selectedTodo) {
-      for (let i = 0; i < Math.min(selectedTodo.realPomo, 12); i++) {
+      for (let i = 0; i < Math.floor(selectedTodo.realPomo / 2); i++) {
         congs.push(
           <CircleIcon
             key={i}
@@ -224,21 +223,26 @@ function UserTimerContainer() {
           />
         )
       }
-      if (selectedTodo.realPomo >= 13) {
+      for (
+        let i = Math.floor(selectedTodo.realPomo / 2);
+        i < Math.ceil(selectedTodo.realPomo / 2);
+        i++
+      ) {
         congs.push(
-          <MoreHorizIcon
-            key={12}
+          <CircleIcon
+            key={i}
             sx={{
               width: '45px',
               height: '45px',
-              color: (theme) => theme.colors.greenText,
+              color: (theme) => `${lighten(0.3, theme.colors.greenText)}`,
               mr: '10px',
               mb: '10px',
             }}
           />
         )
       }
-      const leftPomo = selectedTodo.predictedPomo - selectedTodo.realPomo
+      const leftPomo =
+        selectedTodo.predictedPomo - Math.ceil(selectedTodo.realPomo / 2)
       if (leftPomo >= 1) {
         for (
           let i = selectedTodo.realPomo;
@@ -262,20 +266,6 @@ function UserTimerContainer() {
             )
           }
         }
-      }
-      if (selectedTodo.predictedPomo >= 13 && selectedTodo.realPomo <= 12) {
-        congs.push(
-          <MoreHorizIcon
-            key={12}
-            sx={{
-              width: '45px',
-              height: '45px',
-              color: (theme) => `${lighten(0.6, theme.colors.greenText)}`,
-              mr: '10px',
-              mb: '10px',
-            }}
-          />
-        )
       }
       return congs
     }
@@ -400,7 +390,9 @@ function UserTimerContainer() {
                       fontWeight: 'bold',
                       color: (theme) => theme.colors.lightGreenText,
                     }}
-                  >{`${selectedTodo.realPomo} / ${selectedTodo.predictedPomo} 콩`}</Box>
+                  >{`${selectedTodo.realPomo / 2} / ${
+                    selectedTodo.predictedPomo
+                  } 콩`}</Box>
                   <Grid container>
                     <Grid item xs={6}>
                       <Chip
@@ -460,7 +452,8 @@ function UserTimerContainer() {
             >
               {selectedTodo && (
                 <div>
-                  Cong ({selectedTodo.realPomo}/{selectedTodo.predictedPomo})
+                  Cong ({selectedTodo.realPomo / 2}/{selectedTodo.predictedPomo}
+                  )
                 </div>
               )}
               {!selectedTodo && <div>Cong</div>}

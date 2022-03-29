@@ -106,21 +106,21 @@ function UserTimerDisplay({
             <Box
               sx={{ alignSelf: 'center', fontSize: '22px', fontWeight: 'bold' }}
             >
-              X 1
+              X 0.5
             </Box>
           )}
           {type && type.name === 'Basic' && (
             <Box
               sx={{ alignSelf: 'center', fontSize: '22px', fontWeight: 'bold' }}
             >
-              X 2
+              X 1
             </Box>
           )}
           {type && type.name === 'Long' && (
             <Box
               sx={{ alignSelf: 'center', fontSize: '22px', fontWeight: 'bold' }}
             >
-              X 4
+              X 2
             </Box>
           )}
         </Box>
