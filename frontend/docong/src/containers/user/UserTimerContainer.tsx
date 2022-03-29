@@ -58,7 +58,7 @@ function UserTimerContainer() {
   const dispatch = useDispatch()
 
   const timerTypes = [
-    { index: 0, name: 'Short', time: 900 },
+    { index: 0, name: 'Short', time: 5 },
     { index: 1, name: 'Basic', time: 1500 },
     { index: 2, name: 'Long', time: 3000 },
   ]
@@ -306,6 +306,7 @@ function UserTimerContainer() {
             time={time}
             status={getStatus()}
             progress={getProgress()}
+            type={selectedType}
           />
         </Grid>
         <Grid
