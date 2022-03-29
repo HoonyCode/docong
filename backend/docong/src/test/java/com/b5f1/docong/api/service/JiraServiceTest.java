@@ -41,6 +41,7 @@ class JiraServiceTest {
     }
 
     private Team savedTeam;
+
     private User savedUser;
 
     @Test
