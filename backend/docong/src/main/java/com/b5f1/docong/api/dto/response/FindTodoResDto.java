@@ -19,6 +19,8 @@ public class FindTodoResDto {
     WorkType workType;
     WorkImportance workImportance;
     String userEmail;
+    String userName;
+    String userImg;
     Boolean activate;
 
     public FindTodoResDto(Todo todo) {
@@ -32,6 +34,8 @@ public class FindTodoResDto {
         this.workType = todo.getWorkType();
         this.workImportance = todo.getWorkImportance();
         this.userEmail = todo.getUserTodo().getUser().getEmail();
+        this.userName = todo.getUserTodo().getUser().getName();
+        this.userImg = todo.getUserTodo().getUser().getImage();
         this.activate = todo.getActivate();
     }
 }

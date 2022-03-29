@@ -59,7 +59,7 @@ class JiraServiceTest {
         assertThat(team.getJiraProjectKey()).isEqualTo("TEST");
     }
 
-    @Test
+//    @Test
     public void saveIssueTest() throws Exception {
         Long seq = savedTeam.getSeq();
         Long userSeq = savedUser.getSeq();
