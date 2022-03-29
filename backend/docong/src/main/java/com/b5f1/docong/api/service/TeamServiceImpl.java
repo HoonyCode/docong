@@ -87,19 +87,20 @@ public class TeamServiceImpl implements TeamService {
                 .filter(teamUser -> teamUser.isLeader())
                 .findFirst();
 
-        FindTeamResDto findTeamResDto = new FindTeamResDto(team.getSeq(), userList, team.getName(), leader.get().getUser());
+        FindTeamResDto findTeamResDto = new FindTeamResDto(team, userList, leader.get().getUser());
         return findTeamResDto;
     }
     @Override
-    public FindAllTeamResDto findAllTeam(Long user_id){
-        FindAllTeamResDto teamResDto = new FindAllTeamResDto(new HashMap<>());
+    public List<FindTeamResDto> findAllTeam(Long user_id){
+        List<FindTeamResDto> result = new ArrayList<>();
         List<TeamUser> teamUsers = teamUserQueryRepository.findTeamUserWithUserId(user_id);
         teamUsers.stream()
                 .forEach(teamUser -> {
                     Team team = teamUser.getTeam();
-                    teamResDto.getTeams().put(team.getSeq(),team.getName());
+                    FindTeamResDto teamResDto = findTeam(team.getSeq());
+                    result.add(teamResDto);
                 });
-        return teamResDto;
+        return result;
     }
     @Override
     public void addTeamMember(SaveAndDeleteTeamUserReqDto teamUserReqDto, Long reqUserId) {
