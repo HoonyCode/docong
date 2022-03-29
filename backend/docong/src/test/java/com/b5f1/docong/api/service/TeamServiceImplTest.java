@@ -56,7 +56,7 @@ class TeamServiceImplTest {
         //when
         Long seq = teamService.createTeam(teamReqDto);
         FindTeamResDto teamResDto = teamService.findTeam(seq);
-        Long teamId = teamResDto.getTeam().getSeq();
+        Long teamId = teamResDto.getTeamSeq();
         Long userCount = teamResDto.getUserList().stream().count();
         User leader = teamResDto.getLeader();
         //then
