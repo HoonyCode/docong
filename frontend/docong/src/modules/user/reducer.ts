@@ -5,6 +5,7 @@ import {
   CHANGE_USER_TIMER_TIME,
   CHANGE_USER_TIMER_TODO,
   CHANGE_USER_TIMER_TYPE,
+  getRankingListAsync,
   getUserInfoAsync,
   INIT_USER_TIMER,
 } from './actions'
@@ -24,6 +25,7 @@ const initialState: UserState = {
     status: 'stop',
     time: 1500,
   },
+  rankingList: asyncState.initial(),
 }
 
 // --- reducerUtils 의 createAsyncReducer, transformToArray 를 활용한 리팩토링 ---
@@ -61,9 +63,14 @@ const user = createReducer<UserState, UserAction>(initialState, {
       time: action.payload,
     },
   }),
-}).handleAction(
-  transformToArray(getUserInfoAsync),
-  createAsyncReducer(getUserInfoAsync, 'userInfo')
-)
+})
+  .handleAction(
+    transformToArray(getUserInfoAsync),
+    createAsyncReducer(getUserInfoAsync, 'userInfo')
+  )
+  .handleAction(
+    transformToArray(getRankingListAsync),
+    createAsyncReducer(getRankingListAsync, 'rankingList')
+  )
 
 export default user

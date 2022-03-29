@@ -298,23 +298,53 @@ function UserTodo({
   return (
     <>
       <Board
+        sx={{ flexGrow: 1 }}
         allowRemoveCard
         onCardDragEnd={handleCardMove}
         onCardRemove={handleCardRemove}
         disableColumnDrag
         renderColumnHeader={(column: any) => (
-          <Box
-            key={column.id}
-            sx={{
-              textAlign: 'center',
-              fontSize: '34px',
-              fontWeight: 'bold',
-              color: (theme) => theme.colors.greenText,
-              mb: '3vh',
-            }}
-          >
-            {column.title}
-          </Box>
+          <>
+            <Box sx={{ width: '100px' }}></Box>
+            <Box
+              key={column.id}
+              sx={{
+                textAlign: 'center',
+                fontSize: '34px',
+                fontWeight: 'bold',
+                color: (theme) => theme.colors.greenText,
+                mb: '14px',
+              }}
+            >
+              {column.title}
+            </Box>
+            <Box sx={{ width: '100px' }}>
+              {column.id === 0 && (
+                <Tooltip title="Todo 추가">
+                  <Fab
+                    sx={{
+                      color: (theme) => `${darken(0.5, theme.colors.todoCard)}`,
+                      background: (theme) => theme.colors.doCard,
+                      '&:hover': {
+                        background: (theme) =>
+                          `${darken(0.1, theme.colors.doCard)}`,
+                      },
+                      width: '34px',
+                      height: '34px',
+                      minHeight: '0px',
+                      ml: '10px',
+                      mt: '6px',
+                    }}
+                    aria-label="add"
+                    onClick={openCreateTodoForm}
+                    size="small"
+                  >
+                    <AddIcon />
+                  </Fab>
+                </Tooltip>
+              )}
+            </Box>
+          </>
         )}
         renderCard={(card: any, { dragging }: any) => (
           <Card
@@ -404,11 +434,13 @@ function UserTodo({
                 />
               </Grid>
               <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'end' }}>
-                <Avatar
-                  sx={{ width: 28, height: 28 }}
-                  alt="Remy Sharp"
-                  src="https://cdn.hellodd.com/news/photo/202005/71835_craw1.jpg"
-                />
+                <Tooltip title="User">
+                  <Avatar
+                    sx={{ width: 28, height: 28 }}
+                    alt="User"
+                    src="/images/Profile_Default.jpg"
+                  />
+                </Tooltip>
               </Grid>
             </Grid>
           </Card>
@@ -418,43 +450,17 @@ function UserTodo({
       </Board>
       <Box
         sx={{
-          width: '100%',
           display: 'flex',
-          justifyContent: 'center',
-          px: '5px',
+          height: '100px',
+          flexGrow: 1,
+          p: 3,
+          alignItems: 'end',
         }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            width: '360px',
-            mx: '1vw',
-            px: '15px',
-          }}
-        >
-          <Tooltip title="Todo 추가">
-            <Fab
-              sx={{
-                color: (theme) => `${darken(0.5, theme.colors.todoCard)}`,
-                background: (theme) => theme.colors.doCard,
-              }}
-              aria-label="add"
-              onClick={openCreateTodoForm}
-            >
-              <AddIcon />
-            </Fab>
-          </Tooltip>
-        </Box>
-        <Box sx={{ width: '360px', m: '1vw 1vw 1vw 2.5vw' }}></Box>
-        <Box sx={{ width: '360px', m: '1vw 1vw 1vw 2.5vw' }}></Box>
-      </Box>
-      <Box sx={{ display: 'flex', p: 3, flexGrow: 1, alignItems: 'end' }}>
         <Button
           sx={{
             fontSize: '24px',
             color: (theme) => theme.colors.lightGreenText,
-            mb: '5vh',
           }}
           variant={'text'}
           color="success"
@@ -639,7 +645,7 @@ function UserTodo({
                   type="number"
                   InputProps={{
                     inputProps: {
-                      max: 99,
+                      max: 24,
                       min: 1,
                     },
                   }}
@@ -860,7 +866,7 @@ function UserTodo({
                   type="number"
                   InputProps={{
                     inputProps: {
-                      max: 99,
+                      max: 24,
                       min: 1,
                     },
                   }}

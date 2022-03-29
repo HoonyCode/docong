@@ -31,6 +31,7 @@ export interface UserInfo {
   mbti: string
   job: string
   position: number
+  image: string
 }
 
 export interface DefaultResponse {
@@ -46,4 +47,5 @@ export interface UserData {
   job: string
   name: string
   position: number
+  image: string
 }

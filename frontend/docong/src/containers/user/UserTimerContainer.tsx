@@ -11,6 +11,7 @@ import {
   DialogTitle,
   Grid,
   Slide,
+  Tooltip,
   Typography,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
@@ -305,6 +306,7 @@ function UserTimerContainer() {
             time={time}
             status={getStatus()}
             progress={getProgress()}
+            type={selectedType}
           />
         </Grid>
         <Grid
@@ -417,11 +419,13 @@ function UserTimerContainer() {
                       xs={6}
                       sx={{ display: 'flex', justifyContent: 'end' }}
                     >
-                      <Avatar
-                        sx={{ width: 28, height: 28 }}
-                        alt="Remy Sharp"
-                        src="https://cdn.hellodd.com/news/photo/202005/71835_craw1.jpg"
-                      />
+                      <Tooltip title="User">
+                        <Avatar
+                          sx={{ width: 28, height: 28 }}
+                          alt="User"
+                          src="/images/Profile_Default.jpg"
+                        />
+                      </Tooltip>
                     </Grid>
                   </Grid>
                 </Card>

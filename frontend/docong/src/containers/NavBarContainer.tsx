@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 const LogoImage = styled.img`
   height: 90px;
+  cursor: pointer;
 `
 
 function NavBarContainer() {
@@ -60,7 +61,11 @@ function NavBarContainer() {
           height: '130px',
         }}
       >
-        <LogoImage alt="Docong Logo" src="/images/Docong_Logo.png" />
+        <LogoImage
+          alt="Docong Logo"
+          src="/images/Docong_Logo.png"
+          onClick={(e: any) => onClickToTimer(e)}
+        />
       </Box>
       <Box
         sx={{
@@ -136,7 +141,7 @@ function NavBarContainer() {
             color: (theme) => theme.colors.greenText,
           }}
         >
-          GROUP
+          GROUP (개발중)
         </Box>
       </Box>
       <Box
@@ -182,7 +187,8 @@ function NavBarContainer() {
         sx={{
           px: '40px',
           pb: '5px',
-          fontSize: '25px',
+          fontSize: '28px',
+          fontWeight: 'bold',
           color: (theme) => theme.colors.greenText,
           cursor: 'pointer',
           '&:hover': {

@@ -1,11 +1,48 @@
+.react-kanban-board {
+  > div {
+    height: 100%;
+  }
+}
+
 .react-kanban-column {
-  width: 360px;
+  width: 370px;
   min-height: 200px !important;
-  max-height: 500px;
   margin: 0 1vw;
   background-color: white;
+  height: 100%;
 
   & + & {
     margin-left: 2.5vw;
+  }
+
+  > div:nth-child(1) {
+    display: flex;
+    justify-content: center;
+    margin-right: 10px;
+  }
+
+  > div:nth-child(2) {
+    height: calc(100% - 60px) !important;
+    overflow-y: overlay;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #8a9788;
+    border-radius: 8px;
+    background-clip: padding-box;
+    border: 1px solid transparent;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: #c4c4c4;
+    border-radius: 8px;
+    box-shadow: inset 0px 0px 5px white;
+  }
+  &:hover {
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
   }
 }

@@ -1,4 +1,6 @@
+import { Box } from '@mui/material'
 import styled from 'styled-components'
+import CircleIcon from '@mui/icons-material/Circle'
 
 const TimeDisplay = styled.div`
   position: relative;
@@ -16,7 +18,7 @@ const TimeDisplay = styled.div`
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -60px);
+    transform: translate(-50%, -50px);
     text-align: center;
   }
   h1 {
@@ -39,9 +41,15 @@ interface UserTimerDisplayProps {
   time: any
   status: any
   progress: any
+  type: any
 }
 
-function UserTimerDisplay({ time, status, progress }: UserTimerDisplayProps) {
+function UserTimerDisplay({
+  time,
+  status,
+  progress,
+  type,
+}: UserTimerDisplayProps) {
   const pad2 = (num: any) => {
     return num > 9 ? num : `0${num}`
   }
@@ -85,6 +93,37 @@ function UserTimerDisplay({ time, status, progress }: UserTimerDisplayProps) {
       </svg>
       <div>
         <h1>{formatTime(time)}</h1>
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <CircleIcon
+            sx={{
+              width: '30px',
+              height: '30px',
+              color: (theme) => theme.colors.greenText,
+              mr: '10px',
+            }}
+          />
+          {type && type.name === 'Short' && (
+            <Box
+              sx={{ alignSelf: 'center', fontSize: '22px', fontWeight: 'bold' }}
+            >
+              X 1
+            </Box>
+          )}
+          {type && type.name === 'Basic' && (
+            <Box
+              sx={{ alignSelf: 'center', fontSize: '22px', fontWeight: 'bold' }}
+            >
+              X 2
+            </Box>
+          )}
+          {type && type.name === 'Long' && (
+            <Box
+              sx={{ alignSelf: 'center', fontSize: '22px', fontWeight: 'bold' }}
+            >
+              X 4
+            </Box>
+          )}
+        </Box>
         <p>{status}</p>
       </div>
     </TimeDisplay>

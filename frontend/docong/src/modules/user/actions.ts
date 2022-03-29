@@ -4,6 +4,7 @@ import { SignupResponse } from '../../api/auth'
 import { UserData, UserInfo } from '../../api/user'
 import { PomoData } from '../../api/pomo'
 import { Todo } from '../../api/todo'
+import { RankingDataList } from '../../api/analysis'
 
 // 액션 type 선언
 export const USER_SIGNUP = 'user/USER_SIGNUP'
@@ -29,6 +30,10 @@ export const SET_USER_INFO_ERROR = 'user/SET_USER_INFO_ERROR'
 export const SAVE_POMO = 'user/SAVE_POMO'
 export const SAVE_POMO_SUCCESS = 'user/SAVE_POMO_SUCCESS'
 export const SAVE_POMO_ERROR = 'user/SAVE_POMO_ERROR'
+
+export const GET_RANKING_LIST = 'user/GET_RANKING_LIST'
+export const GET_RANKING_LIST_SUCCESS = 'user/GET_RANKING_LIST_SUCCESS'
+export const GET_RANKING_LIST_ERROR = 'user/GET_RANKING_LIST_ERROR'
 
 export const INIT_USER_TIMER = 'user/INIT_USER_TIMER'
 export const CHANGE_USER_TIMER_TYPE = 'user/CHANGE_USER_TIMER_TYPE'
@@ -76,6 +81,12 @@ export const savePomoAsync = createAsyncAction(
   SAVE_POMO_ERROR
 )<PomoData, any, AxiosError>()
 
+export const getRankingListAsync = createAsyncAction(
+  GET_RANKING_LIST,
+  GET_RANKING_LIST_SUCCESS,
+  GET_RANKING_LIST_ERROR
+)<any, RankingDataList, AxiosError>()
+
 export const initUserTimer = createAction(INIT_USER_TIMER)()
 export const changeUserTimerType = createAction(CHANGE_USER_TIMER_TYPE)<any>()
 export const changeUserTimerTodo = createAction(
@@ -98,6 +109,7 @@ export const actions = {
   getUserInfoAsync,
   setUserInfoAsync,
   savePomoAsync,
+  getRankingListAsync,
   initUserTimer,
   changeUserTimerType,
   changeUserTimerTodo,
