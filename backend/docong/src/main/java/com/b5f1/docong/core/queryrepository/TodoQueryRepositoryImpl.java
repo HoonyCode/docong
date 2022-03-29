@@ -33,6 +33,8 @@ public class TodoQueryRepositoryImpl implements TodoQueryRepository{
                         todo.workType,
                         todo.workImportance,
                         todo.userTodo.user.email,
+                        todo.userTodo.user.name,
+                        todo.userTodo.user.image,
                         todo.activate))
                 .from(todo)
                 .innerJoin(todo.userTodo, userTodo)
@@ -55,6 +57,8 @@ public class TodoQueryRepositoryImpl implements TodoQueryRepository{
                         todo.workType,
                         todo.workImportance,
                         todo.userTodo.user.email,
+                        todo.userTodo.user.name,
+                        todo.userTodo.user.image,
                         todo.activate))
                 .from(todo)
                 .where(todo.team.seq.eq(groupSeq).and(
