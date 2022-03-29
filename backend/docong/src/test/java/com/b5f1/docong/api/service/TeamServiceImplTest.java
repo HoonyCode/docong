@@ -14,12 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+
 
 @SpringBootTest
 @Transactional
@@ -57,7 +56,7 @@ class TeamServiceImplTest {
         //when
         Long seq = teamService.createTeam(teamReqDto);
         FindTeamResDto teamResDto = teamService.findTeam(seq);
-        Long teamId = teamResDto.getTeamId();
+        Long teamId = teamResDto.getTeam().getSeq();
         Long userCount = teamResDto.getUserList().stream().count();
         User leader = teamResDto.getLeader();
         //then

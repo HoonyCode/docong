@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/team")
 @RequiredArgsConstructor
@@ -42,10 +44,10 @@ public class TeamController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<FindAllTeamResDto> findAllTeam(@Auth User user) {
+    public ResponseEntity<List<FindTeamResDto>> findAllTeam(@Auth User user) {
         //해당 유저 모든 team list반환
-        FindAllTeamResDto teamResDto = teamService.findAllTeam(user.getSeq());
-        return ResponseEntity.ok().body(teamResDto);
+        List<FindTeamResDto> teamResDtoList = teamService.findAllTeam(user.getSeq());
+        return ResponseEntity.ok().body(teamResDtoList);
     }
 
     @DeleteMapping("/{id}")
