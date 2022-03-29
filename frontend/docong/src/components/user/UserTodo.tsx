@@ -419,7 +419,7 @@ function UserTodo({
                 fontWeight: 'bold',
                 color: (theme) => theme.colors.lightGreenText,
               }}
-            >{`${card.realPomo} / ${card.predictedPomo} 콩`}</Box>
+            >{`${card.realPomo / 2} / ${card.predictedPomo} 콩`}</Box>
             <Grid container>
               <Grid item xs={6}>
                 <Chip
@@ -645,7 +645,7 @@ function UserTodo({
                   type="number"
                   InputProps={{
                     inputProps: {
-                      max: 24,
+                      max: 12,
                       min: 1,
                     },
                   }}
@@ -866,7 +866,7 @@ function UserTodo({
                   type="number"
                   InputProps={{
                     inputProps: {
-                      max: 24,
+                      max: 12,
                       min: 1,
                     },
                   }}
