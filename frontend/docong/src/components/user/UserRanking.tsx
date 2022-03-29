@@ -50,7 +50,9 @@ function UserRanking({ rankingList }: UserRankingProps) {
           draft.options.xaxis.categories = rankingList.map(
             (ranking) => ranking.userName
           )
-          draft.series[0].data = rankingList.map((ranking) => ranking.pomoCount)
+          draft.series[0].data = rankingList.map(
+            (ranking) => ranking.pomoCount / 2
+          )
         })
       )
     }
