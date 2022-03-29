@@ -40,6 +40,7 @@ function EditUserForm({
     job: userInfo ? userInfo.job : '',
     name: userInfo ? userInfo.name : '',
     position: userInfo ? userInfo.position : 0,
+    image: userInfo ? userInfo.image : '',
   })
 
   const genderList = ['Female', 'Male']
@@ -84,6 +85,7 @@ function EditUserForm({
         job: userInfo ? userInfo.job : '',
         name: userInfo ? userInfo.name : '',
         position: userInfo ? userInfo.position : 0,
+        image: userInfo ? userInfo.image : '',
       })
       setDate(userInfo ? new Date(userInfo.birth) : null)
     }
@@ -272,7 +274,7 @@ function EditUserForm({
               >
                 {genderList.map((gender, index) => (
                   <MenuItem key={index} value={gender.toUpperCase()}>
-                    {gender}
+                    {gender === 'Female' ? '여성' : '남성'}
                   </MenuItem>
                 ))}
               </Select>

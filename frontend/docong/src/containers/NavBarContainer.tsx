@@ -187,7 +187,8 @@ function NavBarContainer() {
         sx={{
           px: '40px',
           pb: '5px',
-          fontSize: '25px',
+          fontSize: '28px',
+          fontWeight: 'bold',
           color: (theme) => theme.colors.greenText,
           cursor: 'pointer',
           '&:hover': {

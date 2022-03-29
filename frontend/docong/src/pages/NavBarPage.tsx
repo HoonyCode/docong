@@ -8,7 +8,7 @@ function NavBarPage() {
       sx={{
         height: '100%',
         minHeight: '800px',
-        minWidth: '1200px',
+        minWidth: '1500px',
         display: 'flex',
       }}
     >
@@ -27,6 +27,7 @@ function NavBarPage() {
             height: '100%',
             background: (theme) => theme.colors.pageBg,
             borderRadius: '20px',
+            boxShadow: 3,
           }}
         >
           <Outlet />

@@ -16,7 +16,7 @@ const TimeDisplay = styled.div`
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -60px);
+    transform: translate(-50%, -50px);
     text-align: center;
   }
   h1 {

@@ -17,6 +17,8 @@ import {
   SET_USER_INFO,
   initUserTimer,
   changeUserTimerTodo,
+  getRankingListAsync,
+  GET_RANKING_LIST,
 } from './actions'
 import {
   userSignup,
@@ -44,6 +46,7 @@ import { closeChannel, subscribe } from './channel'
 import { DefaultResponse, savePomo } from '../../api/pomo'
 import { getUserInfo, setUserInfo, UserInfo } from '../../api/user'
 import { findTodo, Todo } from '../../api/todo'
+import { getRankingList, RankingDataList } from '../../api/analysis'
 
 function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
   try {
@@ -182,6 +185,18 @@ function* savePomoSaga(action: ReturnType<typeof savePomoAsync.request>) {
   }
 }
 
+function* getRankingListSaga(
+  action: ReturnType<typeof getRankingListAsync.request>
+) {
+  try {
+    const rankingList: RankingDataList = yield call(getRankingList)
+    yield put(getRankingListAsync.success(rankingList))
+  } catch (e: any) {
+    yield put(getRankingListAsync.failure(e))
+    console.error(e)
+  }
+}
+
 export function* userSaga() {
   yield takeEvery(USER_SIGNUP, userSignupSaga)
   yield takeEvery(USER_LOGIN, userLoginSaga)
@@ -190,4 +205,5 @@ export function* userSaga() {
   yield takeEvery(SET_USER_INFO, setUserInfoSaga)
   yield takeEvery(START_USER_TIMER, startUserTimerSaga)
   yield takeEvery(SAVE_POMO, savePomoSaga)
+  yield takeEvery(GET_RANKING_LIST, getRankingListSaga)
 }

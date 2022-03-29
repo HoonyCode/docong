@@ -231,6 +231,7 @@ function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
           value={signupInput.name}
           color="success"
           sx={{ background: 'white', mb: '2vh' }}
+          inputProps={{ maxLength: 12 }}
         />
         <FormControl
           required

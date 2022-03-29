@@ -434,11 +434,13 @@ function UserTodo({
                 />
               </Grid>
               <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'end' }}>
-                {/* <Avatar
-                  sx={{ width: 28, height: 28 }}
-                  alt="Remy Sharp"
-                  src="https://cdn.hellodd.com/news/photo/202005/71835_craw1.jpg"
-                /> */}
+                <Tooltip title="User">
+                  <Avatar
+                    sx={{ width: 28, height: 28 }}
+                    alt="User"
+                    src="/images/Profile_Default.jpg"
+                  />
+                </Tooltip>
               </Grid>
             </Grid>
           </Card>
@@ -643,7 +645,7 @@ function UserTodo({
                   type="number"
                   InputProps={{
                     inputProps: {
-                      max: 99,
+                      max: 24,
                       min: 1,
                     },
                   }}
@@ -864,7 +866,7 @@ function UserTodo({
                   type="number"
                   InputProps={{
                     inputProps: {
-                      max: 99,
+                      max: 24,
                       min: 1,
                     },
                   }}
