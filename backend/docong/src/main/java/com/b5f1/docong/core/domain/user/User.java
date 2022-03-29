@@ -2,6 +2,7 @@ package com.b5f1.docong.core.domain.user;
 
 import com.b5f1.docong.api.dto.request.UserInfoReqDto;
 import com.b5f1.docong.core.domain.pomodoro.Pomodoro;
+import com.b5f1.docong.core.domain.pomodoro.TimeStatus;
 import com.b5f1.docong.core.domain.todo.UserTodo;
 import lombok.*;
 
@@ -113,5 +114,13 @@ public class User {
 
     public void addPomodoro(Pomodoro pomodoro) {
         this.pomodoros.add(pomodoro);
+    }
+
+    public Integer getRealPomo(){
+        Integer realPomo = 0;
+        for(Pomodoro p : this.pomodoros){
+            realPomo += (p.getTimeStatus()== TimeStatus.SHORT)?1:(p.getTimeStatus()==TimeStatus.BASIC)?2:3;
+        }
+        return realPomo;
     }
 }
