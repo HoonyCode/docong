@@ -5,6 +5,8 @@ import com.b5f1.docong.api.dto.request.SaveAndDeleteTeamUserReqDto;
 import com.b5f1.docong.api.dto.request.UpdateTeamReqDto;
 import com.b5f1.docong.api.dto.response.FindAllTeamResDto;
 import com.b5f1.docong.api.dto.response.FindTeamResDto;
+import com.b5f1.docong.api.dto.response.UserInfoResDto;
+import com.b5f1.docong.api.dto.response.UserSimpleInfoResDto;
 import com.b5f1.docong.api.exception.CustomException;
 import com.b5f1.docong.api.exception.ErrorCode;
 import com.b5f1.docong.core.domain.group.Team;
@@ -74,20 +76,22 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public FindTeamResDto findTeam(Long team_id) {
-        List<User> userList = new ArrayList<>();
+        List<UserSimpleInfoResDto> userList = new ArrayList<>();
         //team_id가 존재하는지 확인
         Team team = getTeam(team_id);
 
         List<TeamUser> teamUsers = teamUserQueryRepository.findTeamUserWithTeamId(team_id);
 
         teamUsers.stream()
-                .forEach(teamUser -> userList.add(teamUser.getUser()));
+                .forEach(teamUser -> {
+                    User user = teamUser.getUser();
+                    userList.add(new UserSimpleInfoResDto(user.getEmail(), user.getName()));});
 
         Optional<TeamUser> leader = teamUsers.stream()
                 .filter(teamUser -> teamUser.isLeader())
                 .findFirst();
 
-        FindTeamResDto findTeamResDto = new FindTeamResDto(team.getSeq(), team.getName(), team.getJiraDomain(), team.getJiraUserId(), team.getJiraAPIToken(), team.getJiraProjectKey(), userList, leader.get().getUser());
+        FindTeamResDto findTeamResDto = new FindTeamResDto(team.getSeq(), team.getName(), team.getJiraDomain(), team.getJiraUserId(), team.getJiraAPIToken(), team.getJiraProjectKey(), userList, leader.get().getUser().getSeq());
         return findTeamResDto;
     }
     @Override

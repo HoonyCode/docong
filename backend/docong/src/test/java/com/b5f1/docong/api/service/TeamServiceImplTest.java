@@ -58,7 +58,7 @@ class TeamServiceImplTest {
         FindTeamResDto teamResDto = teamService.findTeam(seq);
         Long teamId = teamResDto.getTeamSeq();
         Long userCount = teamResDto.getUserList().stream().count();
-        User leader = teamResDto.getLeader();
+        User leader = userRepository.findById(teamResDto.getLeaderSeq()).get();
         //then
         assertThat(teamId).isEqualTo(seq);
         assertThat(userCount).isEqualTo(1);
