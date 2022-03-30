@@ -17,6 +17,6 @@ public class FindTeamResDto {
     private String jiraUserId;
     private String jiraAPIToken;
     private String jiraProjectKey;
-    private List<User> userList;
-    private User leader;
+    private List<UserSimpleInfoResDto> userList;
+    private Long leaderSeq;
 }
