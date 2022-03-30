@@ -99,7 +99,7 @@ function UserTimerContainer() {
           }
         })
       } catch (e) {
-        console.log('Notification error', e)
+        console.error('Notification error', e)
       }
       let start_date = new Date()
       let end_date = new Date()

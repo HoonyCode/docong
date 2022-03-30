@@ -34,13 +34,13 @@ function EditUserForm({
   const [date, setDate] = useState<Date | null>(null)
 
   const [userInfoInput, setUserInfoInput] = useState({
-    mbti: userInfo ? userInfo.mbti : '',
-    birth: userInfo ? userInfo.birth : '',
-    gender: userInfo ? userInfo.gender : '',
-    job: userInfo ? userInfo.job : '',
-    name: userInfo ? userInfo.name : '',
-    position: userInfo ? userInfo.position : 0,
-    image: userInfo ? userInfo.image : '',
+    mbti: userInfo && userInfo.mbti ? userInfo.mbti : 'ISTJ',
+    birth: userInfo && userInfo.birth ? userInfo.birth : '',
+    gender: userInfo && userInfo.gender ? userInfo.gender : 'FEMALE',
+    job: userInfo && userInfo.job ? userInfo.job : '경영/사무',
+    name: userInfo && userInfo.name ? userInfo.name : '',
+    position: userInfo && userInfo.position ? userInfo.position : 0,
+    image: userInfo && userInfo.image ? userInfo.image : '',
   })
 
   const genderList = ['Female', 'Male']
@@ -79,15 +79,15 @@ function EditUserForm({
   useEffect(() => {
     if (isOpenEditUserForm === true) {
       setUserInfoInput({
-        mbti: userInfo ? userInfo.mbti : '',
-        birth: userInfo ? userInfo.birth : '',
-        gender: userInfo ? userInfo.gender : '',
-        job: userInfo ? userInfo.job : '',
-        name: userInfo ? userInfo.name : '',
-        position: userInfo ? userInfo.position : 0,
-        image: userInfo ? userInfo.image : '',
+        mbti: userInfo && userInfo.mbti ? userInfo.mbti : 'ISTJ',
+        birth: userInfo && userInfo.birth ? userInfo.birth : '',
+        gender: userInfo && userInfo.gender ? userInfo.gender : 'FEMALE',
+        job: userInfo && userInfo.job ? userInfo.job : '경영/사무',
+        name: userInfo && userInfo.name ? userInfo.name : '',
+        position: userInfo && userInfo.position ? userInfo.position : 0,
+        image: userInfo && userInfo.image ? userInfo.image : '',
       })
-      setDate(userInfo ? new Date(userInfo.birth) : null)
+      setDate(userInfo && userInfo.birth ? new Date(userInfo.birth) : null)
     }
   }, [isOpenEditUserForm, userInfo])
 
@@ -247,6 +247,7 @@ function EditUserForm({
                 value={userInfoInput.name}
                 color="success"
                 sx={{ mb: '14px' }}
+                inputProps={{ maxLength: 15 }}
               />
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker

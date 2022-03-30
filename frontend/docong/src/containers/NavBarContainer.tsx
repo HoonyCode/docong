@@ -4,7 +4,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import { darken } from 'polished'
 import { useSelector } from 'react-redux'
 import { RootState } from '../modules'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const LogoImage = styled.img`
   height: 90px;
@@ -14,12 +14,15 @@ const LogoImage = styled.img`
 function NavBarContainer() {
   const userInfo = useSelector((state: RootState) => state.user.userInfo.data)
   const userTimer = useSelector((state: RootState) => state.user.userTimer)
+  const location = useLocation()
 
   const navigate = useNavigate()
 
   const onClickToTimer = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    navigate('/timer')
+    if (location.pathname !== '/timer') {
+      navigate('/timer')
+    }
   }
 
   const onClickToUserTodo = (e: React.MouseEvent<HTMLButtonElement>) => {

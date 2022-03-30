@@ -8,21 +8,27 @@ import {
   GoogleLoginResponseOffline,
 } from 'react-google-login'
 import { userGoogleLoginAsync, userSignupAsync } from '../../modules/user'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { RootState } from '../../modules'
 import HeaderLogo from '../../components/auth/HeaderLogo'
 import { Box } from '@mui/material'
+import CheckModal from '../../components/auth/CheckModal'
 
 function UserSignupContainer() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { status } = useSelector((state: RootState) => state.user.userTimer)
+  const [isOpenCheckToLogin, setIsOpenCheckToLogin] = useState(false)
 
   useEffect(() => {
     if (status === 'play') {
       navigate('/')
     }
   })
+
+  const onClickToLogin = () => {
+    navigate('/')
+  }
 
   // 회원가입 요청
   const onSignupSubmit = (signupInput: SignupData, isCheckedEmail: boolean) => {
@@ -47,12 +53,12 @@ function UserSignupContainer() {
 
   const onFailureGoogleLogin = (googleLoginError: any) => {
     alert('구글 로그인 연동 실패')
-    console.log(googleLoginError)
+    console.error(googleLoginError)
   }
 
   return (
     <>
-      <HeaderLogo size="26%" />
+      <HeaderLogo size="26%" setIsOpenCheckToLogin={setIsOpenCheckToLogin} />
       <Box
         sx={{
           display: 'flex',
@@ -60,7 +66,10 @@ function UserSignupContainer() {
           alignItems: 'center',
         }}
       >
-        <UserSignupForm onSignupSubmit={onSignupSubmit} />
+        <UserSignupForm
+          onSignupSubmit={onSignupSubmit}
+          setIsOpenCheckToLogin={setIsOpenCheckToLogin}
+        />
         <Box
           sx={{
             display: 'flex',
@@ -78,6 +87,15 @@ function UserSignupContainer() {
           />
         </Box>
       </Box>
+      <CheckModal
+        isOpenCheckModal={isOpenCheckToLogin}
+        setIsOpenCheckModal={setIsOpenCheckToLogin}
+        onClick={onClickToLogin}
+        title="로그인으로 이동"
+        content="작성했던 내용은 지워집니다."
+        leftButton="이동"
+        rightButton="취소"
+      />
     </>
   )
 }

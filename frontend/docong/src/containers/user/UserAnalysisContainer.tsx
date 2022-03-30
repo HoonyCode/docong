@@ -22,7 +22,6 @@ function UserAnalysisContainer() {
 
   useEffect(() => {
     if (tabValue === 0) {
-      console.log(userInfo)
       dispatch(getRankingListAsync.request(null))
     }
   }, [])
@@ -117,14 +116,23 @@ function UserAnalysisContainer() {
         <Box
           sx={{
             display: 'flex',
+            height: '100%',
+            width: '100%',
             justifyContent: 'center',
             alignItems: 'center',
             flexGrow: 1,
             pl: '1vw',
+            '> div': { width: '100%' },
           }}
         >
           {userInfo && !userInfo.birth && (
-            <>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
               <Box
                 sx={{
                   fontSize: '20px ',
@@ -140,7 +148,7 @@ function UserAnalysisContainer() {
               <Box sx={{ fontSize: '20px' }}>
                 를 입력하시면 순위를 확인할 수 있습니다.
               </Box>
-            </>
+            </Box>
           )}
           {userInfo && userInfo.birth && tabValue === 0 && (
             <UserRanking rankingList={rankingList} />

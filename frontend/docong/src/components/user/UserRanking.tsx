@@ -63,8 +63,8 @@ function UserRanking({ rankingList }: UserRankingProps) {
       options={chartData.options}
       series={chartData.series}
       type="bar"
-      width={1100}
-      height={700}
+      width={'100%'}
+      height={'100%'}
     />
   )
 }

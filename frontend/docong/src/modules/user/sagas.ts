@@ -115,12 +115,8 @@ function* getUserInfoSaga() {
 
 function* setUserInfoSaga(action: ReturnType<typeof setUserInfoAsync.request>) {
   try {
-    const setUserInfoResponse: DefaultResponse = yield call(
-      setUserInfo,
-      action.payload
-    )
+    yield call(setUserInfo, action.payload)
     yield put(getUserInfoAsync.request(null))
-    console.log(setUserInfoResponse)
   } catch (e: any) {
     alert('유저 정보 수정 실패')
     console.error(e)
@@ -138,7 +134,6 @@ function* startUserTimerSaga() {
   } catch (e) {
     console.error(e)
   } finally {
-    console.log(userTimerSelectedType)
     yield all([
       put(changeUserTimerStatus('stop')),
       put(changeUserTimerTime(userTimerSelectedType.time)),
@@ -170,11 +165,7 @@ function* connectChannel() {
 
 function* savePomoSaga(action: ReturnType<typeof savePomoAsync.request>) {
   try {
-    const savePomoResponse: DefaultResponse = yield call(
-      savePomo,
-      action.payload
-    )
-    console.log(savePomoResponse)
+    yield call(savePomo, action.payload)
     if (action.payload.todo_seq) {
       const selectedTodo: Todo = yield call(findTodo, action.payload.todo_seq)
       yield put(changeUserTimerTodo(selectedTodo))

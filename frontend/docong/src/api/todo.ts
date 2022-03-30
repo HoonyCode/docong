@@ -10,7 +10,6 @@ const setHeader = function () {
 }
 
 export async function saveTodo(todoInput: TodoInput) {
-  console.log(todoInput)
   const response = await axios.post(`${BASE_URL}/api/todo`, todoInput, {
     headers: setHeader(),
   })
