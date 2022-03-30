@@ -119,7 +119,7 @@ public class User {
     public Integer getRealPomo(){
         Integer realPomo = 0;
         for(Pomodoro p : this.pomodoros){
-            realPomo += (p.getTimeStatus()== TimeStatus.SHORT)?1:(p.getTimeStatus()==TimeStatus.BASIC)?2:3;
+            realPomo += (p.getTimeStatus()== TimeStatus.SHORT)?1:(p.getTimeStatus()==TimeStatus.BASIC)?2:4;
         }
         return realPomo;
     }
