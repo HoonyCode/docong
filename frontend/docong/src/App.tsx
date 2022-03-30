@@ -7,8 +7,12 @@ import UserSignupPage from './pages/auth/UserSignupPage'
 import UserAnalysisPage from './pages/user/UserAnalysisPage'
 import UserTimerPage from './pages/user/UserTimerPage'
 import UserTodoPage from './pages/user/UserTodoPage'
+import GroupTodoPage from './pages/group/GroupTodoPage'
+import GroupSettingsPage from './pages/group/GroupSettingsPage'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import NavBarPage from './pages/NavBarPage'
+import GroupMainPage from './pages/group/GroupMainPage'
+import GroupAnalysisPage from './pages/group/GroupAnalysisPage'
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -107,6 +111,10 @@ function App() {
             <Route path="timer" element={<UserTimerPage />} />
             <Route path="user/todo" element={<UserTodoPage />} />
             <Route path="user/analysis" element={<UserAnalysisPage />} />
+            <Route path="group" element={<GroupMainPage />} />
+            <Route path="group/todo/:groupSeq" element={<GroupTodoPage />} />
+            <Route path="group/analysis/:groupSeq" element={<GroupAnalysisPage />} />
+            <Route path="group/settings/:groupSeq" element={<GroupSettingsPage />} />
           </Route>
         </Routes>
       </Background>
