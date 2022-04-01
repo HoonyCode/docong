@@ -1,10 +1,16 @@
 package com.b5f1.docong.api.service;
 
 import com.b5f1.docong.api.dto.request.SavePomodoroReqDto;
+import com.b5f1.docong.api.dto.request.SaveTodoReqDto;
 import com.b5f1.docong.api.dto.response.FindRankingResDto;
+import com.b5f1.docong.api.dto.response.FindWorktypeAnalysisResDto;
 import com.b5f1.docong.core.domain.pomodoro.TimeStatus;
 import com.b5f1.docong.core.domain.pomodoro.noiseStatus;
+import com.b5f1.docong.core.domain.todo.Todo;
+import com.b5f1.docong.core.domain.todo.UserTodo;
+import com.b5f1.docong.core.domain.todo.WorkType;
 import com.b5f1.docong.core.domain.user.User;
+import com.b5f1.docong.core.repository.TodoRepository;
 import com.b5f1.docong.core.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +31,8 @@ class AnalysisServiceTest {
     @Autowired
     PomodoroService pomodoroService;
 
+    @Autowired
+    TodoRepository todoRepository;
 
     @Autowired
     AnalysisService analysisService;
@@ -73,6 +81,64 @@ class AnalysisServiceTest {
         assertThat(response.get(1).getUserName()).isEqualTo("정음1");
         assertThat(response.get(1).getPomoCount()).isEqualTo(4);
         assertThat(response.get(2).getUserName()).isEqualTo("정음3");
+    }
 
+    @Test
+    void findWorktypeAnalysis(){
+        //given
+        User user = User.builder()
+                .email("wjddma1214@naver.com")
+                .name("정음1")
+                .password("12345")
+                .activate(true)
+                .build();
+        User savedUser = userRepository.save(user);
+        Todo todo = Todo.builder()
+                .realPomo(2)
+                .workType(WorkType.개발)
+                .build();
+
+        Todo todo1 = Todo.builder()
+                .realPomo(5)
+                .workType(WorkType.개발)
+                .build();
+
+        Todo todo2 = Todo.builder()
+                .realPomo(1)
+                .workType(WorkType.관리)
+                .build();
+
+        UserTodo userTodo = UserTodo.builder()
+                .user(savedUser)
+                .todo(todo)
+                .build();
+
+        UserTodo userTodo1 = UserTodo.builder()
+                .user(savedUser)
+                .todo(todo1)
+                .build();
+
+        UserTodo userTodo2 = UserTodo.builder()
+                .user(savedUser)
+                .todo(todo2)
+                .build();
+
+        todo.addUserTodo(userTodo);
+        todo1.addUserTodo(userTodo1);
+        todo2.addUserTodo(userTodo2);
+
+        todoRepository.save(todo);
+        todoRepository.save(todo1);
+        todoRepository.save(todo2);
+
+        // when
+        List<FindWorktypeAnalysisResDto> response = analysisService.findWorktypeAnalysis(savedUser);
+
+
+        // then
+        assertThat(response.size()).isEqualTo(2);
+        assertThat(response.get(0).getWorkType()).isEqualTo(WorkType.개발);
+        assertThat(response.get(0).getCountTodo()).isEqualTo(2);
+        assertThat(response.get(0).getTotalPomo()).isEqualTo(7);
     }
 }

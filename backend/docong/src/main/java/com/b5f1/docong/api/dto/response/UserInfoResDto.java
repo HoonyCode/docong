@@ -1,5 +1,6 @@
 package com.b5f1.docong.api.dto.response;
 
+import com.b5f1.docong.core.domain.user.Tier;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -14,4 +15,5 @@ public class UserInfoResDto {
     String job;
     String position;
     String image;
+    Tier tier;
 }
