@@ -1,14 +1,12 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 import {
   changeTodoActivate,
-  DefaultResponse,
   deleteTodo,
   findTodo,
   findUserTodos,
   modifyTodo,
   modifyTodoStatus,
   saveTodo,
-  Todo,
   Todos,
 } from '../../api/todo'
 import {

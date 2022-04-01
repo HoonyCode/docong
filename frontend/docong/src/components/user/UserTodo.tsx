@@ -122,6 +122,10 @@ function UserTodo({
           id: userTodo.seq,
           title: userTodo.title,
           content: userTodo.content,
+          activate: userTodo.activate,
+          userEmail: userTodo.userEmail,
+          userImg: userTodo.userImg,
+          userName: userTodo.userName,
           workImportance: userTodo.workImportance,
           workProficiency: userTodo.workProficiency,
           workType: userTodo.workType,
@@ -135,6 +139,10 @@ function UserTodo({
           id: userTodo.seq,
           title: userTodo.title,
           content: userTodo.content,
+          activate: userTodo.activate,
+          userEmail: userTodo.userEmail,
+          userImg: userTodo.userImg,
+          userName: userTodo.userName,
           workImportance: userTodo.workImportance,
           workProficiency: userTodo.workProficiency,
           workType: userTodo.workType,
@@ -148,6 +156,10 @@ function UserTodo({
           id: userTodo.seq,
           title: userTodo.title,
           content: userTodo.content,
+          activate: userTodo.activate,
+          userEmail: userTodo.userEmail,
+          userImg: userTodo.userImg,
+          userName: userTodo.userName,
           workImportance: userTodo.workImportance,
           workProficiency: userTodo.workProficiency,
           workType: userTodo.workType,
@@ -434,11 +446,15 @@ function UserTodo({
                 />
               </Grid>
               <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'end' }}>
-                <Tooltip title="User">
+                <Tooltip title={`${card.userName} (${card.userEmail})`}>
                   <Avatar
                     sx={{ width: 28, height: 28 }}
-                    alt="User"
-                    src="/images/Profile_Default.jpg"
+                    alt={`${card.userName} (${card.userEmail})`}
+                    src={
+                      card.userImg
+                        ? card.userImg
+                        : '/images/Profile_Default.jpg'
+                    }
                   />
                 </Tooltip>
               </Grid>

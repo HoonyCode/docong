@@ -91,12 +91,16 @@ export interface DefaultResponse {
 }
 
 export interface Todo {
+  activate: boolean
   content: string
   predictedPomo: number
   realPomo: number
   seq: number
   status: string
   title: string
+  userEmail: string
+  userImg: string
+  userName: string
   workImportance: string
   workProficiency: string
   workType: string
