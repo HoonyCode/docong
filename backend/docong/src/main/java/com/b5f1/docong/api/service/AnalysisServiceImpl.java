@@ -1,7 +1,10 @@
 package com.b5f1.docong.api.service;
 
 import com.b5f1.docong.api.dto.response.FindRankingResDto;
+import com.b5f1.docong.api.dto.response.FindWorktypeAnalysisResDto;
+import com.b5f1.docong.core.domain.todo.Todo;
 import com.b5f1.docong.core.domain.user.User;
+import com.b5f1.docong.core.queryrepository.AnalysisQueryRepository;
 import com.b5f1.docong.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,7 @@ import java.util.*;
 public class AnalysisServiceImpl implements AnalysisService{
 
     private final UserRepository userRepository;
+    private final AnalysisQueryRepository analysisQueryRepository;
 
     @Override
     public List<FindRankingResDto> findPomoRanking() {
@@ -31,5 +35,10 @@ public class AnalysisServiceImpl implements AnalysisService{
         });
         if(response.size() >= 20) return response.subList(0, 20);
         return response;
+    }
+
+    @Override
+    public List<FindWorktypeAnalysisResDto> findWorktypeAnalysis(User user) {
+        return analysisQueryRepository.findTodosByUserSeq(user.getSeq());
     }
 }
