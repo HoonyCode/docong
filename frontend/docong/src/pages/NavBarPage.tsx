@@ -7,7 +7,7 @@ function NavBarPage() {
     <Box
       sx={{
         height: '100%',
-        minHeight: '820px',
+        minHeight: '700px',
         minWidth: '1500px',
         display: 'flex',
       }}

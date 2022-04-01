@@ -30,7 +30,7 @@ import { RootState } from '../../modules'
 import { darken } from 'polished'
 import { changeUserTimerTodo } from '../../modules/user'
 import './UserTodo.scss'
-import TableRowsIcon from '@mui/icons-material/TableRows'
+import EditIcon from '@mui/icons-material/Edit'
 
 interface UserTodoProps {
   userTodos: any
@@ -364,7 +364,13 @@ function UserTodo({
             sx={[
               {
                 width: '330px',
+                '@media (max-width: 1660px)': {
+                  width: '290px',
+                },
                 height: '130px',
+                '@media (max-height: 760px)': {
+                  height: '115px',
+                },
                 cursor: 'pointer',
                 borderRadius: '12px',
                 mb: '1vh',
@@ -392,9 +398,15 @@ function UserTodo({
                     fontWeight: 'bold',
                     color: (theme) => theme.colors.basicText,
                     width: '250px',
+                    '@media (max-width: 1660px)': {
+                      width: '210px',
+                    },
                     textOverflow: 'ellipsis',
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
+                    '@media (max-height: 760px)': {
+                      mb: 0,
+                    },
                   }}
                   gutterBottom
                 >
@@ -402,7 +414,7 @@ function UserTodo({
                 </Typography>
               </Grid>
               <Grid item xs={2} sx={{ display: 'flex' }}>
-                <TableRowsIcon
+                <EditIcon
                   sx={{
                     display: 'block',
                     ml: 'auto',
@@ -426,7 +438,7 @@ function UserTodo({
             </Grid>
             <Box
               sx={{
-                mb: '10px',
+                mb: '1vh',
                 fontSize: '14px',
                 fontWeight: 'bold',
                 color: (theme) => theme.colors.lightGreenText,
@@ -482,7 +494,9 @@ function UserTodo({
           color="success"
           onClick={onClickStartTodoTimer}
         >
-          선택한 두콩 시작하기
+          <span className={selectedTodo ? 'highlight on' : 'highlight'}>
+            선택한 두콩 시작하기
+          </span>
         </Button>
       </Box>
       <Dialog open={isOpenCreateTodo} onClose={closeCreateTodo}>

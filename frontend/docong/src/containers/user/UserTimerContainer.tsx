@@ -279,7 +279,9 @@ function UserTimerContainer() {
           justifyContent: 'center',
           alignItems: 'end',
           height: '10%',
-          mb: '8vh',
+          '@media (min-height: 850px)': {
+            mb: '8vh',
+          },
         }}
       >
         {status !== 'play' && (
@@ -290,7 +292,15 @@ function UserTimerContainer() {
           />
         )}
       </Box>
-      <Grid container sx={{ py: '5vh' }}>
+      <Grid
+        container
+        sx={{
+          pt: '5vh',
+          '@media (min-height: 750px)': {
+            pb: '5vh',
+          },
+        }}
+      >
         <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'center' }}>
           <UserTimerDisplay
             time={time}

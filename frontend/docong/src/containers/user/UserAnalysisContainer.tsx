@@ -58,7 +58,7 @@ function UserAnalysisContainer() {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'end',
-          height: '9%',
+          height: '10%',
         }}
       >
         <Button
@@ -93,13 +93,13 @@ function UserAnalysisContainer() {
       <Box
         sx={{
           display: 'flex',
-          height: '91%',
-          px: '5vw',
+          height: '90%',
+          px: '2vw',
           pt: '3vh',
           pb: '5vh',
         }}
       >
-        <Box sx={{ width: '250px', borderRight: '1px solid lightGray' }}>
+        <Box sx={{ width: '300px', borderRight: '1px solid lightGray' }}>
           <UserInfo userInfo={userInfo} openEditUserForm={openEditUserForm} />
           <Tabs
             orientation="vertical"
