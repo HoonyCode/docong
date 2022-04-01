@@ -57,6 +57,9 @@ public class User {
     @Column
     private String image;
 
+    @Column
+    private Tier tier;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserTodo> userTodos = new ArrayList<>();
 
@@ -80,6 +83,7 @@ public class User {
         this.activate = activate;
         this.oauth_type = oauth_type;
         this.image = image;
+        this.tier = Tier.한콩;
     }
 
     public void addUserTodo(UserTodo userTodo) {
@@ -122,5 +126,9 @@ public class User {
             realPomo += (p.getTimeStatus()== TimeStatus.SHORT)?1:(p.getTimeStatus()==TimeStatus.BASIC)?2:4;
         }
         return realPomo;
+    }
+
+    public void changeTier(Tier tier) {
+        this.tier = tier;
     }
 }
