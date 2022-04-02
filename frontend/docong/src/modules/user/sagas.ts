@@ -146,14 +146,21 @@ function* connectChannel() {
   try {
     const timer = 1000
     const buffer = buffers.sliding(1)
+    const startTime = Date.now()
 
     const param = { buffer, timer }
     channel = yield call(subscribe, param)
 
     while (true) {
       yield flush(channel)
-      const time: number = yield select((state) => state.user.userTimer.time)
-      yield put(changeUserTimerTime(time - 1))
+      const selectedTime: number = yield select(
+        (state) => state.user.userTimer.selectedType.time
+      )
+      yield put(
+        changeUserTimerTime(
+          selectedTime - Math.round((Date.now() - startTime) / 1000)
+        )
+      )
       yield race({ timeout: delay(timer) })
     }
   } catch (e) {

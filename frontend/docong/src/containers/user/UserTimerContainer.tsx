@@ -88,7 +88,7 @@ function UserTimerContainer() {
   }, [])
 
   useEffect(() => {
-    if (status === 'play' && localStatus && time === 0) {
+    if (status === 'play' && localStatus && time <= 0) {
       dispatch(stopUserTimer())
       try {
         Notification.requestPermission(function (result) {
