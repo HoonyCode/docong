@@ -91,7 +91,7 @@ public class TeamServiceImpl implements TeamService {
                 .filter(teamUser -> teamUser.isLeader())
                 .findFirst();
 
-        FindTeamResDto findTeamResDto = new FindTeamResDto(team.getSeq(), team.getName(), team.getJiraDomain(), team.getJiraUserId(), team.getJiraAPIToken(), team.getJiraProjectKey(), userList, leader.get().getUser().getSeq());
+        FindTeamResDto findTeamResDto = new FindTeamResDto(team.getSeq(), team.getName(), team.getJiraDomain(), team.getJiraUserId(), team.getJiraAPIToken(), team.getJiraProjectKey(), userList, leader.get().getUser().getEmail());
         return findTeamResDto;
     }
     @Override
