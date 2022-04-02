@@ -11,6 +11,7 @@ import com.b5f1.docong.core.domain.pomodoro.TimeStatus;
 import com.b5f1.docong.core.domain.pomodoro.noiseStatus;
 import com.b5f1.docong.core.domain.todo.Todo;
 import com.b5f1.docong.core.domain.todo.UserTodo;
+import com.b5f1.docong.core.domain.user.Tier;
 import com.b5f1.docong.core.domain.user.User;
 import com.b5f1.docong.core.repository.PomodoroRepository;
 import com.b5f1.docong.core.repository.TodoRepository;
@@ -67,7 +68,7 @@ class PomodoroServiceImplTest {
         //then
         assertThat(save.get().getSeq()).isEqualTo(saveSeq);
         assertThat(savedTodo.getRealPomo()).isEqualTo(2);
-
+        assertThat(savedUser.getTier()).isEqualTo(Tier.한콩);
     }
 
     @Test
