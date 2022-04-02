@@ -16,6 +16,13 @@ export async function getRankingList() {
   return response.data
 }
 
+export async function getWorkTypeAnalysis() {
+  const response = await axios.get(`${BASE_URL}/api/analysis/wokrtype`, {
+    headers: setHeader(),
+  })
+  return response.data
+}
+
 export interface RankingData {
   userName: string
   userEmail: string
@@ -23,3 +30,11 @@ export interface RankingData {
 }
 
 export interface RankingDataList extends Array<RankingData> {}
+
+export interface WorkTypeData {
+  countTodo: number
+  totalPomo: number
+  workType: string
+}
+
+export interface WorkTypeAnalysis extends Array<WorkTypeData> {}

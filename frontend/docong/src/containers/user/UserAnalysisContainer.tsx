@@ -1,13 +1,19 @@
 import { Box, Button, Tab, Tabs } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { UserData } from '../../api/user'
 import EditUserForm from '../../components/user/EditUserForm'
+import UserCategoryAnalysis from '../../components/user/UserCategoryAnalysis'
 import UserInfo from '../../components/user/UserInfo'
 import UserRanking from '../../components/user/UserRanking'
 import { RootState } from '../../modules'
-import { getRankingListAsync, setUserInfoAsync } from '../../modules/user'
+import {
+  getRankingListAsync,
+  getUserInfoAsync,
+  getWorkTypeAnalysisAsync,
+  setUserInfoAsync,
+} from '../../modules/user'
 
 function UserAnalysisContainer() {
   const dispatch = useDispatch()
@@ -17,14 +23,23 @@ function UserAnalysisContainer() {
   const rankingList = useSelector((state: RootState) =>
     state.user.rankingList ? state.user.rankingList.data : null
   )
+  const workTypeAnalysis = useSelector((state: RootState) =>
+    state.user.workTypeAnalysis ? state.user.workTypeAnalysis.data : null
+  )
   const [isOpenEditUserForm, setIsOpenEditUserForm] = useState(false)
   const [tabValue, setTabValue] = useState(0)
 
   useEffect(() => {
+    dispatch(getUserInfoAsync.request(null))
+  }, [])
+
+  useEffect(() => {
     if (tabValue === 0) {
       dispatch(getRankingListAsync.request(null))
+    } else if (tabValue === 1) {
+      dispatch(getWorkTypeAnalysisAsync.request(null))
     }
-  }, [])
+  }, [tabValue])
 
   const onClickToTodos = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -110,6 +125,7 @@ function UserAnalysisContainer() {
             sx={{ mt: '2vh' }}
           >
             <Tab sx={{ fontSize: '16px' }} label="Ranking" />
+            <Tab sx={{ fontSize: '16px' }} label="Category" />
             <Tab sx={{ fontSize: '16px' }} label="준비중" disabled />
           </Tabs>
         </Box>
@@ -153,6 +169,9 @@ function UserAnalysisContainer() {
           {userInfo && userInfo.birth && tabValue === 0 && (
             <UserRanking rankingList={rankingList} />
           )}
+          {userInfo && userInfo.birth && tabValue === 1 && (
+            <UserCategoryAnalysis workTypeAnalysis={workTypeAnalysis} />
+          )}
         </Box>
       </Box>
       <EditUserForm
@@ -164,4 +183,4 @@ function UserAnalysisContainer() {
   )
 }
 
-export default UserAnalysisContainer
+export default memo(UserAnalysisContainer)

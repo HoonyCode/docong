@@ -19,6 +19,8 @@ import {
   changeUserTimerTodo,
   getRankingListAsync,
   GET_RANKING_LIST,
+  getWorkTypeAnalysisAsync,
+  GET_WORK_TYPE_ANALYSIS,
 } from './actions'
 import {
   userSignup,
@@ -46,7 +48,12 @@ import { closeChannel, subscribe } from './channel'
 import { savePomo } from '../../api/pomo'
 import { getUserInfo, setUserInfo, UserInfo } from '../../api/user'
 import { findTodo, Todo } from '../../api/todo'
-import { getRankingList, RankingDataList } from '../../api/analysis'
+import {
+  getRankingList,
+  getWorkTypeAnalysis,
+  RankingDataList,
+  WorkTypeAnalysis,
+} from '../../api/analysis'
 
 function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
   try {
@@ -195,6 +202,18 @@ function* getRankingListSaga(
   }
 }
 
+function* getWorkTypeAnalysisSaga(
+  action: ReturnType<typeof getWorkTypeAnalysisAsync.request>
+) {
+  try {
+    const workTypeAnalysis: WorkTypeAnalysis = yield call(getWorkTypeAnalysis)
+    yield put(getWorkTypeAnalysisAsync.success(workTypeAnalysis))
+  } catch (e: any) {
+    yield put(getWorkTypeAnalysisAsync.failure(e))
+    console.error(e)
+  }
+}
+
 export function* userSaga() {
   yield takeEvery(USER_SIGNUP, userSignupSaga)
   yield takeEvery(USER_LOGIN, userLoginSaga)
@@ -204,4 +223,5 @@ export function* userSaga() {
   yield takeEvery(START_USER_TIMER, startUserTimerSaga)
   yield takeEvery(SAVE_POMO, savePomoSaga)
   yield takeEvery(GET_RANKING_LIST, getRankingListSaga)
+  yield takeEvery(GET_WORK_TYPE_ANALYSIS, getWorkTypeAnalysisSaga)
 }
