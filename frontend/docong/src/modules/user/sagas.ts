@@ -43,7 +43,7 @@ import {
 } from 'redux-saga/effects'
 import { buffers, EventChannel, Task } from 'redux-saga'
 import { closeChannel, subscribe } from './channel'
-import { DefaultResponse, savePomo } from '../../api/pomo'
+import { savePomo } from '../../api/pomo'
 import { getUserInfo, setUserInfo, UserInfo } from '../../api/user'
 import { findTodo, Todo } from '../../api/todo'
 import { getRankingList, RankingDataList } from '../../api/analysis'

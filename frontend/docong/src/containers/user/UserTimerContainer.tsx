@@ -421,11 +421,17 @@ function UserTimerContainer() {
                       xs={6}
                       sx={{ display: 'flex', justifyContent: 'end' }}
                     >
-                      <Tooltip title="User">
+                      <Tooltip
+                        title={`${selectedTodo.userName} (${selectedTodo.userEmail})`}
+                      >
                         <Avatar
                           sx={{ width: 28, height: 28 }}
-                          alt="User"
-                          src="/images/Profile_Default.jpg"
+                          alt={`${selectedTodo.userName} (${selectedTodo.userEmail})`}
+                          src={
+                            selectedTodo.userImg
+                              ? selectedTodo.userImg
+                              : '/images/Profile_Default.jpg'
+                          }
                         />
                       </Tooltip>
                     </Grid>
