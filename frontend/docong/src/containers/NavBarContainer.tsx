@@ -285,7 +285,7 @@ function NavBarContainer() {
       >
         <Box sx={{ width: '60px', alignSelf: 'center' }}>
           <Avatar
-            sx={{ width: 48, height: 48, boxShadow: 2 }}
+            sx={{ width: 48, height: 48, boxShadow: 2, mr: '10px' }}
             alt="User"
             src={
               userInfo && userInfo.image
@@ -294,7 +294,7 @@ function NavBarContainer() {
             }
           />
         </Box>
-        <Box sx={{ alignSelf: 'center' }}>
+        <Box sx={{ display: 'flex', alignSelf: 'center' }}>
           {`${userInfo ? userInfo.name : ''}님`}
         </Box>
       </Box>
@@ -303,7 +303,7 @@ function NavBarContainer() {
           sx={{
             display: 'flex',
             alignItems: 'center',
-            ml: '43px',
+            ml: '100px',
             height: '25px',
             fontSize: '16px',
             color: (theme) => theme.colors.greenText,
