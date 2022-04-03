@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom'
 import { UserData } from '../../api/user'
 import EditUserForm from '../../components/user/EditUserForm'
 import UserCategoryAnalysis from '../../components/user/UserCategoryAnalysis'
-import UserProfile from '../../components/user/UserProfile'
 import UserRanking from '../../components/user/UserRanking'
 import { RootState } from '../../modules'
 import {
@@ -78,7 +77,7 @@ function UserAnalysisContainer() {
       >
         <Button
           sx={{
-            fontSize: '24px',
+            fontSize: '20px',
             color: (theme) => theme.colors.greenText,
             mx: '0.8vw',
             borderRadius: '0px',
@@ -92,7 +91,7 @@ function UserAnalysisContainer() {
         </Button>
         <Button
           sx={{
-            fontSize: '24px',
+            fontSize: '20px',
             color: (theme) => theme.colors.greenText,
             mx: '0.8vw',
             borderBottom: (theme) => `2px solid ${theme.colors.greenText}`,
@@ -123,9 +122,8 @@ function UserAnalysisContainer() {
             color="success"
             sx={{ mt: '2vh' }}
           >
-            <Tab sx={{ fontSize: '16px' }} label="Profile" />
-            <Tab sx={{ fontSize: '16px' }} label="Ranking" />
-            <Tab sx={{ fontSize: '16px' }} label="Category" />
+            <Tab sx={{ fontSize: '16px' }} label="두콩 랭킹" />
+            <Tab sx={{ fontSize: '16px' }} label="업무별 통계" />
             <Tab sx={{ fontSize: '16px' }} label="준비중" disabled />
           </Tabs>
         </Box>
@@ -141,13 +139,7 @@ function UserAnalysisContainer() {
             '> div': { width: '100%' },
           }}
         >
-          {tabValue === 0 && (
-            <UserProfile
-              userInfo={userInfo}
-              openEditUserForm={openEditUserForm}
-            />
-          )}
-          {tabValue !== 0 && userInfo && !userInfo.birth && (
+          {userInfo && !userInfo.birth && (
             <Box
               sx={{
                 display: 'flex',
@@ -172,10 +164,10 @@ function UserAnalysisContainer() {
               </Box>
             </Box>
           )}
-          {userInfo && userInfo.birth && tabValue === 1 && (
+          {userInfo && userInfo.birth && tabValue === 0 && (
             <UserRanking rankingList={rankingList} />
           )}
-          {userInfo && userInfo.birth && tabValue === 2 && (
+          {userInfo && userInfo.birth && tabValue === 1 && (
             <UserCategoryAnalysis workTypeAnalysis={workTypeAnalysis} />
           )}
         </Box>

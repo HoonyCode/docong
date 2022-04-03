@@ -10,42 +10,20 @@ interface UserCategoryAnalysisProps {
 function UserCategoryAnalysis({ workTypeAnalysis }: UserCategoryAnalysisProps) {
   const [chartData, setChartData] = useState({
     options: {
-      labels: ['Team A', 'Team B'],
-      colors: [
-        '#ffc078',
-        '#ffe066',
-        '#c0eb75',
-        '#8ce99a',
-        '#63e6be',
-        '#66d9e8',
-        '#74c0fc',
-        '#91a7ff',
-        '#b197fc',
-        '#e599f7',
-        '#faa2c1',
-        '#ffa8a8',
-        '#ffd8a8',
-        '#ffec99',
-        '#d8f5a2',
-        '#b2f2bb',
-        '#ced4da',
-      ],
+      labels: [''],
+      colors: ['#d8f5a2', '#8ce99a'],
       dataLabels: {
         enabled: true,
+        enabledOnSeries: [1],
         style: {
-          fontSize: '16px',
+          fontSize: '12px',
         },
       },
-      fill: {
-        type: 'gradient',
+      stroke: {
+        width: [0, 4],
       },
       legend: {
-        fontSize: '20px',
-        formatter: function (val: any, opts: any) {
-          return (
-            ' ' + val + ' : ' + opts.w.globals.series[opts.seriesIndex] + ' 콩'
-          )
-        },
+        fontSize: '16px',
       },
       tooltip: {
         y: {
@@ -54,17 +32,45 @@ function UserCategoryAnalysis({ workTypeAnalysis }: UserCategoryAnalysisProps) {
           },
         },
       },
+      yaxis: [
+        {
+          title: {
+            text: '전체 콩',
+          },
+        },
+        {
+          opposite: true,
+          title: {
+            text: '평균 콩',
+          },
+        },
+      ],
     },
-    series: [44, 55],
+    series: [
+      {
+        name: '전체 콩',
+        type: 'column',
+        data: [0],
+      },
+      {
+        name: '평균 콩',
+        type: 'line',
+        data: [0],
+      },
+    ],
   })
 
   useEffect(() => {
-    console.log(workTypeAnalysis)
     if (workTypeAnalysis) {
       setChartData(
         produce((draft) => {
           draft.options.labels = workTypeAnalysis.map((data) => data.workType)
-          draft.series = workTypeAnalysis.map((data) => data.totalPomo / 2)
+          draft.series[0].data = workTypeAnalysis.map(
+            (data) => data.totalPomo / 2
+          )
+          draft.series[1].data = workTypeAnalysis.map((data) =>
+            Number((data.totalPomo / 2 / data.countTodo).toFixed(1))
+          )
         })
       )
     }
@@ -74,9 +80,9 @@ function UserCategoryAnalysis({ workTypeAnalysis }: UserCategoryAnalysisProps) {
     <Chart
       options={chartData.options}
       series={chartData.series}
-      type="pie"
+      type="line"
       width={'90%'}
-      height={'100%'}
+      height={'70%'}
     />
   )
 }
