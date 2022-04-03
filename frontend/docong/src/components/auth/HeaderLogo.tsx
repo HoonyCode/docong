@@ -10,12 +10,24 @@ const Header = styled.div`
 
 const LogoImage = styled.img`
   height: 130px;
+  cursor: pointer;
 `
 
-function HeaderLogo({ size }: { size: any }) {
+interface HeaderLogoProps {
+  size: string
+  setIsOpenCheckToLogin: any
+}
+
+function HeaderLogo({ size, setIsOpenCheckToLogin }: HeaderLogoProps) {
   return (
     <Header size={size}>
-      <LogoImage alt="Docong Logo" src="/images/Docong_Logo.png" />
+      <LogoImage
+        alt="Docong Logo"
+        src="/images/Docong_Logo.png"
+        onClick={() =>
+          setIsOpenCheckToLogin ? setIsOpenCheckToLogin(true) : null
+        }
+      />
     </Header>
   )
 }

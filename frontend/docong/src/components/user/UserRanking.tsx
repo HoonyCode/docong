@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import Chart from 'react-apexcharts'
 import { RankingDataList } from '../../api/analysis'
 import produce from 'immer'
@@ -12,6 +12,11 @@ function UserRanking({ rankingList }: UserRankingProps) {
     options: {
       xaxis: {
         categories: [''],
+        labels: {
+          formatter: function (val: any) {
+            return val.toFixed(1) + ' 콩'
+          },
+        },
       },
       plotOptions: {
         bar: {
@@ -23,7 +28,6 @@ function UserRanking({ rankingList }: UserRankingProps) {
         enabled: false,
       },
       fill: {
-        colors: ['#69db7c'],
         type: 'gradient',
         gradient: {
           shade: 'light',
@@ -35,9 +39,18 @@ function UserRanking({ rankingList }: UserRankingProps) {
           stops: [0, 50, 100],
         },
       },
+      tooltip: {
+        y: {
+          formatter: function (val: any) {
+            return val + ' 콩'
+          },
+        },
+      },
+      colors: ['#69db7c'],
     },
     series: [
       {
+        name: 'Cong',
         data: [0],
       },
     ],
@@ -63,10 +76,10 @@ function UserRanking({ rankingList }: UserRankingProps) {
       options={chartData.options}
       series={chartData.series}
       type="bar"
-      width={1100}
-      height={700}
+      width={'90%'}
+      height={'100%'}
     />
   )
 }
 
-export default UserRanking
+export default memo(UserRanking)

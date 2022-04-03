@@ -20,6 +20,7 @@ import {
   Avatar,
   Grid,
   DialogContentText,
+  InputAdornment,
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
@@ -27,10 +28,16 @@ import { Todo, TodoInput } from '../../api/todo'
 import produce from 'immer'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../../modules'
-import { darken } from 'polished'
+import { lighten, darken } from 'polished'
 import { changeUserTimerTodo } from '../../modules/user'
 import './UserTodo.scss'
-import TableRowsIcon from '@mui/icons-material/TableRows'
+import EditIcon from '@mui/icons-material/Edit'
+import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import DragHandleIcon from '@mui/icons-material/DragHandle'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
+import CircleIcon from '@mui/icons-material/Circle'
 
 interface UserTodoProps {
   userTodos: any
@@ -112,6 +119,25 @@ function UserTodo({
     '독서',
     '기타',
   ]
+  const workTypeColors = [
+    '#ffc078',
+    '#ffe066',
+    '#c0eb75',
+    '#8ce99a',
+    '#63e6be',
+    '#66d9e8',
+    '#74c0fc',
+    '#91a7ff',
+    '#b197fc',
+    '#e599f7',
+    '#faa2c1',
+    '#ffa8a8',
+    '#ffd8a8',
+    '#ffec99',
+    '#d8f5a2',
+    '#b2f2bb',
+    '#ced4da',
+  ]
   const todoStatus = ['TODO', 'IN_PROGRESS', 'DONE']
 
   useEffect(() => {
@@ -122,6 +148,10 @@ function UserTodo({
           id: userTodo.seq,
           title: userTodo.title,
           content: userTodo.content,
+          activate: userTodo.activate,
+          userEmail: userTodo.userEmail,
+          userImg: userTodo.userImg,
+          userName: userTodo.userName,
           workImportance: userTodo.workImportance,
           workProficiency: userTodo.workProficiency,
           workType: userTodo.workType,
@@ -135,6 +165,10 @@ function UserTodo({
           id: userTodo.seq,
           title: userTodo.title,
           content: userTodo.content,
+          activate: userTodo.activate,
+          userEmail: userTodo.userEmail,
+          userImg: userTodo.userImg,
+          userName: userTodo.userName,
           workImportance: userTodo.workImportance,
           workProficiency: userTodo.workProficiency,
           workType: userTodo.workType,
@@ -148,6 +182,10 @@ function UserTodo({
           id: userTodo.seq,
           title: userTodo.title,
           content: userTodo.content,
+          activate: userTodo.activate,
+          userEmail: userTodo.userEmail,
+          userImg: userTodo.userImg,
+          userName: userTodo.userName,
           workImportance: userTodo.workImportance,
           workProficiency: userTodo.workProficiency,
           workType: userTodo.workType,
@@ -352,7 +390,13 @@ function UserTodo({
             sx={[
               {
                 width: '330px',
+                '@media (max-width: 1660px)': {
+                  width: '290px',
+                },
                 height: '130px',
+                '@media (max-height: 760px)': {
+                  height: '115px',
+                },
                 cursor: 'pointer',
                 borderRadius: '12px',
                 mb: '1vh',
@@ -380,9 +424,15 @@ function UserTodo({
                     fontWeight: 'bold',
                     color: (theme) => theme.colors.basicText,
                     width: '250px',
+                    '@media (max-width: 1660px)': {
+                      width: '210px',
+                    },
                     textOverflow: 'ellipsis',
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
+                    '@media (max-height: 760px)': {
+                      mb: 0,
+                    },
                   }}
                   gutterBottom
                 >
@@ -390,7 +440,7 @@ function UserTodo({
                 </Typography>
               </Grid>
               <Grid item xs={2} sx={{ display: 'flex' }}>
-                <TableRowsIcon
+                <EditIcon
                   sx={{
                     display: 'block',
                     ml: 'auto',
@@ -414,31 +464,59 @@ function UserTodo({
             </Grid>
             <Box
               sx={{
-                mb: '10px',
+                mb: '1vh',
                 fontSize: '14px',
                 fontWeight: 'bold',
                 color: (theme) => theme.colors.lightGreenText,
               }}
             >{`${card.realPomo / 2} / ${card.predictedPomo} 콩`}</Box>
             <Grid container>
-              <Grid item xs={6}>
+              <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center' }}>
                 <Chip
                   sx={{
                     color: (theme) => theme.colors.basicText,
                     fontWeight: 'bold',
-                    background: (theme) => theme.colors.badge1,
+                    background:
+                      workTypeColors[workTypeList.indexOf(card.workType)],
                   }}
                   label={card.workType}
                   color="primary"
                   size="small"
                 />
+                {card.workImportance === '상' && (
+                  <KeyboardDoubleArrowUpIcon
+                    sx={{ fontSize: 26, color: '#FF7452' }}
+                  />
+                )}
+                {card.workImportance === '중상' && (
+                  <KeyboardArrowUpIcon
+                    sx={{ fontSize: 26, color: '#FF7452' }}
+                  />
+                )}
+                {card.workImportance === '중' && (
+                  <DragHandleIcon sx={{ fontSize: 26, color: '#FFAB00' }} />
+                )}
+                {card.workImportance === '중하' && (
+                  <KeyboardArrowDownIcon
+                    sx={{ fontSize: 26, color: '#0065FF' }}
+                  />
+                )}
+                {card.workImportance === '하' && (
+                  <KeyboardDoubleArrowDownIcon
+                    sx={{ fontSize: 26, color: '#0065FF' }}
+                  />
+                )}
               </Grid>
               <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'end' }}>
-                <Tooltip title="User">
+                <Tooltip title={`${card.userName} (${card.userEmail})`}>
                   <Avatar
                     sx={{ width: 28, height: 28 }}
-                    alt="User"
-                    src="/images/Profile_Default.jpg"
+                    alt={`${card.userName} (${card.userEmail})`}
+                    src={
+                      card.userImg
+                        ? card.userImg
+                        : '/images/Profile_Default.jpg'
+                    }
                   />
                 </Tooltip>
               </Grid>
@@ -466,7 +544,9 @@ function UserTodo({
           color="success"
           onClick={onClickStartTodoTimer}
         >
-          선택한 두콩 시작하기
+          <span className={selectedTodo ? 'highlight on' : 'highlight'}>
+            선택한 두콩 시작하기
+          </span>
         </Button>
       </Box>
       <Dialog open={isOpenCreateTodo} onClose={closeCreateTodo}>
@@ -605,7 +685,16 @@ function UserTodo({
                 >
                   {workTypeList.map((workType, index) => (
                     <MenuItem key={index} value={workType}>
-                      {workType}
+                      <Chip
+                        sx={{
+                          color: (theme) => theme.colors.basicText,
+                          fontWeight: 'bold',
+                          background: workTypeColors[index],
+                        }}
+                        label={workType}
+                        color="primary"
+                        size="small"
+                      />
                     </MenuItem>
                   ))}
                 </Select>
@@ -616,10 +705,41 @@ function UserTodo({
                   value={todoInput.workImportance}
                   onChange={onChangeTodoImportance}
                   color="success"
-                  sx={{ mb: '14px' }}
+                  sx={{
+                    mb: '14px',
+                    '> div': {
+                      display: 'flex',
+                      alignItems: 'center',
+                    },
+                  }}
                 >
                   {workImportanceList.map((workImportance, index) => (
                     <MenuItem key={index} value={workImportance}>
+                      {workImportance === '상' && (
+                        <KeyboardDoubleArrowUpIcon
+                          sx={{ fontSize: 22, color: '#FF7452' }}
+                        />
+                      )}
+                      {workImportance === '중상' && (
+                        <KeyboardArrowUpIcon
+                          sx={{ fontSize: 22, color: '#FF7452' }}
+                        />
+                      )}
+                      {workImportance === '중' && (
+                        <DragHandleIcon
+                          sx={{ fontSize: 22, color: '#FFAB00' }}
+                        />
+                      )}
+                      {workImportance === '중하' && (
+                        <KeyboardArrowDownIcon
+                          sx={{ fontSize: 22, color: '#0065FF' }}
+                        />
+                      )}
+                      {workImportance === '하' && (
+                        <KeyboardDoubleArrowDownIcon
+                          sx={{ fontSize: 22, color: '#0065FF' }}
+                        />
+                      )}
                       {workImportance}
                     </MenuItem>
                   ))}
@@ -648,6 +768,27 @@ function UserTodo({
                       max: 12,
                       min: 1,
                     },
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <CircleIcon
+                          sx={{
+                            width: '20px',
+                            height: '20px',
+                            color: (theme) =>
+                              `${lighten(0.1, theme.colors.greenText)}`,
+                            mr: '4px',
+                          }}
+                        />
+                        <CloseIcon
+                          sx={{
+                            width: '18px',
+                            height: '18px',
+                            color: (theme) =>
+                              `${lighten(0.3, theme.colors.greenText)}`,
+                          }}
+                        />
+                      </InputAdornment>
+                    ),
                   }}
                   onChange={onChangeTodoPredictedPomo}
                   value={todoInput.predictedPomo}
@@ -826,7 +967,16 @@ function UserTodo({
                 >
                   {workTypeList.map((workType, index) => (
                     <MenuItem key={index} value={workType}>
-                      {workType}
+                      <Chip
+                        sx={{
+                          color: (theme) => theme.colors.basicText,
+                          fontWeight: 'bold',
+                          background: workTypeColors[index],
+                        }}
+                        label={workType}
+                        color="primary"
+                        size="small"
+                      />
                     </MenuItem>
                   ))}
                 </Select>
@@ -837,10 +987,41 @@ function UserTodo({
                   value={todoInput.workImportance}
                   onChange={onChangeTodoImportance}
                   color="success"
-                  sx={{ mb: '14px' }}
+                  sx={{
+                    mb: '14px',
+                    '> div': {
+                      display: 'flex',
+                      alignItems: 'center',
+                    },
+                  }}
                 >
                   {workImportanceList.map((workImportance, index) => (
                     <MenuItem key={index} value={workImportance}>
+                      {workImportance === '상' && (
+                        <KeyboardDoubleArrowUpIcon
+                          sx={{ fontSize: 22, color: '#FF7452' }}
+                        />
+                      )}
+                      {workImportance === '중상' && (
+                        <KeyboardArrowUpIcon
+                          sx={{ fontSize: 22, color: '#FF7452' }}
+                        />
+                      )}
+                      {workImportance === '중' && (
+                        <DragHandleIcon
+                          sx={{ fontSize: 22, color: '#FFAB00' }}
+                        />
+                      )}
+                      {workImportance === '중하' && (
+                        <KeyboardArrowDownIcon
+                          sx={{ fontSize: 22, color: '#0065FF' }}
+                        />
+                      )}
+                      {workImportance === '하' && (
+                        <KeyboardDoubleArrowDownIcon
+                          sx={{ fontSize: 22, color: '#0065FF' }}
+                        />
+                      )}
                       {workImportance}
                     </MenuItem>
                   ))}
@@ -869,6 +1050,27 @@ function UserTodo({
                       max: 12,
                       min: 1,
                     },
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <CircleIcon
+                          sx={{
+                            width: '20px',
+                            height: '20px',
+                            color: (theme) =>
+                              `${lighten(0.1, theme.colors.greenText)}`,
+                            mr: '4px',
+                          }}
+                        />
+                        <CloseIcon
+                          sx={{
+                            width: '18px',
+                            height: '18px',
+                            color: (theme) =>
+                              `${lighten(0.3, theme.colors.greenText)}`,
+                          }}
+                        />
+                      </InputAdornment>
+                    ),
                   }}
                   onChange={onChangeTodoPredictedPomo}
                   value={todoInput.predictedPomo}

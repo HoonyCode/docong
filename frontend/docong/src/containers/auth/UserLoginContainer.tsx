@@ -43,12 +43,12 @@ function UserLoginContainer() {
 
   const onFailureGoogleLogin = (googleLoginError: any) => {
     alert('구글 로그인 연동 실패')
-    console.log(googleLoginError)
+    console.error(googleLoginError)
   }
 
   return (
     <>
-      <HeaderLogo size="35%" />
+      <HeaderLogo size="35%" setIsOpenCheckToLogin={null} />
       <Box
         sx={{
           display: 'flex',

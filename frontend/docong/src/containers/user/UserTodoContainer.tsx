@@ -67,7 +67,7 @@ function UserTodoContainer() {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'end',
-          height: '9%',
+          height: '10%',
         }}
       >
         <Button
@@ -104,7 +104,7 @@ function UserTodoContainer() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          height: '91%',
+          height: '90%',
           mb: '3vh',
         }}
       >

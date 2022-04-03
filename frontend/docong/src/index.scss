@@ -26,10 +26,8 @@ body {
   margin: 0;
   padding: 0;
   background: #fafafa;
-  // font-family: 'Noto Sans KR', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
-  //   'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  font-family: 'GowunDodum-Regular', 'Pretendard-Regular', 'Work Sans',
-    'sans-serif';
+  font-family: 'MapoPeacefull', 'TmoneyRoundWindRegular', 'Work Sans',
+  'sans-serif';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -48,19 +46,15 @@ code {
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans&display=swap');
 
 @font-face {
-  font-family: 'GowunDodum-Regular';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunDodum-Regular.woff')
-    format('woff');
+  font-family: 'TmoneyRoundWindRegular';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/TmoneyRoundWindRegular.woff') format('woff');
   font-weight: normal;
   font-style: normal;
-  unicode-range: U+AC00-D7A3;
 }
 
 @font-face {
-  font-family: 'Pretendard-Regular';
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')
-    format('woff');
-  font-weight: 400;
+  font-family: 'MapoPeacefull';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoPeacefullA.woff') format('woff');
+  font-weight: normal;
   font-style: normal;
-  unicode-range: U+0030-0039;
 }
