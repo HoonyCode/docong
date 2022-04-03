@@ -26,9 +26,9 @@ public class AnalysisGroupServiceImpl implements AnalysisGroupService {
 
     @Override
     public FindPomoTimeResDto findPomoTime(Long id) {
-        // 개인 뽀모 시간
+        // 통합 뽀모 시간
         Optional<User> user = userRepository.findById(id);
-        Integer singlePomoCount = user.get().getRealPomo();
+        Integer totalPomoCount = user.get().getRealPomo();
 
         // 그룹 뽀모 시간
         List<TeamUser> teamUsers = teamUserQueryRepository.findTeamUserWithUserId(id);
@@ -50,8 +50,8 @@ public class AnalysisGroupServiceImpl implements AnalysisGroupService {
             teamTotalCount += pomoCount;
         }
 
-        // 통합 뽀모 시간
-        Integer totalPomoCount = singlePomoCount + teamTotalCount;
+        // 개인 뽀모 시간
+        Integer singlePomoCount = totalPomoCount - teamTotalCount;
 
         return new FindPomoTimeResDto(singlePomoCount, teamPomoCount, totalPomoCount);
     }
