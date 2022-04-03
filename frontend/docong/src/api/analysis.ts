@@ -17,7 +17,7 @@ export async function getRankingList() {
 }
 
 export async function getWorkTypeAnalysis() {
-  const response = await axios.get(`${BASE_URL}/api/analysis/wokrtype`, {
+  const response = await axios.get(`${BASE_URL}/api/analysis/worktype`, {
     headers: setHeader(),
   })
   return response.data
