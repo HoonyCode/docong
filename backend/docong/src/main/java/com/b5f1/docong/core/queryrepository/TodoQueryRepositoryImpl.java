@@ -75,4 +75,27 @@ public class TodoQueryRepositoryImpl implements TodoQueryRepository{
                 .where(todo.team.seq.eq(teamSeq))
                 .fetch();
     }
+
+    @Override
+    public List<FindTodoResDto> findAllWithUserIdAndGroupId(Long userSeq, Long groupSeq) {
+        return query
+                .select(Projections.constructor(FindTodoResDto.class,
+                        todo.seq,
+                        todo.title,
+                        todo.content,
+                        todo.status,
+                        todo.predictedPomo,
+                        todo.realPomo,
+                        todo.workProficiency,
+                        todo.workType,
+                        todo.workImportance,
+                        todo.userTodo.user.email,
+                        todo.userTodo.user.name,
+                        todo.userTodo.user.image,
+                        todo.activate))
+                .from(todo)
+                .where(todo.userTodo.user.seq.eq(userSeq)
+                        .and(todo.team.seq.eq(groupSeq).and(todo.deleted.eq(false))))
+                .fetch();
+    }
 }
