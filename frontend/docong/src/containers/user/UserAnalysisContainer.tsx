@@ -5,14 +5,17 @@ import { useNavigate } from 'react-router-dom'
 import { UserData } from '../../api/user'
 import EditUserForm from '../../components/user/EditUserForm'
 import UserCategoryAnalysis from '../../components/user/UserCategoryAnalysis'
+import UserPomoCountAnalysis from '../../components/user/UserPomoCountAnalysis'
 import UserRanking from '../../components/user/UserRanking'
 import { RootState } from '../../modules'
 import {
   getRankingListAsync,
   getUserInfoAsync,
+  getUserPomoCountAsync,
   getWorkTypeAnalysisAsync,
   setUserInfoAsync,
 } from '../../modules/user'
+import Masonry from '@mui/lab/Masonry'
 
 function UserAnalysisContainer() {
   const dispatch = useDispatch()
@@ -24,6 +27,11 @@ function UserAnalysisContainer() {
   )
   const workTypeAnalysis = useSelector((state: RootState) =>
     state.user.workTypeAnalysis ? state.user.workTypeAnalysis.data : null
+  )
+  const userPomoCountAnalysis = useSelector((state: RootState) =>
+    state.user.userPomoCountAnalysis
+      ? state.user.userPomoCountAnalysis.data
+      : null
   )
   const [isOpenEditUserForm, setIsOpenEditUserForm] = useState(false)
   const [tabValue, setTabValue] = useState(0)
@@ -37,6 +45,7 @@ function UserAnalysisContainer() {
       dispatch(getRankingListAsync.request(null))
     } else if (tabValue === 1) {
       dispatch(getWorkTypeAnalysisAsync.request(null))
+      dispatch(getUserPomoCountAsync.request(null))
     }
   }, [tabValue])
 
@@ -123,7 +132,7 @@ function UserAnalysisContainer() {
             sx={{ mt: '2vh' }}
           >
             <Tab sx={{ fontSize: '16px' }} label="두콩 랭킹" />
-            <Tab sx={{ fontSize: '16px' }} label="업무별 통계" />
+            <Tab sx={{ fontSize: '16px' }} label="사용자 통계" />
             <Tab sx={{ fontSize: '16px' }} label="준비중" disabled />
           </Tabs>
         </Box>
@@ -168,7 +177,40 @@ function UserAnalysisContainer() {
             <UserRanking rankingList={rankingList} />
           )}
           {userInfo && userInfo.birth && tabValue === 1 && (
-            <UserCategoryAnalysis workTypeAnalysis={workTypeAnalysis} />
+            <Masonry
+              sx={{ height: '100%', width: '100%' }}
+              columns={2}
+              spacing={3}
+            >
+              <Box
+                sx={{
+                  boxShadow: 3,
+                  width: '50%',
+                  height: '50%',
+                  p: '15px',
+                }}
+              >
+                <Box sx={{ textAlign: 'center', fontSize: '20px' }}>
+                  업무 카테고리 통계
+                </Box>
+                <UserCategoryAnalysis workTypeAnalysis={workTypeAnalysis} />
+              </Box>
+              <Box
+                sx={{
+                  boxShadow: 3,
+                  width: '50%',
+                  height: '40%',
+                  p: '15px',
+                }}
+              >
+                <Box sx={{ textAlign: 'center', fontSize: '20px' }}>
+                  두콩 합계
+                </Box>
+                <UserPomoCountAnalysis
+                  userPomoCountAnalysis={userPomoCountAnalysis}
+                />
+              </Box>
+            </Masonry>
           )}
         </Box>
       </Box>

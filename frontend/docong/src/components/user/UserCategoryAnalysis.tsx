@@ -12,6 +12,11 @@ function UserCategoryAnalysis({ workTypeAnalysis }: UserCategoryAnalysisProps) {
     options: {
       labels: [''],
       colors: ['#d8f5a2', '#8ce99a'],
+      chart: {
+        zoom: {
+          enabled: false,
+        },
+      },
       dataLabels: {
         enabled: true,
         enabledOnSeries: [1],
@@ -24,6 +29,7 @@ function UserCategoryAnalysis({ workTypeAnalysis }: UserCategoryAnalysisProps) {
       },
       legend: {
         fontSize: '16px',
+        fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
       },
       tooltip: {
         y: {
@@ -33,16 +39,9 @@ function UserCategoryAnalysis({ workTypeAnalysis }: UserCategoryAnalysisProps) {
         },
       },
       yaxis: [
-        {
-          title: {
-            text: '전체 콩',
-          },
-        },
+        {},
         {
           opposite: true,
-          title: {
-            text: '평균 콩',
-          },
         },
       ],
     },
@@ -81,8 +80,8 @@ function UserCategoryAnalysis({ workTypeAnalysis }: UserCategoryAnalysisProps) {
       options={chartData.options}
       series={chartData.series}
       type="line"
-      width={'90%'}
-      height={'70%'}
+      width={'100%'}
+      height={'90%'}
     />
   )
 }

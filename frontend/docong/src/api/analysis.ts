@@ -23,6 +23,13 @@ export async function getWorkTypeAnalysis() {
   return response.data
 }
 
+export async function getUserPomoCount() {
+  const response = await axios.get(`${BASE_URL}/api/analysis/pomotime`, {
+    headers: setHeader(),
+  })
+  return response.data
+}
+
 export interface RankingData {
   userName: string
   userEmail: string
@@ -38,3 +45,14 @@ export interface WorkTypeData {
 }
 
 export interface WorkTypeAnalysis extends Array<WorkTypeData> {}
+
+export interface TeamPomoCount {
+  pomoCount: number
+  teamName: string
+}
+
+export interface UserPomoCount {
+  singlePomoCount: number
+  teamPomoCount: Array<TeamPomoCount>
+  totalPomoCount: number
+}

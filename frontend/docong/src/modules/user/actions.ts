@@ -4,7 +4,11 @@ import { SignupResponse } from '../../api/auth'
 import { UserData, UserInfo } from '../../api/user'
 import { PomoData } from '../../api/pomo'
 import { Todo } from '../../api/todo'
-import { RankingDataList, WorkTypeAnalysis } from '../../api/analysis'
+import {
+  RankingDataList,
+  UserPomoCount,
+  WorkTypeAnalysis,
+} from '../../api/analysis'
 
 // 액션 type 선언
 export const USER_SIGNUP = 'user/USER_SIGNUP'
@@ -39,6 +43,10 @@ export const GET_WORK_TYPE_ANALYSIS = 'user/GET_WORK_TYPE_ANALYSIS'
 export const GET_WORK_TYPE_ANALYSIS_SUCCESS =
   'user/GET_WORK_TYPE_ANALYSIS_SUCCESS'
 export const GET_WORK_TYPE_ANALYSIS_ERROR = 'user/GET_WORK_TYPE_ANALYSIS_ERROR'
+
+export const GET_USER_POMO_COUNT = 'user/GET_USER_POMO_COUNT'
+export const GET_USER_POMO_COUNT_SUCCESS = 'user/GET_USER_POMO_COUNT_SUCCESS'
+export const GET_USER_POMO_COUNT_ERROR = 'user/GET_USER_POMO_COUNT_ERROR'
 
 export const INIT_USER_TIMER = 'user/INIT_USER_TIMER'
 export const CHANGE_USER_TIMER_TYPE = 'user/CHANGE_USER_TIMER_TYPE'
@@ -98,6 +106,12 @@ export const getWorkTypeAnalysisAsync = createAsyncAction(
   GET_WORK_TYPE_ANALYSIS_ERROR
 )<any, WorkTypeAnalysis, AxiosError>()
 
+export const getUserPomoCountAsync = createAsyncAction(
+  GET_USER_POMO_COUNT,
+  GET_USER_POMO_COUNT_SUCCESS,
+  GET_USER_POMO_COUNT_ERROR
+)<any, UserPomoCount, AxiosError>()
+
 export const initUserTimer = createAction(INIT_USER_TIMER)()
 export const changeUserTimerType = createAction(CHANGE_USER_TIMER_TYPE)<any>()
 export const changeUserTimerTodo = createAction(
@@ -122,6 +136,7 @@ export const actions = {
   savePomoAsync,
   getRankingListAsync,
   getWorkTypeAnalysisAsync,
+  getUserPomoCountAsync,
   initUserTimer,
   changeUserTimerType,
   changeUserTimerTodo,
