@@ -7,5 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class UserSimpleInfoResDto {
     private String email;
+    private String image;
     private String name;
 }

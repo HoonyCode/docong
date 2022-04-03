@@ -95,7 +95,7 @@ public class TeamServiceImpl implements TeamService {
         teamUsers.stream()
                 .forEach(teamUser -> {
                     User user = teamUser.getUser();
-                    userList.add(new UserSimpleInfoResDto(user.getEmail(), user.getName()));});
+                    userList.add(new UserSimpleInfoResDto(user.getEmail(), user.getImage(), user.getName()));});
 
         Optional<TeamUser> leader = teamUsers.stream()
                 .filter(teamUser -> teamUser.isLeader())
