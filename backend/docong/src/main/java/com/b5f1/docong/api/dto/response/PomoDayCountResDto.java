@@ -11,6 +11,6 @@ import lombok.ToString;
 @ToString
 public class PomoDayCountResDto {
     Long day;
-    Long wWeek;
+    Long week;
     Long month;
 }
