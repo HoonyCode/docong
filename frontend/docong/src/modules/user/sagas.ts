@@ -19,6 +19,8 @@ import {
   changeUserTimerTodo,
   getRankingListAsync,
   GET_RANKING_LIST,
+  getWorkTypeAnalysisAsync,
+  GET_WORK_TYPE_ANALYSIS,
 } from './actions'
 import {
   userSignup,
@@ -43,10 +45,15 @@ import {
 } from 'redux-saga/effects'
 import { buffers, EventChannel, Task } from 'redux-saga'
 import { closeChannel, subscribe } from './channel'
-import { DefaultResponse, savePomo } from '../../api/pomo'
+import { savePomo } from '../../api/pomo'
 import { getUserInfo, setUserInfo, UserInfo } from '../../api/user'
 import { findTodo, Todo } from '../../api/todo'
-import { getRankingList, RankingDataList } from '../../api/analysis'
+import {
+  getRankingList,
+  getWorkTypeAnalysis,
+  RankingDataList,
+  WorkTypeAnalysis,
+} from '../../api/analysis'
 
 function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
   try {
@@ -115,12 +122,8 @@ function* getUserInfoSaga() {
 
 function* setUserInfoSaga(action: ReturnType<typeof setUserInfoAsync.request>) {
   try {
-    const setUserInfoResponse: DefaultResponse = yield call(
-      setUserInfo,
-      action.payload
-    )
+    yield call(setUserInfo, action.payload)
     yield put(getUserInfoAsync.request(null))
-    console.log(setUserInfoResponse)
   } catch (e: any) {
     alert('유저 정보 수정 실패')
     console.error(e)
@@ -138,7 +141,6 @@ function* startUserTimerSaga() {
   } catch (e) {
     console.error(e)
   } finally {
-    console.log(userTimerSelectedType)
     yield all([
       put(changeUserTimerStatus('stop')),
       put(changeUserTimerTime(userTimerSelectedType.time)),
@@ -151,14 +153,21 @@ function* connectChannel() {
   try {
     const timer = 1000
     const buffer = buffers.sliding(1)
+    const startTime = Date.now()
 
     const param = { buffer, timer }
     channel = yield call(subscribe, param)
 
     while (true) {
       yield flush(channel)
-      const time: number = yield select((state) => state.user.userTimer.time)
-      yield put(changeUserTimerTime(time - 1))
+      const selectedTime: number = yield select(
+        (state) => state.user.userTimer.selectedType.time
+      )
+      yield put(
+        changeUserTimerTime(
+          selectedTime - Math.round((Date.now() - startTime) / 1000)
+        )
+      )
       yield race({ timeout: delay(timer) })
     }
   } catch (e) {
@@ -170,11 +179,7 @@ function* connectChannel() {
 
 function* savePomoSaga(action: ReturnType<typeof savePomoAsync.request>) {
   try {
-    const savePomoResponse: DefaultResponse = yield call(
-      savePomo,
-      action.payload
-    )
-    console.log(savePomoResponse)
+    yield call(savePomo, action.payload)
     if (action.payload.todo_seq) {
       const selectedTodo: Todo = yield call(findTodo, action.payload.todo_seq)
       yield put(changeUserTimerTodo(selectedTodo))
@@ -197,6 +202,18 @@ function* getRankingListSaga(
   }
 }
 
+function* getWorkTypeAnalysisSaga(
+  action: ReturnType<typeof getWorkTypeAnalysisAsync.request>
+) {
+  try {
+    const workTypeAnalysis: WorkTypeAnalysis = yield call(getWorkTypeAnalysis)
+    yield put(getWorkTypeAnalysisAsync.success(workTypeAnalysis))
+  } catch (e: any) {
+    yield put(getWorkTypeAnalysisAsync.failure(e))
+    console.error(e)
+  }
+}
+
 export function* userSaga() {
   yield takeEvery(USER_SIGNUP, userSignupSaga)
   yield takeEvery(USER_LOGIN, userLoginSaga)
@@ -206,4 +223,5 @@ export function* userSaga() {
   yield takeEvery(START_USER_TIMER, startUserTimerSaga)
   yield takeEvery(SAVE_POMO, savePomoSaga)
   yield takeEvery(GET_RANKING_LIST, getRankingListSaga)
+  yield takeEvery(GET_WORK_TYPE_ANALYSIS, getWorkTypeAnalysisSaga)
 }

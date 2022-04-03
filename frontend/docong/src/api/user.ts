@@ -32,6 +32,7 @@ export interface UserInfo {
   job: string
   position: number
   image: string
+  tier: string
 }
 
 export interface DefaultResponse {

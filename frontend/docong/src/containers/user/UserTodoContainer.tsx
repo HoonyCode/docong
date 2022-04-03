@@ -67,12 +67,12 @@ function UserTodoContainer() {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'end',
-          height: '9%',
+          height: '10%',
         }}
       >
         <Button
           sx={{
-            fontSize: '24px',
+            fontSize: '20px',
             color: (theme) => theme.colors.greenText,
             mx: '0.8vw',
             borderBottom: (theme) => `2px solid ${theme.colors.greenText}`,
@@ -86,7 +86,7 @@ function UserTodoContainer() {
         </Button>
         <Button
           sx={{
-            fontSize: '24px',
+            fontSize: '20px',
             color: (theme) => theme.colors.greenText,
             mx: '0.8vw',
             borderRadius: '0px',
@@ -104,7 +104,7 @@ function UserTodoContainer() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          height: '91%',
+          height: '90%',
           mb: '3vh',
         }}
       >

@@ -7,6 +7,7 @@ import {
   CHANGE_USER_TIMER_TYPE,
   getRankingListAsync,
   getUserInfoAsync,
+  getWorkTypeAnalysisAsync,
   INIT_USER_TIMER,
 } from './actions'
 import {
@@ -26,6 +27,7 @@ const initialState: UserState = {
     time: 1500,
   },
   rankingList: asyncState.initial(),
+  workTypeAnalysis: asyncState.initial(),
 }
 
 // --- reducerUtils 의 createAsyncReducer, transformToArray 를 활용한 리팩토링 ---
@@ -71,6 +73,10 @@ const user = createReducer<UserState, UserAction>(initialState, {
   .handleAction(
     transformToArray(getRankingListAsync),
     createAsyncReducer(getRankingListAsync, 'rankingList')
+  )
+  .handleAction(
+    transformToArray(getWorkTypeAnalysisAsync),
+    createAsyncReducer(getWorkTypeAnalysisAsync, 'workTypeAnalysis')
   )
 
 export default user

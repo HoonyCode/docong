@@ -1,13 +1,18 @@
 import { Box, Button, Tab, Tabs } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { UserData } from '../../api/user'
 import EditUserForm from '../../components/user/EditUserForm'
-import UserInfo from '../../components/user/UserInfo'
+import UserCategoryAnalysis from '../../components/user/UserCategoryAnalysis'
 import UserRanking from '../../components/user/UserRanking'
 import { RootState } from '../../modules'
-import { getRankingListAsync, setUserInfoAsync } from '../../modules/user'
+import {
+  getRankingListAsync,
+  getUserInfoAsync,
+  getWorkTypeAnalysisAsync,
+  setUserInfoAsync,
+} from '../../modules/user'
 
 function UserAnalysisContainer() {
   const dispatch = useDispatch()
@@ -17,15 +22,23 @@ function UserAnalysisContainer() {
   const rankingList = useSelector((state: RootState) =>
     state.user.rankingList ? state.user.rankingList.data : null
   )
+  const workTypeAnalysis = useSelector((state: RootState) =>
+    state.user.workTypeAnalysis ? state.user.workTypeAnalysis.data : null
+  )
   const [isOpenEditUserForm, setIsOpenEditUserForm] = useState(false)
   const [tabValue, setTabValue] = useState(0)
 
   useEffect(() => {
-    if (tabValue === 0) {
-      console.log(userInfo)
-      dispatch(getRankingListAsync.request(null))
-    }
+    dispatch(getUserInfoAsync.request(null))
   }, [])
+
+  useEffect(() => {
+    if (tabValue === 1) {
+      dispatch(getRankingListAsync.request(null))
+    } else if (tabValue === 2) {
+      dispatch(getWorkTypeAnalysisAsync.request(null))
+    }
+  }, [tabValue])
 
   const onClickToTodos = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -59,12 +72,12 @@ function UserAnalysisContainer() {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'end',
-          height: '9%',
+          height: '10%',
         }}
       >
         <Button
           sx={{
-            fontSize: '24px',
+            fontSize: '20px',
             color: (theme) => theme.colors.greenText,
             mx: '0.8vw',
             borderRadius: '0px',
@@ -78,7 +91,7 @@ function UserAnalysisContainer() {
         </Button>
         <Button
           sx={{
-            fontSize: '24px',
+            fontSize: '20px',
             color: (theme) => theme.colors.greenText,
             mx: '0.8vw',
             borderBottom: (theme) => `2px solid ${theme.colors.greenText}`,
@@ -94,14 +107,13 @@ function UserAnalysisContainer() {
       <Box
         sx={{
           display: 'flex',
-          height: '91%',
-          px: '5vw',
+          height: '90%',
+          px: '2vw',
           pt: '3vh',
           pb: '5vh',
         }}
       >
-        <Box sx={{ width: '250px', borderRight: '1px solid lightGray' }}>
-          <UserInfo userInfo={userInfo} openEditUserForm={openEditUserForm} />
+        <Box sx={{ width: '200px', borderRight: '1px solid lightGray' }}>
           <Tabs
             orientation="vertical"
             value={tabValue}
@@ -110,21 +122,31 @@ function UserAnalysisContainer() {
             color="success"
             sx={{ mt: '2vh' }}
           >
-            <Tab sx={{ fontSize: '16px' }} label="Ranking" />
+            <Tab sx={{ fontSize: '16px' }} label="두콩 랭킹" />
+            <Tab sx={{ fontSize: '16px' }} label="업무별 통계" />
             <Tab sx={{ fontSize: '16px' }} label="준비중" disabled />
           </Tabs>
         </Box>
         <Box
           sx={{
             display: 'flex',
+            height: '100%',
+            width: '100%',
             justifyContent: 'center',
             alignItems: 'center',
             flexGrow: 1,
             pl: '1vw',
+            '> div': { width: '100%' },
           }}
         >
           {userInfo && !userInfo.birth && (
-            <>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
               <Box
                 sx={{
                   fontSize: '20px ',
@@ -138,12 +160,15 @@ function UserAnalysisContainer() {
                 추가 정보
               </Box>
               <Box sx={{ fontSize: '20px' }}>
-                를 입력하시면 순위를 확인할 수 있습니다.
+                를 입력하시면 사용 통계를 확인할 수 있습니다.
               </Box>
-            </>
+            </Box>
           )}
           {userInfo && userInfo.birth && tabValue === 0 && (
             <UserRanking rankingList={rankingList} />
+          )}
+          {userInfo && userInfo.birth && tabValue === 1 && (
+            <UserCategoryAnalysis workTypeAnalysis={workTypeAnalysis} />
           )}
         </Box>
       </Box>
@@ -156,4 +181,4 @@ function UserAnalysisContainer() {
   )
 }
 
-export default UserAnalysisContainer
+export default memo(UserAnalysisContainer)

@@ -1,14 +1,12 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 import {
   changeTodoActivate,
-  DefaultResponse,
   deleteTodo,
   findTodo,
   findUserTodos,
   modifyTodo,
   modifyTodoStatus,
   saveTodo,
-  Todo,
   Todos,
 } from '../../api/todo'
 import {
@@ -30,12 +28,8 @@ import {
 
 function* saveTodoSaga(action: ReturnType<typeof saveTodoAsync.request>) {
   try {
-    const saveTodoResponse: DefaultResponse = yield call(
-      saveTodo,
-      action.payload
-    )
+    yield call(saveTodo, action.payload)
     yield put(findUserTodosAsync.request(null))
-    console.log(saveTodoResponse)
   } catch (e: any) {
     console.error(e)
   }
@@ -43,8 +37,7 @@ function* saveTodoSaga(action: ReturnType<typeof saveTodoAsync.request>) {
 
 function* findTodoSaga(action: ReturnType<typeof findTodoAsync.request>) {
   try {
-    const findTodoResponse: Todo = yield call(findTodo, action.payload)
-    console.log(findTodoResponse)
+    yield call(findTodo, action.payload)
   } catch (e: any) {
     console.error(e)
   }
@@ -52,13 +45,8 @@ function* findTodoSaga(action: ReturnType<typeof findTodoAsync.request>) {
 
 function* modifyTodoSaga(action: ReturnType<typeof modifyTodoAsync.request>) {
   try {
-    const modifyTodoResponse: DefaultResponse = yield call(
-      modifyTodo,
-      action.payload.todoId,
-      action.payload.todoInput
-    )
+    yield call(modifyTodo, action.payload.todoId, action.payload.todoInput)
     yield put(findUserTodosAsync.request(null))
-    console.log(modifyTodoResponse)
   } catch (e: any) {
     console.error(e)
   }
@@ -66,12 +54,8 @@ function* modifyTodoSaga(action: ReturnType<typeof modifyTodoAsync.request>) {
 
 function* deleteTodoSaga(action: ReturnType<typeof deleteTodoAsync.request>) {
   try {
-    const deleteTodoResponse: DefaultResponse = yield call(
-      deleteTodo,
-      action.payload
-    )
+    yield call(deleteTodo, action.payload)
     yield put(findUserTodosAsync.request(null))
-    console.log(deleteTodoResponse)
   } catch (e: any) {
     console.error(e)
   }
@@ -81,12 +65,11 @@ function* modifyTodoStatusSaga(
   action: ReturnType<typeof modifyTodoStatusAsync.request>
 ) {
   try {
-    const modifyTodoStatusResponse: Todos = yield call(
+    yield call(
       modifyTodoStatus,
       action.payload.todoId,
       action.payload.todoStatus
     )
-    console.log(modifyTodoStatusResponse)
     yield put(findUserTodosAsync.request(null))
   } catch (e: any) {
     console.error(e)
@@ -109,12 +92,11 @@ function* changeTodoActivateSaga(
   action: ReturnType<typeof changeTodoActivateAsync.request>
 ) {
   try {
-    const response: {} = yield call(
+    yield call(
       changeTodoActivate,
       action.payload.todoId,
       action.payload.activateData
     )
-    console.log(response)
   } catch (e: any) {
     console.error(e)
   }

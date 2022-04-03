@@ -10,7 +10,6 @@ const setHeader = function () {
 }
 
 export async function saveTodo(todoInput: TodoInput) {
-  console.log(todoInput)
   const response = await axios.post(`${BASE_URL}/api/todo`, todoInput, {
     headers: setHeader(),
   })
@@ -92,12 +91,16 @@ export interface DefaultResponse {
 }
 
 export interface Todo {
+  activate: boolean
   content: string
   predictedPomo: number
   realPomo: number
   seq: number
   status: string
   title: string
+  userEmail: string
+  userImg: string
+  userName: string
   workImportance: string
   workProficiency: string
   workType: string

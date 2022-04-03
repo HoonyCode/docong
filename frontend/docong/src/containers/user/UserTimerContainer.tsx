@@ -57,9 +57,48 @@ function UserTimerContainer() {
   const dispatch = useDispatch()
 
   const timerTypes = [
-    { index: 0, name: 'Short', time: 900 },
-    { index: 1, name: 'Basic', time: 1500 },
+    { index: 0, name: 'Short', time: 3 },
+    { index: 1, name: 'Basic', time: 3 },
     { index: 2, name: 'Long', time: 3000 },
+  ]
+
+  const workTypeList = [
+    '기획',
+    '설계',
+    '디자인',
+    '컨설팅',
+    '개발',
+    'QA',
+    '분석',
+    '운영',
+    '회계',
+    '제작',
+    '관리',
+    '홍보',
+    '인사',
+    '문서화',
+    '학습',
+    '독서',
+    '기타',
+  ]
+  const workTypeColors = [
+    '#ffc078',
+    '#ffe066',
+    '#c0eb75',
+    '#8ce99a',
+    '#63e6be',
+    '#66d9e8',
+    '#74c0fc',
+    '#91a7ff',
+    '#b197fc',
+    '#e599f7',
+    '#faa2c1',
+    '#ffa8a8',
+    '#ffd8a8',
+    '#ffec99',
+    '#d8f5a2',
+    '#b2f2bb',
+    '#ced4da',
   ]
 
   useEffect(() => {
@@ -88,7 +127,7 @@ function UserTimerContainer() {
   }, [])
 
   useEffect(() => {
-    if (status === 'play' && localStatus && time === 0) {
+    if (status === 'play' && localStatus && time <= 0) {
       dispatch(stopUserTimer())
       try {
         Notification.requestPermission(function (result) {
@@ -99,7 +138,7 @@ function UserTimerContainer() {
           }
         })
       } catch (e) {
-        console.log('Notification error', e)
+        console.error('Notification error', e)
       }
       let start_date = new Date()
       let end_date = new Date()
@@ -279,7 +318,9 @@ function UserTimerContainer() {
           justifyContent: 'center',
           alignItems: 'end',
           height: '10%',
-          mb: '8vh',
+          '@media (min-height: 850px)': {
+            mb: '8vh',
+          },
         }}
       >
         {status !== 'play' && (
@@ -290,7 +331,15 @@ function UserTimerContainer() {
           />
         )}
       </Box>
-      <Grid container sx={{ py: '5vh' }}>
+      <Grid
+        container
+        sx={{
+          pt: '5vh',
+          '@media (min-height: 750px)': {
+            pb: '5vh',
+          },
+        }}
+      >
         <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'center' }}>
           <UserTimerDisplay
             time={time}
@@ -399,7 +448,10 @@ function UserTimerContainer() {
                         sx={{
                           color: (theme) => theme.colors.basicText,
                           fontWeight: 'bold',
-                          background: (theme) => theme.colors.badge1,
+                          background:
+                            workTypeColors[
+                              workTypeList.indexOf(selectedTodo.workType)
+                            ],
                         }}
                         label={selectedTodo.workType}
                         color="primary"
@@ -411,11 +463,17 @@ function UserTimerContainer() {
                       xs={6}
                       sx={{ display: 'flex', justifyContent: 'end' }}
                     >
-                      <Tooltip title="User">
+                      <Tooltip
+                        title={`${selectedTodo.userName} (${selectedTodo.userEmail})`}
+                      >
                         <Avatar
                           sx={{ width: 28, height: 28 }}
-                          alt="User"
-                          src="/images/Profile_Default.jpg"
+                          alt={`${selectedTodo.userName} (${selectedTodo.userEmail})`}
+                          src={
+                            selectedTodo.userImg
+                              ? selectedTodo.userImg
+                              : '/images/Profile_Default.jpg'
+                          }
                         />
                       </Tooltip>
                     </Grid>
