@@ -33,9 +33,9 @@ function UserAnalysisContainer() {
   }, [])
 
   useEffect(() => {
-    if (tabValue === 1) {
+    if (tabValue === 0) {
       dispatch(getRankingListAsync.request(null))
-    } else if (tabValue === 2) {
+    } else if (tabValue === 1) {
       dispatch(getWorkTypeAnalysisAsync.request(null))
     }
   }, [tabValue])
