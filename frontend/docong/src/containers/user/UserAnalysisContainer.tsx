@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { UserData } from '../../api/user'
 import EditUserForm from '../../components/user/EditUserForm'
 import UserCategoryAnalysis from '../../components/user/UserCategoryAnalysis'
-import UserInfo from '../../components/user/UserInfo'
+import UserProfile from '../../components/user/UserProfile'
 import UserRanking from '../../components/user/UserRanking'
 import { RootState } from '../../modules'
 import {
@@ -34,9 +34,9 @@ function UserAnalysisContainer() {
   }, [])
 
   useEffect(() => {
-    if (tabValue === 0) {
+    if (tabValue === 1) {
       dispatch(getRankingListAsync.request(null))
-    } else if (tabValue === 1) {
+    } else if (tabValue === 2) {
       dispatch(getWorkTypeAnalysisAsync.request(null))
     }
   }, [tabValue])
@@ -114,8 +114,7 @@ function UserAnalysisContainer() {
           pb: '5vh',
         }}
       >
-        <Box sx={{ width: '300px', borderRight: '1px solid lightGray' }}>
-          <UserInfo userInfo={userInfo} openEditUserForm={openEditUserForm} />
+        <Box sx={{ width: '200px', borderRight: '1px solid lightGray' }}>
           <Tabs
             orientation="vertical"
             value={tabValue}
@@ -124,6 +123,7 @@ function UserAnalysisContainer() {
             color="success"
             sx={{ mt: '2vh' }}
           >
+            <Tab sx={{ fontSize: '16px' }} label="Profile" />
             <Tab sx={{ fontSize: '16px' }} label="Ranking" />
             <Tab sx={{ fontSize: '16px' }} label="Category" />
             <Tab sx={{ fontSize: '16px' }} label="준비중" disabled />
@@ -141,7 +141,13 @@ function UserAnalysisContainer() {
             '> div': { width: '100%' },
           }}
         >
-          {userInfo && !userInfo.birth && (
+          {tabValue === 0 && (
+            <UserProfile
+              userInfo={userInfo}
+              openEditUserForm={openEditUserForm}
+            />
+          )}
+          {tabValue !== 0 && userInfo && !userInfo.birth && (
             <Box
               sx={{
                 display: 'flex',
@@ -162,14 +168,14 @@ function UserAnalysisContainer() {
                 추가 정보
               </Box>
               <Box sx={{ fontSize: '20px' }}>
-                를 입력하시면 순위를 확인할 수 있습니다.
+                를 입력하시면 사용 통계를 확인할 수 있습니다.
               </Box>
             </Box>
           )}
-          {userInfo && userInfo.birth && tabValue === 0 && (
+          {userInfo && userInfo.birth && tabValue === 1 && (
             <UserRanking rankingList={rankingList} />
           )}
-          {userInfo && userInfo.birth && tabValue === 1 && (
+          {userInfo && userInfo.birth && tabValue === 2 && (
             <UserCategoryAnalysis workTypeAnalysis={workTypeAnalysis} />
           )}
         </Box>

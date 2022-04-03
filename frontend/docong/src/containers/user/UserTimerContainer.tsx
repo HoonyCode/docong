@@ -62,6 +62,45 @@ function UserTimerContainer() {
     { index: 2, name: 'Long', time: 3000 },
   ]
 
+  const workTypeList = [
+    '기획',
+    '설계',
+    '디자인',
+    '컨설팅',
+    '개발',
+    'QA',
+    '분석',
+    '운영',
+    '회계',
+    '제작',
+    '관리',
+    '홍보',
+    '인사',
+    '문서화',
+    '학습',
+    '독서',
+    '기타',
+  ]
+  const workTypeColors = [
+    '#ffc078',
+    '#ffe066',
+    '#c0eb75',
+    '#8ce99a',
+    '#63e6be',
+    '#66d9e8',
+    '#74c0fc',
+    '#91a7ff',
+    '#b197fc',
+    '#e599f7',
+    '#faa2c1',
+    '#ffa8a8',
+    '#ffd8a8',
+    '#ffec99',
+    '#d8f5a2',
+    '#b2f2bb',
+    '#ced4da',
+  ]
+
   useEffect(() => {
     Notification.requestPermission().then(function (permission) {})
     if (status === 'play') {
@@ -409,7 +448,10 @@ function UserTimerContainer() {
                         sx={{
                           color: (theme) => theme.colors.basicText,
                           fontWeight: 'bold',
-                          background: (theme) => theme.colors.badge1,
+                          background:
+                            workTypeColors[
+                              workTypeList.indexOf(selectedTodo.workType)
+                            ],
                         }}
                         label={selectedTodo.workType}
                         color="primary"

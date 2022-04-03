@@ -25,12 +25,7 @@ function UserRanking({ rankingList }: UserRankingProps) {
         },
       },
       dataLabels: {
-        enabled: true,
-        style: {
-          fontSize: '16px',
-          fontWeight: 'bold',
-          colors: ['#333'],
-        },
+        enabled: false,
       },
       fill: {
         type: 'gradient',

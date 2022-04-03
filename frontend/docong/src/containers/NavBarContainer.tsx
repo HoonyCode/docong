@@ -71,21 +71,26 @@ function NavBarContainer() {
         />
       </Box>
       <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          mt: '60px',
-          mb: '20px',
-          height: '50px',
-          fontSize: '25px',
-          cursor: 'pointer',
-          '&:hover': {
+        sx={[
+          {
+            display: 'flex',
+            justifyContent: 'space-between',
+            mt: '6vh',
+            mb: '1vh',
+            height: '50px',
+            fontSize: '25px',
+            cursor: 'pointer',
+            '&:hover': {
+              background: (theme) => `${darken(0.1, theme.colors.navBg)}`,
+            },
+            '&:active': {
+              background: (theme) => `${darken(0.25, theme.colors.navBg)}`,
+            },
+          },
+          location.pathname === '/timer' && {
             background: (theme) => `${darken(0.1, theme.colors.navBg)}`,
           },
-          '&:active': {
-            background: (theme) => `${darken(0.25, theme.colors.navBg)}`,
-          },
-        }}
+        ]}
         onClick={(e: any) => onClickToTimer(e)}
       >
         <Box
@@ -109,33 +114,51 @@ function NavBarContainer() {
           <ArrowForwardIosIcon />
         </Box>
       </Box>
-      <Box sx={{ px: '40px', pb: '30px' }}>
+      <Box
+        sx={[
+          {
+            display: 'flex',
+            justifyContent: 'space-between',
+            mb: '1.5vh',
+            height: '50px',
+            fontSize: '25px',
+            cursor: 'pointer',
+            '&:hover': {
+              background: (theme) => `${darken(0.1, theme.colors.navBg)}`,
+            },
+            '&:active': {
+              background: (theme) => `${darken(0.25, theme.colors.navBg)}`,
+            },
+          },
+          (location.pathname === '/user/todo' ||
+            location.pathname === '/user/analysis') && {
+            background: (theme) => `${darken(0.1, theme.colors.navBg)}`,
+          },
+        ]}
+        onClick={(e: any) => onClickToUserTodo(e)}
+      >
         <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
-            fontSize: '25px',
-            mb: '15px',
+            pl: '40px',
             color: (theme) => theme.colors.greenText,
           }}
         >
-          To Do
-        </Box>
-        <Button
-          sx={{
-            justifyContent: 'flex-start',
-            boxShadow: 1,
-            p: '8px 0 6px 10px',
-            mb: '20px',
-            fontSize: '15px',
-          }}
-          fullWidth
-          size="small"
-          color="success"
-          onClick={onClickToUserTodo}
-        >
           내 To Do
-        </Button>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            pr: '40px',
+            color: (theme) => theme.colors.greenText,
+          }}
+        >
+          <ArrowForwardIosIcon />
+        </Box>
+      </Box>
+      <Box sx={{ px: '40px', pb: '30px' }}>
         <Box
           sx={{
             display: 'flex',
