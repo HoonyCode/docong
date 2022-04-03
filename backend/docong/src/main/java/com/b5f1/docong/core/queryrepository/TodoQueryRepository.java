@@ -8,6 +8,6 @@ import java.util.List;
 public interface TodoQueryRepository {
     List<FindTodoResDto> findAllWithUserId(Long userSeq);
     List<FindTodoResDto> findAllWithGroupId(Long groupSeq);
-    List<FindTodoResDto> findAllWithUserIdAndGroupId(Long userSeq, Long groupSeq);
     List<Todo> findTodosWithTeamSeq(Long teamSeq);
+    List<FindTodoResDto> findAllWithUserIdAndGroupId(Long userSeq, Long groupSeq);
 }
