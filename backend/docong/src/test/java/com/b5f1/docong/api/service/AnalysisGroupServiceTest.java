@@ -81,8 +81,8 @@ public class AnalysisGroupServiceTest {
 
         FindPomoTimeResDto response = analysisGroupService.findPomoTime(savedUser1.getSeq());
 
-        assertThat(response.getSinglePomoCount()).isEqualTo(1); // 1
-        assertThat(response.getTotalPomoCount()).isEqualTo(8); // 9
+        assertThat(response.getSinglePomoCount()).isEqualTo(2);
+        assertThat(response.getTotalPomoCount()).isEqualTo(9);
     }
 
     @Test
