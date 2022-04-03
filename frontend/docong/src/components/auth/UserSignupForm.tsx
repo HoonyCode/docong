@@ -16,9 +16,13 @@ import EmailCheckForm from './EmailCheckForm'
 
 interface UserSignupFormProps {
   onSignupSubmit: (signupInput: SignupData, isCheckedEmail: boolean) => void
+  setIsOpenCheckToLogin: any
 }
 
-function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
+function UserSignupForm({
+  onSignupSubmit,
+  setIsOpenCheckToLogin,
+}: UserSignupFormProps) {
   const [signupInput, setSignupInput] = useState({
     email: '',
     password: '',
@@ -39,8 +43,6 @@ function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
   const [isCheckedEmail, setIsCheckedEmail] = useState(false)
   const [isOpenEmailCheckForm, setIsOpenEmailCheckForm] = useState(false)
   const [realCheckNumber, setRealCheckNumber] = useState('')
-
-  const navigate = useNavigate()
 
   useEffect(() => {
     document.title = `docong`
@@ -136,11 +138,6 @@ function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
     setIsCheckedEmail(true)
   }
 
-  const onClickToLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    navigate('/')
-  }
-
   return (
     <Box
       sx={{
@@ -231,7 +228,7 @@ function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
           value={signupInput.name}
           color="success"
           sx={{ background: 'white', mb: '2vh' }}
-          inputProps={{ maxLength: 12 }}
+          inputProps={{ maxLength: 15 }}
         />
         <FormControl
           required
@@ -315,7 +312,7 @@ function UserSignupForm({ onSignupSubmit }: UserSignupFormProps) {
               background: (theme) => theme.colors.gray,
             }}
             variant="contained"
-            onClick={onClickToLogin}
+            onClick={() => setIsOpenCheckToLogin(true)}
             color="success"
           >
             로그인

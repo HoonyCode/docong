@@ -6,8 +6,10 @@ import com.b5f1.docong.api.dto.request.UpdateTeamReqDto;
 import com.b5f1.docong.api.dto.response.BaseResponseEntity;
 import com.b5f1.docong.api.dto.response.FindAllTeamResDto;
 import com.b5f1.docong.api.dto.response.FindTeamResDto;
+import com.b5f1.docong.api.dto.response.FindTodoResDto;
 import com.b5f1.docong.api.resolver.Auth;
 import com.b5f1.docong.api.service.TeamServiceImpl;
+import com.b5f1.docong.api.service.TodoServiceImpl;
 import com.b5f1.docong.core.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import java.util.List;
 public class TeamController {
     //    private final UserRepository userRepository;
     private final TeamServiceImpl teamService;
+    private final TodoServiceImpl todoService;
 
 
     @PostMapping
@@ -52,6 +55,8 @@ public class TeamController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponseEntity> deleteTeam(@Auth User user, @PathVariable Long id) {
+        List<FindTodoResDto> groupTodos = todoService.findGroupTodos(id);
+        groupTodos.stream().forEach(groupTodo -> todoService.deleteTodo(groupTodo.getSeq()));
         teamService.deleteTeam(id);
         return ResponseEntity.ok().body(new BaseResponseEntity(200,"Success"));
     }

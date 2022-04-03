@@ -1,7 +1,10 @@
 package com.b5f1.docong.api.controller;
 
 import com.b5f1.docong.api.dto.response.FindRankingResDto;
+import com.b5f1.docong.api.dto.response.FindWorktypeAnalysisResDto;
+import com.b5f1.docong.api.resolver.Auth;
 import com.b5f1.docong.api.service.AnalysisService;
+import com.b5f1.docong.core.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +23,12 @@ public class AnalysisController {
     @GetMapping("/ranking")
     ResponseEntity<List<FindRankingResDto>> findRanking(){
         List<FindRankingResDto> response = analysisService.findPomoRanking();
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @GetMapping("/worktype")
+    ResponseEntity<List<FindWorktypeAnalysisResDto>> findWorkType(@Auth User user){
+        List<FindWorktypeAnalysisResDto> response = analysisService.findWorktypeAnalysis(user);
         return ResponseEntity.status(200).body(response);
     }
 }
