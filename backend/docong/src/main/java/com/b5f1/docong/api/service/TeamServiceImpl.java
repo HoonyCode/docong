@@ -11,10 +11,13 @@ import com.b5f1.docong.api.exception.CustomException;
 import com.b5f1.docong.api.exception.ErrorCode;
 import com.b5f1.docong.core.domain.group.Team;
 import com.b5f1.docong.core.domain.group.TeamUser;
+import com.b5f1.docong.core.domain.todo.Todo;
 import com.b5f1.docong.core.domain.user.User;
 import com.b5f1.docong.core.queryrepository.TeamUserQueryRepositoryImpl;
+import com.b5f1.docong.core.queryrepository.TodoQueryRepository;
 import com.b5f1.docong.core.repository.TeamRepository;
 import com.b5f1.docong.core.repository.TeamUserRepository;
+import com.b5f1.docong.core.repository.TodoRepository;
 import com.b5f1.docong.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,6 +37,7 @@ public class TeamServiceImpl implements TeamService {
     private final TeamUserRepository teamUserRepository;
     private final TeamUserQueryRepositoryImpl teamUserQueryRepository;
     private final UserRepository userRepository;
+    private final TodoQueryRepository todoQueryRepository;
 
     @Override
     public Long createTeam(SaveTeamReqDto teamReqDto) {
@@ -67,6 +71,12 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public void deleteTeam(Long team_id) {
+        // 관련 투두 NULL 처리
+        List<Todo> todos = todoQueryRepository.findTodosWithTeamSeq(team_id);
+        for(Todo todo:todos){
+            todo.deleteTodo();
+            todo.addTeam(null);
+        }
         //팀목록에서 멤버 삭제(TeamUser에서 해당 row삭제)
         List<TeamUser> teamUserList = teamUserQueryRepository.findTeamUserWithTeamId(team_id);
         teamUserRepository.deleteAll(teamUserList);
