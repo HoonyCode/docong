@@ -9,6 +9,6 @@ import java.util.List;
 @AllArgsConstructor
 public class FindPomoTimeResDto {
     Integer singlePomoCount;
-    List<FindPomoByGruopResDto> teamPomoCount;
+    List<FindPomoByGroupResDto> teamPomoCount;
     Integer totalPomoCount;
 }

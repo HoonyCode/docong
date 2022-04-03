@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class FindPomoByGruopResDto {
+public class FindPomoByGroupResDto {
     String teamName;
     Integer pomoCount;
 }

@@ -1,7 +1,7 @@
 package com.b5f1.docong.api.service;
 
 import com.b5f1.docong.api.dto.response.FindGroupRankingResDto;
-import com.b5f1.docong.api.dto.response.FindPomoByGruopResDto;
+import com.b5f1.docong.api.dto.response.FindPomoByGroupResDto;
 import com.b5f1.docong.api.dto.response.FindPomoTimeResDto;
 import com.b5f1.docong.api.dto.response.FindTodoResDto;
 import com.b5f1.docong.core.domain.group.TeamUser;
@@ -33,7 +33,7 @@ public class AnalysisGroupServiceImpl implements AnalysisGroupService {
         // 그룹 뽀모 시간
         List<TeamUser> teamUsers = teamUserQueryRepository.findTeamUserWithUserId(id);
 
-        List<FindPomoByGruopResDto> teamPomoCount = new ArrayList<>();
+        List<FindPomoByGroupResDto> teamPomoCount = new ArrayList<>();
         Integer teamTotalCount = 0;
 
         for (TeamUser teamUser : teamUsers) {
@@ -46,7 +46,7 @@ public class AnalysisGroupServiceImpl implements AnalysisGroupService {
                 pomoCount += todo.getRealPomo();
             }
 
-            teamPomoCount.add(new FindPomoByGruopResDto(teamName, pomoCount));
+            teamPomoCount.add(new FindPomoByGroupResDto(teamName, pomoCount));
             teamTotalCount += pomoCount;
         }
 
