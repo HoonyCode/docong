@@ -30,6 +30,13 @@ export async function getUserPomoCount() {
   return response.data
 }
 
+export async function getUserTimeAnalysis() {
+  const response = await axios.get(`${BASE_URL}/api/analysis/time`, {
+    headers: setHeader(),
+  })
+  return response.data
+}
+
 export interface RankingData {
   userName: string
   userEmail: string
@@ -56,3 +63,10 @@ export interface UserPomoCount {
   teamPomoCount: Array<TeamPomoCount>
   totalPomoCount: number
 }
+
+export interface UserTimeData {
+  cnt: number
+  hour: number
+}
+
+export interface UserTimeAnalysis extends Array<UserTimeData> {}
