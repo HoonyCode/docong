@@ -50,11 +50,11 @@ public class TeamController {
         return ResponseEntity.ok().body(teamResDtoList);
     }
 
-//    @GetMapping("/activate/{team_id}")
-//    public ResponseEntity<List<FindMemberActivateResDto>> findMemberWithActivate(@PathVariable Long team_id) {
-//        List<FindMemberActivateResDto> response = teamService.findMemberWithActivate(team_id);
-//        return ResponseEntity.ok().body(response);
-//    }
+    @GetMapping("/activate/{team_id}")
+    public ResponseEntity<List<FindMemberActivateResDto>> findMemberWithActivate(@PathVariable Long team_id) {
+        List<FindMemberActivateResDto> response = teamService.findMemberWithActivate(team_id);
+        return ResponseEntity.ok().body(response);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<BaseResponseEntity> deleteTeam(@Auth User user, @PathVariable Long id) {

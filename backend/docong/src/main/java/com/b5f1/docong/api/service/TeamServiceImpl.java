@@ -153,10 +153,10 @@ public class TeamServiceImpl implements TeamService {
         teamUserRepository.delete(findeamUser);
     }
 
-//    @Override
-//    public List<FindMemberActivateResDto> findMemberWithActivate(Long team_id) {
-//        return teamUserQueryRepository.findMemberActivate(team_id);
-//    }
+    @Override
+    public List<FindMemberActivateResDto> findMemberWithActivate(Long team_id) {
+        return teamUserQueryRepository.findMemberActivate(team_id);
+    }
 
 
     public boolean isTeam(Long team_id) {
