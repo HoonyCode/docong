@@ -2,33 +2,31 @@ import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { GroupModifyData } from "../../api/group";
+import { Group, GroupModifyData } from "../../api/group";
 import { RootState } from "../../modules";
 
 interface GroupModifyProps {
+    group: Group | null
     onGroupModifySubmit: (groupModifyData: GroupModifyData) => void
 }
 
-function GroupModify({ onGroupModifySubmit }: GroupModifyProps) {
+function GroupModify({ group, onGroupModifySubmit }: GroupModifyProps) {
 
-    const groupInfo = useSelector((state: RootState) => state.group.groups.data)
     const userInfo = useSelector((state: RootState) => state.user.userInfo.data)
 
     const [groupModifyInput, setGroupModifyInput] = useState({
         userEmail: userInfo ? userInfo.email : '',
-        // teamId: groupInfo ? groupInfo.seq : 1,
-        teamId: 1,
-        name: groupInfo ? groupInfo.name : ''
+        teamId: group ? group.teamSeq : 0,
+        name: group ? group.name : ''
     })
 
     useEffect(() => {
         setGroupModifyInput({
             userEmail: userInfo ? userInfo.email : '',
-            // teamId: groupInfo ? groupInfo.seq : 1,
-            teamId: 1,
-            name: groupInfo ? groupInfo.name : ''
+            teamId: group ? group.teamSeq : 0,
+            name: ''
         })
-    }, [userInfo, groupInfo])
+    }, [userInfo, group])
 
     const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
         setGroupModifyInput({ ...groupModifyInput, name: e.target.value })
@@ -84,6 +82,7 @@ function GroupModify({ onGroupModifySubmit }: GroupModifyProps) {
                     value={groupModifyInput.name}
                     color="success"
                     sx={{ background: 'white', mb: '2vh' }}
+                    inputProps={{ maxLength: 15 }}
                 />
                 <Button
                     sx={{
