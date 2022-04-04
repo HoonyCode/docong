@@ -169,6 +169,7 @@ function GroupTodoComponent({
                     predictedPomo: groupTodo.predictedPomo,
                     realPomo: groupTodo.realPomo,
                     status: groupTodo.status,
+                    userName: groupTodo.userName,
                     userEmail: groupTodo.userEmail,
                     userImg: groupTodo.userImg,
                     activate: groupTodo.activate
@@ -185,6 +186,7 @@ function GroupTodoComponent({
                     predictedPomo: groupTodo.predictedPomo,
                     realPomo: groupTodo.realPomo,
                     status: groupTodo.status,
+                    userName: groupTodo.userName,
                     userEmail: groupTodo.userEmail,
                     userImg: groupTodo.userImg,
                     activate: groupTodo.activate
@@ -201,6 +203,7 @@ function GroupTodoComponent({
                     predictedPomo: groupTodo.predictedPomo,
                     realPomo: groupTodo.realPomo,
                     status: groupTodo.status,
+                    userName: groupTodo.userName,
                     userEmail: groupTodo.userEmail,
                     userImg: groupTodo.userImg,
                     activate: groupTodo.activate
