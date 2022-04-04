@@ -79,7 +79,7 @@ function UserPomoCountAnalysis({
       options={chartData.options}
       series={chartData.series}
       type="donut"
-      width={'100%'}
+      width={'95%'}
       height={'90%'}
     />
   )

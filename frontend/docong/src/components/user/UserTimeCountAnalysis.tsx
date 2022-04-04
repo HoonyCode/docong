@@ -42,7 +42,7 @@ function UserTimeCountAnalysis({ userTimeAnalysis }: UserTimeAnalysisProps) {
       options={chartData.options}
       series={chartData.series}
       type="area"
-      width={'100%'}
+      width={'95%'}
       height={'90%'}
     />
   )

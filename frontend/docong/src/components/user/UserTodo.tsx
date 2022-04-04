@@ -403,14 +403,14 @@ function UserTodo({
                 p: '18px',
                 background: (theme) => theme.colors.todoCard,
                 '&:hover': {
-                  background: (theme) => `${darken(0.1, theme.colors.doCard)}`,
+                  background: (theme) => `${darken(0.05, theme.colors.doCard)}`,
                 },
                 '&:active': {
-                  background: (theme) => `${darken(0.3, theme.colors.doCard)}`,
+                  background: (theme) => `${darken(0.1, theme.colors.doCard)}`,
                 },
               },
               card.id === (selectedTodo ? selectedTodo.seq : null) && {
-                background: (theme) => `${darken(0.1, theme.colors.doCard)}`,
+                background: (theme) => `${darken(0.05, theme.colors.doCard)}`,
               },
             ]}
             onClick={() => onSelectTodo(card)}
@@ -422,6 +422,7 @@ function UserTodo({
                     display: 'inline-block',
                     fontSize: '20px',
                     fontWeight: 'bold',
+                    fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
                     color: (theme) => theme.colors.basicText,
                     width: '250px',
                     '@media (max-width: 1660px)': {
@@ -447,6 +448,12 @@ function UserTodo({
                     cursor: 'pointer',
                     fontSize: '26px',
                     color: (theme) => `${darken(0.2, theme.colors.gray)}`,
+                    '&:hover': {
+                      color: (theme) => `${darken(0.5, theme.colors.gray)}`,
+                    },
+                    '&:active': {
+                      color: (theme) => `${darken(0.7, theme.colors.gray)}`,
+                    },
                   }}
                   onClick={() => openModifyTodoForm(card)}
                 />
@@ -457,6 +464,12 @@ function UserTodo({
                     cursor: 'pointer',
                     fontSize: '26px',
                     color: (theme) => `${darken(0.2, theme.colors.gray)}`,
+                    '&:hover': {
+                      color: (theme) => `${darken(0.4, theme.colors.gray)}`,
+                    },
+                    '&:active': {
+                      color: (theme) => `${darken(0.6, theme.colors.gray)}`,
+                    },
                   }}
                   onClick={() => handleCardRemove(card)}
                 />
@@ -476,6 +489,7 @@ function UserTodo({
                   sx={{
                     color: (theme) => theme.colors.basicText,
                     fontWeight: 'bold',
+                    fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
                     background:
                       workTypeColors[workTypeList.indexOf(card.workType)],
                   }}
@@ -537,7 +551,9 @@ function UserTodo({
       >
         <Button
           sx={{
-            fontSize: '24px',
+            fontSize: '30px',
+            fontWeight: 'bold',
+            fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
             color: (theme) => theme.colors.lightGreenText,
           }}
           variant={'text'}
@@ -554,6 +570,7 @@ function UserTodo({
           sx={{
             fontSize: '24px',
             fontWeight: 'bold',
+            fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
             p: '28px',
             pb: '4px',
             color: (theme) => theme.colors.greenText,
@@ -660,7 +677,9 @@ function UserTodo({
                   onChange={onChangeTodoTitle}
                   value={todoInput.title}
                   color="success"
-                  sx={{ mb: '14px' }}
+                  sx={{
+                    mb: '14px',
+                  }}
                 />
                 <TextField
                   required
@@ -689,6 +708,7 @@ function UserTodo({
                         sx={{
                           color: (theme) => theme.colors.basicText,
                           fontWeight: 'bold',
+                          fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
                           background: workTypeColors[index],
                         }}
                         label={workType}
@@ -710,11 +730,18 @@ function UserTodo({
                     '> div': {
                       display: 'flex',
                       alignItems: 'center',
+                      fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
                     },
                   }}
                 >
                   {workImportanceList.map((workImportance, index) => (
-                    <MenuItem key={index} value={workImportance}>
+                    <MenuItem
+                      sx={{
+                        fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                      }}
+                      key={index}
+                      value={workImportance}
+                    >
                       {workImportance === '상' && (
                         <KeyboardDoubleArrowUpIcon
                           sx={{ fontSize: 22, color: '#FF7452' }}
@@ -751,10 +778,19 @@ function UserTodo({
                   value={todoInput.workProficiency}
                   onChange={onChangeTodoProficiency}
                   color="success"
-                  sx={{ mb: '14px' }}
+                  sx={{
+                    mb: '14px',
+                    fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                  }}
                 >
                   {workProficiencyList.map((workProficiency, index) => (
-                    <MenuItem key={index} value={workProficiency}>
+                    <MenuItem
+                      sx={{
+                        fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                      }}
+                      key={index}
+                      value={workProficiency}
+                    >
                       {workProficiency}
                     </MenuItem>
                   ))}
@@ -803,6 +839,7 @@ function UserTodo({
               sx={{
                 width: '22%',
                 fontSize: '16px',
+                fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
                 color: (theme) => theme.colors.pageBg,
                 background: (theme) => theme.colors.greenButton,
                 borderRadius: '8px',
@@ -818,6 +855,7 @@ function UserTodo({
               sx={{
                 width: '22%',
                 fontSize: '16px',
+                fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
                 color: (theme) => theme.colors.pageBg,
                 background: (theme) => theme.colors.gray,
                 borderRadius: '8px',
@@ -836,6 +874,7 @@ function UserTodo({
           sx={{
             fontSize: '24px',
             fontWeight: 'bold',
+            fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
             p: '28px',
             pb: '4px',
             color: (theme) => theme.colors.greenText,
@@ -963,7 +1002,10 @@ function UserTodo({
                   value={todoInput.workType}
                   onChange={onChangeTodoType}
                   color="success"
-                  sx={{ mb: '14px' }}
+                  sx={{
+                    mb: '14px',
+                    fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                  }}
                 >
                   {workTypeList.map((workType, index) => (
                     <MenuItem key={index} value={workType}>
@@ -971,6 +1013,7 @@ function UserTodo({
                         sx={{
                           color: (theme) => theme.colors.basicText,
                           fontWeight: 'bold',
+                          fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
                           background: workTypeColors[index],
                         }}
                         label={workType}
@@ -992,11 +1035,18 @@ function UserTodo({
                     '> div': {
                       display: 'flex',
                       alignItems: 'center',
+                      fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
                     },
                   }}
                 >
                   {workImportanceList.map((workImportance, index) => (
-                    <MenuItem key={index} value={workImportance}>
+                    <MenuItem
+                      sx={{
+                        fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                      }}
+                      key={index}
+                      value={workImportance}
+                    >
                       {workImportance === '상' && (
                         <KeyboardDoubleArrowUpIcon
                           sx={{ fontSize: 22, color: '#FF7452' }}
@@ -1033,10 +1083,19 @@ function UserTodo({
                   value={todoInput.workProficiency}
                   onChange={onChangeTodoProficiency}
                   color="success"
-                  sx={{ mb: '14px' }}
+                  sx={{
+                    mb: '14px',
+                    fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                  }}
                 >
                   {workProficiencyList.map((workProficiency, index) => (
-                    <MenuItem key={index} value={workProficiency}>
+                    <MenuItem
+                      sx={{
+                        fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                      }}
+                      key={index}
+                      value={workProficiency}
+                    >
                       {workProficiency}
                     </MenuItem>
                   ))}
@@ -1085,6 +1144,7 @@ function UserTodo({
               sx={{
                 width: '22%',
                 fontSize: '16px',
+                fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
                 color: (theme) => theme.colors.pageBg,
                 background: (theme) => theme.colors.greenButton,
                 borderRadius: '8px',
@@ -1100,6 +1160,7 @@ function UserTodo({
               sx={{
                 width: '22%',
                 fontSize: '16px',
+                fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
                 color: (theme) => theme.colors.pageBg,
                 background: (theme) => theme.colors.gray,
                 borderRadius: '8px',
@@ -1123,6 +1184,7 @@ function UserTodo({
           sx={{
             fontSize: '24px',
             fontWeight: 'bold',
+            fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
             p: '18px',
             color: (theme) => theme.colors.greenText,
           }}
@@ -1130,13 +1192,20 @@ function UserTodo({
           {'Todo 삭제'}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText sx={{ fontSize: '16px' }} id="stop-dialog">
+          <DialogContentText
+            sx={{
+              fontSize: '16px',
+              fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+            }}
+            id="stop-dialog"
+          >
             정말로 삭제하시겠습니까?
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ pb: '16px', pr: '16px' }}>
           <Button
             sx={{
+              fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
               color: (theme) => theme.colors.pageBg,
               background: (theme) => theme.colors.greenButton,
               borderRadius: '8px',
@@ -1152,6 +1221,7 @@ function UserTodo({
           </Button>
           <Button
             sx={{
+              fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
               color: (theme) => theme.colors.pageBg,
               background: (theme) => theme.colors.gray,
               borderRadius: '8px',

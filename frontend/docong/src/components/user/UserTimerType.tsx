@@ -35,6 +35,7 @@ function UserTimerType({ types, changeType, selected }: UserTimerTypeProps) {
             mx: '0.5vw',
             color: (theme) => theme.colors.greenText,
             fontSize: '20px',
+            fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
           }}
           key={index}
           label={type.name}

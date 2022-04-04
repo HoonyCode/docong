@@ -382,18 +382,13 @@ function UserTimerContainer() {
                     {
                       width: '330px',
                       height: '130px',
-                      cursor: 'pointer',
                       borderRadius: '12px',
                       mb: '1vh',
                       p: '18px',
                       background: (theme) => theme.colors.todoCard,
                       '&:hover': {
                         background: (theme) =>
-                          `${darken(0.1, theme.colors.doCard)}`,
-                      },
-                      '&:active': {
-                        background: (theme) =>
-                          `${darken(0.3, theme.colors.doCard)}`,
+                          `${darken(0.01, theme.colors.doCard)}`,
                       },
                     },
                   ]}
@@ -405,6 +400,7 @@ function UserTimerContainer() {
                           display: 'inline-block',
                           fontSize: '20px',
                           fontWeight: 'bold',
+                          fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
                           color: (theme) => theme.colors.basicText,
                           width: '280px',
                           textOverflow: 'ellipsis',
@@ -426,6 +422,14 @@ function UserTimerContainer() {
                             fontSize: '26px',
                             color: (theme) =>
                               `${darken(0.2, theme.colors.gray)}`,
+                            '&:hover': {
+                              color: (theme) =>
+                                `${darken(0.5, theme.colors.gray)}`,
+                            },
+                            '&:active': {
+                              color: (theme) =>
+                                `${darken(0.7, theme.colors.gray)}`,
+                            },
                           }}
                           onClick={() => handleCardRemove()}
                         />
@@ -448,6 +452,7 @@ function UserTimerContainer() {
                         sx={{
                           color: (theme) => theme.colors.basicText,
                           fontWeight: 'bold',
+                          fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
                           background:
                             workTypeColors[
                               workTypeList.indexOf(selectedTodo.workType)
