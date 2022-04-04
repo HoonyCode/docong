@@ -10,5 +10,4 @@ public interface TeamUserQueryRepository {
     List<TeamUser> findTeamUserWithTeamId(Long teamSeq);
     List<TeamUser> findTeamUserWithUserId(Long userSeq);
     Optional<TeamUser> findTeamUserWithUserIdAndTeamId(Long userSeq, Long teamSeq);
-    List<FindMemberActivateResDto> findMemberActivate(Long teamSeq);
 }

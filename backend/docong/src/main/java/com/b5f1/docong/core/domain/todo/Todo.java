@@ -83,7 +83,7 @@ public class Todo extends BaseEntity {
 
     public void changeActivation(Boolean activate){
         this.activate = activate;
-        this.userTodo.getUser().changeActivation(activate);
+//        this.userTodo.getUser().changeActivation(activate);
     }
 
     public void changeStatus(TodoStatus todoStatus) {
