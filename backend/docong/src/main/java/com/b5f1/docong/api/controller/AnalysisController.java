@@ -40,7 +40,7 @@ public class AnalysisController {
         PomoDayCountResDto response = analysisService.findPomoCountByUserSolo(user.getSeq());
         return ResponseEntity.status(200).body(response);
     }
-k
+
     @GetMapping("/count/{group}")
     ResponseEntity<PomoDayCountResDto> findDayCountGroup(@Auth User user, @PathVariable Long groupSeq) {
         PomoDayCountResDto response = analysisService.findPomoCountByUserGroup(user.getSeq(), groupSeq);
