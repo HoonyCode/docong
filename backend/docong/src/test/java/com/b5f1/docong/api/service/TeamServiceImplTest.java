@@ -71,24 +71,24 @@ class TeamServiceImplTest {
         assertThat(leader.getSeq()).isEqualTo(findUser.getSeq());
     }
 
-//    @Test
-//    void findActivateTest(){
-//        //given
-//        User findUser = joinUser("teat1");
-//        SaveTeamReqDto teamReqDto = new SaveTeamReqDto(findUser.getEmail(), "findTeamTest");
-//        Long seq = teamService.createTeam(teamReqDto);
-//        Todo todo = Todo.builder().title("hi").content("HI").build();;
-//        UserTodo userTodo = UserTodo.builder().todo(todo).user(findUser).build();
-//        todo.addUserTodo(userTodo);
-//        Todo savedTodo = todoRepository.save(todo);
-//        savedTodo.changeActivation(true);
-//
-//        //when
-//        List<FindMemberActivateResDto> response = teamService.findMemberWithActivate(seq);
-//
-//        //then
-//        assertThat(response.get(0).getOnline()).isEqualTo(true);
-//    }
+    @Test
+    void findActivateTest(){
+        //given
+        User findUser = joinUser("teat1");
+        SaveTeamReqDto teamReqDto = new SaveTeamReqDto(findUser.getEmail(), "findTeamTest");
+        Long seq = teamService.createTeam(teamReqDto);
+        Todo todo = Todo.builder().title("hi").content("HI").build();;
+        UserTodo userTodo = UserTodo.builder().todo(todo).user(findUser).build();
+        todo.addUserTodo(userTodo);
+        Todo savedTodo = todoRepository.save(todo);
+        savedTodo.changeActivation(true);
+
+        //when
+        List<FindMemberActivateResDto> response = teamService.findMemberWithActivate(seq);
+
+        //then
+        assertThat(response.get(0).getOnline()).isEqualTo(true);
+    }
 
     @Test
     void updateTest(){
