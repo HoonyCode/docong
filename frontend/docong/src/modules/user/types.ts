@@ -5,6 +5,7 @@ import { UserInfo } from '../../api/user'
 import {
   RankingDataList,
   UserPomoCount,
+  UserTimeAnalysis,
   WorkTypeAnalysis,
 } from '../../api/analysis'
 
@@ -16,6 +17,7 @@ export type UserState = {
   rankingList: AsyncState<RankingDataList, Error>
   workTypeAnalysis: AsyncState<WorkTypeAnalysis, Error>
   userPomoCountAnalysis: AsyncState<UserPomoCount, Error>
+  userTimeAnalysis: AsyncState<UserTimeAnalysis, Error>
 }
 
 export type UserTimerKey = keyof UserState['userTimer']

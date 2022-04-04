@@ -12,10 +12,12 @@ import {
   getRankingListAsync,
   getUserInfoAsync,
   getUserPomoCountAsync,
+  getUserTimeAnalysisAsync,
   getWorkTypeAnalysisAsync,
   setUserInfoAsync,
 } from '../../modules/user'
 import Masonry from '@mui/lab/Masonry'
+import UserTimeCountAnalysis from '../../components/user/UserTimeCountAnalysis'
 
 function UserAnalysisContainer() {
   const dispatch = useDispatch()
@@ -33,6 +35,9 @@ function UserAnalysisContainer() {
       ? state.user.userPomoCountAnalysis.data
       : null
   )
+  const userTimeAnalysis = useSelector((state: RootState) =>
+    state.user.userTimeAnalysis ? state.user.userTimeAnalysis.data : null
+  )
   const [isOpenEditUserForm, setIsOpenEditUserForm] = useState(false)
   const [tabValue, setTabValue] = useState(0)
 
@@ -46,6 +51,7 @@ function UserAnalysisContainer() {
     } else if (tabValue === 1) {
       dispatch(getWorkTypeAnalysisAsync.request(null))
       dispatch(getUserPomoCountAsync.request(null))
+      dispatch(getUserTimeAnalysisAsync.request(null))
     }
   }, [tabValue])
 
@@ -185,20 +191,6 @@ function UserAnalysisContainer() {
                 sx={{
                   boxShadow: 3,
                   width: '50%',
-                  height: '50%',
-                  p: '15px',
-                  borderRadius: '8px',
-                }}
-              >
-                <Box sx={{ textAlign: 'center', fontSize: '20px' }}>
-                  업무 카테고리 통계
-                </Box>
-                <UserCategoryAnalysis workTypeAnalysis={workTypeAnalysis} />
-              </Box>
-              <Box
-                sx={{
-                  boxShadow: 3,
-                  width: '50%',
                   height: '40%',
                   p: '15px',
                   borderRadius: '8px',
@@ -210,6 +202,34 @@ function UserAnalysisContainer() {
                 <UserPomoCountAnalysis
                   userPomoCountAnalysis={userPomoCountAnalysis}
                 />
+              </Box>
+              <Box
+                sx={{
+                  boxShadow: 3,
+                  width: '50%',
+                  height: '50%',
+                  p: '15px',
+                  borderRadius: '8px',
+                }}
+              >
+                <Box sx={{ textAlign: 'center', fontSize: '20px' }}>
+                  시간대별 통계
+                </Box>
+                <UserTimeCountAnalysis userTimeAnalysis={userTimeAnalysis} />
+              </Box>
+              <Box
+                sx={{
+                  boxShadow: 3,
+                  width: '50%',
+                  height: '50%',
+                  p: '15px',
+                  borderRadius: '8px',
+                }}
+              >
+                <Box sx={{ textAlign: 'center', fontSize: '20px' }}>
+                  업무 카테고리 통계
+                </Box>
+                <UserCategoryAnalysis workTypeAnalysis={workTypeAnalysis} />
               </Box>
             </Masonry>
           )}

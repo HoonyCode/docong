@@ -23,6 +23,8 @@ import {
   GET_WORK_TYPE_ANALYSIS,
   getUserPomoCountAsync,
   GET_USER_POMO_COUNT,
+  getUserTimeAnalysisAsync,
+  GET_USER_TIME_ANALYSIS,
 } from './actions'
 import {
   userSignup,
@@ -53,9 +55,11 @@ import { findTodo, Todo } from '../../api/todo'
 import {
   getRankingList,
   getUserPomoCount,
+  getUserTimeAnalysis,
   getWorkTypeAnalysis,
   RankingDataList,
   UserPomoCount,
+  UserTimeAnalysis,
   WorkTypeAnalysis,
 } from '../../api/analysis'
 
@@ -230,6 +234,18 @@ function* getUserPomoCountSaga(
   }
 }
 
+function* getUserTimeAnalysisSaga(
+  action: ReturnType<typeof getUserTimeAnalysisAsync.request>
+) {
+  try {
+    const userTimeAnalysis: UserTimeAnalysis = yield call(getUserTimeAnalysis)
+    yield put(getUserTimeAnalysisAsync.success(userTimeAnalysis))
+  } catch (e: any) {
+    yield put(getUserTimeAnalysisAsync.failure(e))
+    console.error(e)
+  }
+}
+
 export function* userSaga() {
   yield takeEvery(USER_SIGNUP, userSignupSaga)
   yield takeEvery(USER_LOGIN, userLoginSaga)
@@ -241,4 +257,5 @@ export function* userSaga() {
   yield takeEvery(GET_RANKING_LIST, getRankingListSaga)
   yield takeEvery(GET_WORK_TYPE_ANALYSIS, getWorkTypeAnalysisSaga)
   yield takeEvery(GET_USER_POMO_COUNT, getUserPomoCountSaga)
+  yield takeEvery(GET_USER_TIME_ANALYSIS, getUserTimeAnalysisSaga)
 }
