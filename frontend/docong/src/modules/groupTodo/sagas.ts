@@ -9,7 +9,6 @@ function* saveGroupTodoSaga(action: ReturnType<typeof saveGroupTodoAsync.request
             action.payload
         )
         yield put(findAllGroupTodosAsync.request(action.payload.teamId)) // 그 그룹의 id를 넣어야함
-        console.log(saveGroupTodoResponse)
     } catch (e: any) {
         console.error(e)
     }
@@ -21,7 +20,6 @@ function* findGroupTodoSaga(action: ReturnType<typeof findGroupTodoAsync.request
             findGroupTodo,
             action.payload
         )
-        console.log(findGroupTodoResponse)
     } catch (e: any) {
         console.error(e)
     }
@@ -35,7 +33,6 @@ function* modifyGroupTodoSaga(action: ReturnType<typeof modifyGroupTodoAsync.req
             action.payload.groupTodoInput
         )
         yield put(findAllGroupTodosAsync.request(action.payload.groupTodoInput.teamId))
-        console.log(modifyGroupTodoResponse)
     } catch (e: any) {
         console.error(e)
     }
@@ -47,8 +44,6 @@ function* deleteGroupTodoSaga(action: ReturnType<typeof deleteGroupTodoAsync.req
             deleteGroupTodo,
             action.payload
         )
-        // 여기서 group todo 갱신을 해줘야함
-        console.log(deleteGroupTodoResponse)
     } catch (e: any) {
         console.error(e)
     }
@@ -61,7 +56,6 @@ function* modifyGroupTodoStatusSaga(action: ReturnType<typeof modifyGroupTodoSta
             action.payload.todoId,
             action.payload.todoStatus
         )
-        console.log(modifyGroupTodoStatusResponse)
     } catch (e: any) {
         console.error(e)
     }
@@ -76,7 +70,6 @@ function* changeGroupTodoActivateSaga(
             action.payload.todoId,
             action.payload.activateData
         )
-        console.log(response)
     } catch (e: any) {
         console.error(e)
     }
@@ -89,7 +82,6 @@ export function* findAllGroupTodosSaga(action: ReturnType<typeof actions.findAll
             action.payload
         )
         yield put(findAllGroupTodosAsync.success(groupTodos))
-        console.log(groupTodos)
     } catch (e: any) {
         yield put(findAllGroupTodosAsync.failure(e))
         console.error(e)
