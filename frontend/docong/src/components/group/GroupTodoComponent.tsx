@@ -4,6 +4,7 @@ import '@asseinfo/react-kanban/dist/styles.css'
 import { useDispatch, useSelector } from "react-redux"
 import { GroupTodo, GroupTodoInput } from "../../api/groupTodo"
 import { RootState } from "../../modules"
+import EditIcon from '@mui/icons-material/Edit'
 import produce from 'immer'
 import { changeUserTimerTodo } from "../../modules/user"
 import {
@@ -25,15 +26,24 @@ import {
     Avatar,
     Grid,
     DialogContentText,
+    InputAdornment,
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
-import { darken } from 'polished'
+import { darken, lighten } from 'polished'
 import TableRowsIcon from '@mui/icons-material/TableRows'
 import '../user/UserTodo.scss'
 import { modifyJiraInfoAsync } from "../../modules/group"
+import { Group } from "../../api/group"
+import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp'
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import DragHandleIcon from '@mui/icons-material/DragHandle'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
+import CircleIcon from '@mui/icons-material/Circle'
 
 interface GroupTodoProps {
+    group: Group | null
     groupSeq: number
     groupTodos: any
     createTodo: (groupTodoInput: GroupTodoInput) => void
@@ -44,6 +54,7 @@ interface GroupTodoProps {
 }
 
 function GroupTodoComponent({
+    group,
     groupSeq,
     groupTodos,
     createTodo,
@@ -74,7 +85,6 @@ function GroupTodoComponent({
 
     const userInfo = useSelector((state: RootState) => state.user.userInfo.data)
     const userTimer = useSelector((state: RootState) => state.user.userTimer)
-    const groupInfo = useSelector((state: RootState) => state.group.groups.data) // filter(team_seq==props)
 
     const [isOpenCreateTodo, setIsOpenCreateTodo] = useState(false)
     const [isOpenModifyTodo, setIsOpenModifyTodo] = useState(false)
@@ -95,14 +105,33 @@ function GroupTodoComponent({
     })
 
     const [jiraInfoInput, setJiraInfoInput] = useState({
-        jiraAPIToken: groupInfo ? groupInfo.jiraApiToken : '',
-        jiraDomain: groupInfo ? groupInfo.jiraDomain : '',
-        jiraProjectKey: groupInfo ? groupInfo.jiraProjectKey : '',
-        jiraUserId: groupInfo ? groupInfo.jiraUserId : '',
+        jiraAPIToken: group ? group.jiraApiToken : '',
+        jiraDomain: group ? group.jiraDomain : '',
+        jiraProjectKey: group ? group.jiraProjectKey : '',
+        jiraUserId: group ? group.jiraUserId : '',
     })
 
     const dispatch = useDispatch()
 
+    const workTypeColors = [
+        '#ffc078',
+        '#ffe066',
+        '#c0eb75',
+        '#8ce99a',
+        '#63e6be',
+        '#66d9e8',
+        '#74c0fc',
+        '#91a7ff',
+        '#b197fc',
+        '#e599f7',
+        '#faa2c1',
+        '#ffa8a8',
+        '#ffd8a8',
+        '#ffec99',
+        '#d8f5a2',
+        '#b2f2bb',
+        '#ced4da',
+    ]
     const workImportanceList = ['하', '중하', '중', '중상', '상']
     const workProficiencyList = ['초급', '초중급', '중급', '중상급', '상급']
     const workTypeList = [
@@ -198,13 +227,13 @@ function GroupTodoComponent({
     useEffect(() => {
         if (isOpenJiraSettingForm === true) {
             setJiraInfoInput({
-                jiraAPIToken: groupInfo ? groupInfo.jiraApiToken : '',
-                jiraDomain: groupInfo ? groupInfo.jiraDomain : '',
-                jiraProjectKey: groupInfo ? groupInfo.jiraProjectKey : '',
-                jiraUserId: groupInfo ? groupInfo.jiraUserId : '',
+                jiraAPIToken: group ? group.jiraApiToken : '',
+                jiraDomain: group ? group.jiraDomain : '',
+                jiraProjectKey: group ? group.jiraProjectKey : '',
+                jiraUserId: group ? group.jiraUserId : '',
             })
         }
-    }, [isOpenJiraSettingForm, groupInfo])
+    }, [isOpenJiraSettingForm, group])
 
     const setInitialGroupTodoInput = () => {
         setGroupTodoInput({
@@ -419,7 +448,13 @@ function GroupTodoComponent({
                         sx={[
                             {
                                 width: '330px',
+                                '@media (max-width: 1660px)': {
+                                    width: '290px',
+                                },
                                 height: '130px',
+                                '@media (max-height: 760px)': {
+                                    height: '115px',
+                                },
                                 cursor: 'pointer',
                                 borderRadius: '12px',
                                 mb: '1vh',
@@ -436,10 +471,7 @@ function GroupTodoComponent({
                                 background: (theme) => `${darken(0.1, theme.colors.doCard)}`,
                             },
                         ]}
-                        onClick={() => {
-                            console.log("card -> ", card.id)
-                            onSelectTodo(card)
-                        }}
+                        onClick={() => onSelectTodo(card)}
                     >
                         <Grid container>
                             <Grid item xs={10}>
@@ -450,9 +482,15 @@ function GroupTodoComponent({
                                         fontWeight: 'bold',
                                         color: (theme) => theme.colors.basicText,
                                         width: '250px',
+                                        '@media (max-width: 1660px)': {
+                                            width: '210px',
+                                        },
                                         textOverflow: 'ellipsis',
                                         overflow: 'hidden',
                                         whiteSpace: 'nowrap',
+                                        '@media (max-height: 760px)': {
+                                            mb: 0,
+                                        },
                                     }}
                                     gutterBottom
                                 >
@@ -460,7 +498,7 @@ function GroupTodoComponent({
                                 </Typography>
                             </Grid>
                             <Grid item xs={2} sx={{ display: 'flex' }}>
-                                <TableRowsIcon
+                                <EditIcon
                                     sx={{
                                         display: 'block',
                                         ml: 'auto',
@@ -484,31 +522,58 @@ function GroupTodoComponent({
                         </Grid>
                         <Box
                             sx={{
-                                mb: '10px',
+                                mb: '1vh',
                                 fontSize: '14px',
                                 fontWeight: 'bold',
                                 color: (theme) => theme.colors.lightGreenText,
                             }}
                         >{`${card.realPomo / 2} / ${card.predictedPomo} 콩`}</Box>
                         <Grid container>
-                            <Grid item xs={6}>
+                            <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center' }}>
                                 <Chip
                                     sx={{
                                         color: (theme) => theme.colors.basicText,
                                         fontWeight: 'bold',
-                                        background: (theme) => theme.colors.badge1,
+                                        background: workTypeColors[workTypeList.indexOf(card.workType)],
                                     }}
                                     label={card.workType}
                                     color="primary"
                                     size="small"
                                 />
+                                {card.workImportance === '상' && (
+                                    <KeyboardDoubleArrowUpIcon
+                                        sx={{ fontSize: 26, color: '#FF7452' }}
+                                    />
+                                )}
+                                {card.workImportance === '중상' && (
+                                    <KeyboardArrowUpIcon
+                                        sx={{ fontSize: 26, color: '#FF7452' }}
+                                    />
+                                )}
+                                {card.workImportance === '중' && (
+                                    <DragHandleIcon sx={{ fontSize: 26, color: '#FFAB00' }} />
+                                )}
+                                {card.workImportance === '중하' && (
+                                    <KeyboardArrowDownIcon
+                                        sx={{ fontSize: 26, color: '#0065FF' }}
+                                    />
+                                )}
+                                {card.workImportance === '하' && (
+                                    <KeyboardDoubleArrowDownIcon
+                                        sx={{ fontSize: 26, color: '#0065FF' }}
+                                    />
+                                )}
                             </Grid>
                             <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'end' }}>
-                                <Tooltip title={card.userEmail}>
+                                <Tooltip title={`${card.userName} (${card.userEmail})`}>
                                     <Avatar
                                         sx={{ width: 28, height: 28 }}
-                                        alt="User"
-                                        src="/images/Profile_Default.jpg"
+                                        alt={`${card.userName} (${card.userEmail})`}
+                                        src={
+                                            card.userImg
+                                                ? card.userImg
+                                                : '/images/Profile_Default.jpg'
+                                        }
                                     />
                                 </Tooltip>
                             </Grid>
@@ -536,19 +601,25 @@ function GroupTodoComponent({
                     color="success"
                     onClick={onClickStartTodoTimer}
                 >
-                    선택한 두콩 시작하기
+                    <span className={selectedTodo ? 'highlight on' : 'highlight'}>
+                        선택한 두콩 시작하기
+                    </span>
                 </Button>
-                <Button
-                    sx={{
-                        fontSize: '24px',
-                        color: (theme) => theme.colors.lightGreenText,
-                    }}
-                    variant={'text'}
-                    color="success"
-                    onClick={openJiraSettingForm}
-                >
-                    JIRA 이슈 불러오기
-                </Button>
+                {userInfo !== null && group !== null && userInfo.email === group.leaderEmail &&
+                    <Button
+                        sx={{
+                            fontSize: '24px',
+                            color: (theme) => theme.colors.lightGreenText,
+                        }}
+                        variant={'text'}
+                        color="success"
+                        onClick={openJiraSettingForm}
+                    >
+                        <span className={selectedTodo ? 'highlight on' : 'highlight'}>
+                            JIRA 이슈 불러오기
+                        </span>
+                    </Button>
+                }
             </Box>
             <Dialog open={isOpenCreateTodo} onClose={closeCreateTodo}>
                 <DialogTitle
@@ -686,7 +757,16 @@ function GroupTodoComponent({
                                 >
                                     {workTypeList.map((workType, index) => (
                                         <MenuItem key={index} value={workType}>
-                                            {workType}
+                                            <Chip
+                                                sx={{
+                                                    color: (theme) => theme.colors.basicText,
+                                                    fontWeight: 'bold',
+                                                    background: workTypeColors[index],
+                                                }}
+                                                label={workType}
+                                                color="primary"
+                                                size="small"
+                                            />
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -697,10 +777,41 @@ function GroupTodoComponent({
                                     value={groupTodoInput.workImportance}
                                     onChange={onChangeTodoImportance}
                                     color="success"
-                                    sx={{ mb: '14px' }}
+                                    sx={{
+                                        mb: '14px',
+                                        '> div': {
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                        },
+                                    }}
                                 >
                                     {workImportanceList.map((workImportance, index) => (
                                         <MenuItem key={index} value={workImportance}>
+                                            {workImportance === '상' && (
+                                                <KeyboardDoubleArrowUpIcon
+                                                    sx={{ fontSize: 22, color: '#FF7452' }}
+                                                />
+                                            )}
+                                            {workImportance === '중상' && (
+                                                <KeyboardArrowUpIcon
+                                                    sx={{ fontSize: 22, color: '#FF7452' }}
+                                                />
+                                            )}
+                                            {workImportance === '중' && (
+                                                <DragHandleIcon
+                                                    sx={{ fontSize: 22, color: '#FFAB00' }}
+                                                />
+                                            )}
+                                            {workImportance === '중하' && (
+                                                <KeyboardArrowDownIcon
+                                                    sx={{ fontSize: 22, color: '#0065FF' }}
+                                                />
+                                            )}
+                                            {workImportance === '하' && (
+                                                <KeyboardDoubleArrowDownIcon
+                                                    sx={{ fontSize: 22, color: '#0065FF' }}
+                                                />
+                                            )}
                                             {workImportance}
                                         </MenuItem>
                                     ))}
@@ -729,6 +840,27 @@ function GroupTodoComponent({
                                             max: 12,
                                             min: 1,
                                         },
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <CircleIcon
+                                                    sx={{
+                                                        width: '20px',
+                                                        height: '20px',
+                                                        color: (theme) =>
+                                                            `${lighten(0.1, theme.colors.greenText)}`,
+                                                        mr: '4px',
+                                                    }}
+                                                />
+                                                <CloseIcon
+                                                    sx={{
+                                                        width: '18px',
+                                                        height: '18px',
+                                                        color: (theme) =>
+                                                            `${lighten(0.3, theme.colors.greenText)}`,
+                                                    }}
+                                                />
+                                            </InputAdornment>
+                                        ),
                                     }}
                                     onChange={onChangeTodoPredictedPomo}
                                     value={groupTodoInput.predictedPomo}
@@ -907,7 +1039,16 @@ function GroupTodoComponent({
                                 >
                                     {workTypeList.map((workType, index) => (
                                         <MenuItem key={index} value={workType}>
-                                            {workType}
+                                            <Chip
+                                                sx={{
+                                                    color: (theme) => theme.colors.basicText,
+                                                    fontWeight: 'bold',
+                                                    background: workTypeColors[index],
+                                                }}
+                                                label={workType}
+                                                color="primary"
+                                                size="small"
+                                            />
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -918,12 +1059,43 @@ function GroupTodoComponent({
                                     value={groupTodoInput.workImportance}
                                     onChange={onChangeTodoImportance}
                                     color="success"
-                                    sx={{ mb: '14px' }}
+                                    sx={{
+                                        mb: '14px',
+                                        '> div': {
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                        },
+                                    }}
                                 >
                                     {workImportanceList.map((workImportance, index) => (
                                         <MenuItem key={index} value={workImportance}>
-                                            {workImportance}
-                                        </MenuItem>
+                                        {workImportance === '상' && (
+                                          <KeyboardDoubleArrowUpIcon
+                                            sx={{ fontSize: 22, color: '#FF7452' }}
+                                          />
+                                        )}
+                                        {workImportance === '중상' && (
+                                          <KeyboardArrowUpIcon
+                                            sx={{ fontSize: 22, color: '#FF7452' }}
+                                          />
+                                        )}
+                                        {workImportance === '중' && (
+                                          <DragHandleIcon
+                                            sx={{ fontSize: 22, color: '#FFAB00' }}
+                                          />
+                                        )}
+                                        {workImportance === '중하' && (
+                                          <KeyboardArrowDownIcon
+                                            sx={{ fontSize: 22, color: '#0065FF' }}
+                                          />
+                                        )}
+                                        {workImportance === '하' && (
+                                          <KeyboardDoubleArrowDownIcon
+                                            sx={{ fontSize: 22, color: '#0065FF' }}
+                                          />
+                                        )}
+                                        {workImportance}
+                                      </MenuItem>
                                     ))}
                                 </Select>
                                 <Select
@@ -950,6 +1122,27 @@ function GroupTodoComponent({
                                             max: 12,
                                             min: 1,
                                         },
+                                        startAdornment: (
+                                          <InputAdornment position="start">
+                                            <CircleIcon
+                                              sx={{
+                                                width: '20px',
+                                                height: '20px',
+                                                color: (theme) =>
+                                                  `${lighten(0.1, theme.colors.greenText)}`,
+                                                mr: '4px',
+                                              }}
+                                            />
+                                            <CloseIcon
+                                              sx={{
+                                                width: '18px',
+                                                height: '18px',
+                                                color: (theme) =>
+                                                  `${lighten(0.3, theme.colors.greenText)}`,
+                                              }}
+                                            />
+                                          </InputAdornment>
+                                        ),
                                     }}
                                     onChange={onChangeTodoPredictedPomo}
                                     value={groupTodoInput.predictedPomo}
