@@ -12,7 +12,6 @@ const setHeader = function () {
 }
 
 export async function createGroup(groupCreateData: GroupCreateData) {
-    console.log(groupCreateData)
     const response = await axios.post(`${BASE_URL}/api/team`, groupCreateData, {
         headers: setHeader(),
     })
@@ -44,7 +43,6 @@ export async function searchAllGroup() {
     const response = await axios.get(`${BASE_URL}/api/team/all`, {
         headers: setHeader(),
     })
-    console.log("group all -> ", response.data)
     return response.data
 }
 
@@ -62,8 +60,14 @@ export async function deleteMemberGroup(groupMemberModifyData: GroupMemberModify
     return response.data
 }
 
+export async function getUserListData(team_id: number) {
+    const response = await axios.get(`${BASE_URL}/api/team/activate/${team_id}`, {
+        headers:setHeader(),
+    })
+    return response.data
+}
+
 export async function modifyJiraInfo(jiraData: JiraData, team_id: number) {
-    console.log("group.ts ->", jiraData)
     const response = await axios.post(`${BASE_URL}/api/jira/${team_id}`, jiraData, {
         headers: setHeader(),
     })
@@ -76,6 +80,7 @@ export async function getJiraIssue(team_id: number) {
     })
     return response.data
 }
+
 
 export interface JiraData {
     jiraDomain: string
@@ -105,6 +110,15 @@ export interface GroupMemberModifyData2 {
     user_email: string
 }
 
+export interface OnOffUser {
+    online: boolean
+    userEmail: string
+    userImg: string
+    userName: string
+}
+
+export interface OnOffUserList extends Array<OnOffUser>{}
+
 export interface GroupData {
     teamId: number
     userList: Array<UserInfo>
@@ -120,19 +134,19 @@ export interface DefaultResponse {
 
 export interface MemberData {
     email: string
+    image: string
     name: string
 }
 
 export interface Group {
     teamSeq: number
-    createdDate: string
-    modifiedDate: string
     jiraApiToken: string
     jiraDomain: string
     jiraProjectKey: string
     jiraUserId: string
-    userList: Array<MemberData>
+    userList: Array<MemberData> | null
     name: string
+    leaderEmail: string
 }
 
 export interface Groups extends Array<Group> {}
