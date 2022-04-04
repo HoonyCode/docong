@@ -1,6 +1,6 @@
 import { createAsyncAction } from 'typesafe-actions' // createAsyncAction 유틸함수 사용
 import { AxiosError } from 'axios'
-import { GroupCreateData, GroupModifyData, GroupMemberModifyData, DefaultResponse, GroupData, GroupMemberModifyData2, Groups } from '../../api/group'
+import { GroupCreateData, GroupModifyData, GroupMemberModifyData, DefaultResponse, GroupData, GroupMemberModifyData2, Groups, OnOffUserList } from '../../api/group'
 
 
 export const CREATE_GROUP = 'group/CREATE_GROUP'
@@ -30,6 +30,10 @@ export const ADD_MEMBER_GROUP_ERROR = 'group/ADD_MEMBER_GROUP_ERROR'
 export const DELETE_MEMBER_GROUP = 'group/DELETE_MEMBER_GROUP'
 export const DELETE_MEMBER_GROUP_SUCCESS = 'group/DELETE_MEMBER_GROUP_SUCCESS'
 export const DELETE_MEMBER_GROUP_ERROR = 'group/DELETE_MEMBER_GROUP_ERROR'
+
+export const GET_USER_LIST_DATA = 'group/GET_USER_LIST_DATA'
+export const GET_USER_LIST_DATA_SUCCESS = 'group/GET_USER_LIST_DATA_SUCCESS'
+export const GET_USER_LIST_DATA_ERROR = 'group/GET_USER_LIST_DATA_ERROR'
 
 export const MODIFY_JIRA_INFO = 'group/MODIFY_JIRA_INFO'
 export const MODIFY_JIRA_INFO_SUCCESS = 'group/MODIFY_JIRA_INFO_SUCCESS'
@@ -82,6 +86,12 @@ export const deleteMemberGroupAsync = createAsyncAction(
     DELETE_MEMBER_GROUP_ERROR
 )<GroupMemberModifyData2, DefaultResponse, AxiosError>()
 
+export const getUserListDataAsync = createAsyncAction(
+    GET_USER_LIST_DATA,
+    GET_USER_LIST_DATA_SUCCESS,
+    GET_USER_LIST_DATA_ERROR
+)<number, OnOffUserList, AxiosError>()
+
 export const modifyJiraInfoAsync = createAsyncAction(
     MODIFY_JIRA_INFO,
     MODIFY_JIRA_INFO_SUCCESS,
@@ -102,6 +112,7 @@ export const actions = {
     searchAllGroupAsync,
     addMemberGroupAsync,
     deleteMemberGroupAsync,
+    getUserListDataAsync,
     modifyJiraInfoAsync,
     getJiraIssueAsync
 }

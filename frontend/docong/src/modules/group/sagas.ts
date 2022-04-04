@@ -1,8 +1,6 @@
-import { CoPresentSharp } from '@mui/icons-material';
 import { call, put, takeEvery } from 'redux-saga/effects'
-import { TypeOfTag } from 'typescript';
-import { addMemberGroup, createGroup, DefaultResponse, deleteGroup, deleteMemberGroup, getJiraIssue, Group, GroupData, Groups, modifyGroup, modifyJiraInfo, searchAllGroup, searchGroup } from '../../api/group';
-import { actions, ADD_MEMBER_GROUP, CREATE_GROUP, DELETE_GROUP, DELETE_MEMBER_GROUP, getJiraIssueAsync, GET_JIRA_ISSUE, MODIFY_GROUP, MODIFY_JIRA_INFO, searchAllGroupAsync, SEARCH_ALL_GROUP, SEARCH_GROUP } from './actions';
+import { addMemberGroup, createGroup, DefaultResponse, deleteGroup, deleteMemberGroup, getJiraIssue, getUserListData, Group, GroupData, Groups, modifyGroup, modifyJiraInfo, OnOffUserList, searchAllGroup, searchGroup } from '../../api/group';
+import { actions, ADD_MEMBER_GROUP, CREATE_GROUP, DELETE_GROUP, DELETE_MEMBER_GROUP, getJiraIssueAsync, GET_JIRA_ISSUE, GET_USER_LIST_DATA, MODIFY_GROUP, MODIFY_JIRA_INFO, searchAllGroupAsync, SEARCH_ALL_GROUP, SEARCH_GROUP } from './actions';
 
 
 
@@ -14,7 +12,6 @@ export function* createGroupSaga(action: ReturnType<typeof actions.createGroupAs
     )
     // group을 생성하고 모든 그룹을 불러옴
     yield put(searchAllGroupAsync.request(null))
-    console.log(createGroupResponse)
   } catch (e: any) {
     console.error(e)
   }
@@ -26,7 +23,8 @@ export function* modifyGroupSaga(action: ReturnType<typeof actions.modifyGroupAs
       modifyGroup,
       action.payload
     )
-    console.log(modifyGroupResponse)
+    // group을 생성하고 모든 그룹을 불러옴
+    yield put(searchAllGroupAsync.request(null))
   } catch (e: any) {
     console.error(e)
   }
@@ -39,8 +37,7 @@ export function* deleteGroupSaga(action: ReturnType<typeof actions.deleteGroupAs
       action.payload
     )
     // group을 삭제하고 모든 그룹을 불러옴
-    // yield put(searchAllGroupAsync.request(null))
-    console.log(deleteGroupResponse)
+    yield put(searchAllGroupAsync.request(null))
   } catch (e: any) {
     console.error(e)
   }
@@ -52,49 +49,59 @@ export function* searchGroupSaga(action: ReturnType<typeof actions.searchGroupAs
       searchGroup,
       action.payload
     )
-    console.log(searchGroupResponse)
   } catch (e: any) {
     console.error(e)
   }
 }
 
 export function* searchAllGroupSaga(action: ReturnType<typeof actions.searchAllGroupAsync.request>) {
-  try{
+  try {
     const groups: Groups = yield call(searchAllGroup)
     yield put(searchAllGroupAsync.success(groups))
-    console.log(groups)
-  } catch(e:any){
+  } catch (e: any) {
     yield put(searchAllGroupAsync.failure(e))
     console.error(e)
   }
 }
 
 export function* addMemberGroupSaga(action: ReturnType<typeof actions.addMemberGroupAsync.request>) {
-  try{
+  try {
     const addMemberGroupResponse: DefaultResponse = yield call(
       addMemberGroup,
       action.payload
     )
-    console.log(addMemberGroupResponse)
-  } catch(e: any) {
+  } catch (e: any) {
+    alert("잘못된 유저를 추가하였습니다.")
     console.error(e)
   }
 }
 
 export function* deleteMemberGroupSaga(action: ReturnType<typeof actions.deleteMemberGroupAsync.request>) {
-  try{
+  try {
     const deleteMemberGroupResponse: DefaultResponse = yield call(
       deleteMemberGroup,
       action.payload
     )
-    console.log(deleteMemberGroupResponse)
-  } catch(e: any) {
+    // group을 생성하고 모든 그룹을 불러옴
+    yield put(searchAllGroupAsync.request(null))
+  } catch (e: any) {
+    console.error(e)
+  }
+}
+
+export function* getUserListDataSaga(action: ReturnType<typeof actions.getUserListDataAsync.request>) {
+  try {
+    const getUserListDataResponse: OnOffUserList = yield call(
+      getUserListData,
+      action.payload
+    )
+  } catch (e: any) {
     console.error(e)
   }
 }
 
 export function* modifyJiraInfoSaga(action: ReturnType<typeof actions.modifyJiraInfoAsync.request>) {
-  try{
+  try {
     const modifyJiraInfoResponse: DefaultResponse = yield call(
       modifyJiraInfo,
       action.payload.jiraData,
@@ -102,20 +109,18 @@ export function* modifyJiraInfoSaga(action: ReturnType<typeof actions.modifyJira
     )
     // Jira 정보를 업데이트하고 Jira 데이터를 가져옴
     yield put(getJiraIssueAsync.request(action.payload.team_id))
-    console.log(modifyJiraInfoResponse)
-  }catch(e: any) {
+  } catch (e: any) {
     console.error(e)
   }
 }
 
 export function* getJiraIssueSaga(action: ReturnType<typeof actions.getJiraIssueAsync.request>) {
-  try{
+  try {
     const getJiraIssueResponse: DefaultResponse = yield call(
       getJiraIssue,
       action.payload
     )
-    console.log(getJiraIssueResponse)
-  } catch(e: any) {
+  } catch (e: any) {
     console.log(e)
   }
 }
@@ -130,4 +135,5 @@ export function* groupSaga() {
   yield takeEvery(DELETE_MEMBER_GROUP, deleteMemberGroupSaga)
   yield takeEvery(MODIFY_JIRA_INFO, modifyJiraInfoSaga)
   yield takeEvery(GET_JIRA_ISSUE, getJiraIssueSaga)
+  yield takeEvery(GET_USER_LIST_DATA, getUserListDataSaga)
 }
