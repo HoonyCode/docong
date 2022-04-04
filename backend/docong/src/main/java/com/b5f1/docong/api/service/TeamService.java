@@ -16,5 +16,5 @@ public interface TeamService {
     List<FindTeamResDto> findAllTeam(Long user_id);
     void addTeamMember(SaveAndDeleteTeamUserReqDto teamUserReqDto, Long reqUserId);
     void deleteTeamMember(SaveAndDeleteTeamUserReqDto teamUserReqDto, Long reqUserId);
-    List<FindMemberActivateResDto> findMemberWithActivate(Long team_id);
+//    List<FindMemberActivateResDto> findMemberWithActivate(Long team_id);
 }
