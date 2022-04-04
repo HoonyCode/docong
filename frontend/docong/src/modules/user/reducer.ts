@@ -7,6 +7,7 @@ import {
   CHANGE_USER_TIMER_TYPE,
   getRankingListAsync,
   getUserInfoAsync,
+  getUserPomoCountAsync,
   getWorkTypeAnalysisAsync,
   INIT_USER_TIMER,
 } from './actions'
@@ -28,6 +29,7 @@ const initialState: UserState = {
   },
   rankingList: asyncState.initial(),
   workTypeAnalysis: asyncState.initial(),
+  userPomoCountAnalysis: asyncState.initial(),
 }
 
 // --- reducerUtils 의 createAsyncReducer, transformToArray 를 활용한 리팩토링 ---
@@ -77,6 +79,10 @@ const user = createReducer<UserState, UserAction>(initialState, {
   .handleAction(
     transformToArray(getWorkTypeAnalysisAsync),
     createAsyncReducer(getWorkTypeAnalysisAsync, 'workTypeAnalysis')
+  )
+  .handleAction(
+    transformToArray(getUserPomoCountAsync),
+    createAsyncReducer(getUserPomoCountAsync, 'userPomoCountAnalysis')
   )
 
 export default user

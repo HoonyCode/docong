@@ -21,6 +21,8 @@ import {
   GET_RANKING_LIST,
   getWorkTypeAnalysisAsync,
   GET_WORK_TYPE_ANALYSIS,
+  getUserPomoCountAsync,
+  GET_USER_POMO_COUNT,
 } from './actions'
 import {
   userSignup,
@@ -50,8 +52,10 @@ import { getUserInfo, setUserInfo, UserInfo } from '../../api/user'
 import { findTodo, Todo } from '../../api/todo'
 import {
   getRankingList,
+  getUserPomoCount,
   getWorkTypeAnalysis,
   RankingDataList,
+  UserPomoCount,
   WorkTypeAnalysis,
 } from '../../api/analysis'
 
@@ -214,6 +218,18 @@ function* getWorkTypeAnalysisSaga(
   }
 }
 
+function* getUserPomoCountSaga(
+  action: ReturnType<typeof getUserPomoCountAsync.request>
+) {
+  try {
+    const userPomoCount: UserPomoCount = yield call(getUserPomoCount)
+    yield put(getUserPomoCountAsync.success(userPomoCount))
+  } catch (e: any) {
+    yield put(getUserPomoCountAsync.failure(e))
+    console.error(e)
+  }
+}
+
 export function* userSaga() {
   yield takeEvery(USER_SIGNUP, userSignupSaga)
   yield takeEvery(USER_LOGIN, userLoginSaga)
@@ -224,4 +240,5 @@ export function* userSaga() {
   yield takeEvery(SAVE_POMO, savePomoSaga)
   yield takeEvery(GET_RANKING_LIST, getRankingListSaga)
   yield takeEvery(GET_WORK_TYPE_ANALYSIS, getWorkTypeAnalysisSaga)
+  yield takeEvery(GET_USER_POMO_COUNT, getUserPomoCountSaga)
 }
