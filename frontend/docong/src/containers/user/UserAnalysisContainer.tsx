@@ -133,7 +133,6 @@ function UserAnalysisContainer() {
           >
             <Tab sx={{ fontSize: '16px' }} label="두콩 랭킹" />
             <Tab sx={{ fontSize: '16px' }} label="사용자 통계" />
-            <Tab sx={{ fontSize: '16px' }} label="준비중" disabled />
           </Tabs>
         </Box>
         <Box
@@ -188,6 +187,7 @@ function UserAnalysisContainer() {
                   width: '50%',
                   height: '50%',
                   p: '15px',
+                  borderRadius: '8px',
                 }}
               >
                 <Box sx={{ textAlign: 'center', fontSize: '20px' }}>
@@ -201,6 +201,7 @@ function UserAnalysisContainer() {
                   width: '50%',
                   height: '40%',
                   p: '15px',
+                  borderRadius: '8px',
                 }}
               >
                 <Box sx={{ textAlign: 'center', fontSize: '20px' }}>
