@@ -1,13 +1,17 @@
 package com.b5f1.docong.api.service;
 
 import com.b5f1.docong.api.dto.request.*;
+import com.b5f1.docong.api.dto.response.FindMemberActivateResDto;
 import com.b5f1.docong.api.dto.response.FindTeamResDto;
 import com.b5f1.docong.core.domain.group.Team;
 import com.b5f1.docong.core.domain.group.TeamUser;
+import com.b5f1.docong.core.domain.todo.Todo;
+import com.b5f1.docong.core.domain.todo.UserTodo;
 import com.b5f1.docong.core.domain.user.User;
 import com.b5f1.docong.core.queryrepository.TeamUserQueryRepositoryImpl;
 import com.b5f1.docong.core.repository.TeamRepository;
 import com.b5f1.docong.core.repository.TeamUserRepository;
+import com.b5f1.docong.core.repository.TodoRepository;
 import com.b5f1.docong.core.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +39,8 @@ class TeamServiceImplTest {
     private TeamUserRepository teamUserRepository;
     @Autowired
     private TeamUserQueryRepositoryImpl teamUserQueryRepository;
+    @Autowired
+    private TodoRepository todoRepository;
 
     @Test
     void saveTest(){
@@ -63,6 +69,25 @@ class TeamServiceImplTest {
         assertThat(teamId).isEqualTo(seq);
         assertThat(userCount).isEqualTo(1);
         assertThat(leader.getSeq()).isEqualTo(findUser.getSeq());
+    }
+
+    @Test
+    void findActivateTest(){
+        //given
+        User findUser = joinUser("teat1");
+        SaveTeamReqDto teamReqDto = new SaveTeamReqDto(findUser.getEmail(), "findTeamTest");
+        Long seq = teamService.createTeam(teamReqDto);
+        Todo todo = Todo.builder().title("hi").content("HI").build();;
+        UserTodo userTodo = UserTodo.builder().todo(todo).user(findUser).build();
+        todo.addUserTodo(userTodo);
+        Todo savedTodo = todoRepository.save(todo);
+        savedTodo.changeActivation(true);
+
+        //when
+        List<FindMemberActivateResDto> response = teamService.findMemberWithActivate(seq);
+
+        //then
+        assertThat(response.get(0).getOnline()).isEqualTo(true);
     }
 
     @Test
