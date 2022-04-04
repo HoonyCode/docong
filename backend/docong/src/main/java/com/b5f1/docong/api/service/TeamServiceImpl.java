@@ -3,10 +3,7 @@ package com.b5f1.docong.api.service;
 import com.b5f1.docong.api.dto.request.SaveTeamReqDto;
 import com.b5f1.docong.api.dto.request.SaveAndDeleteTeamUserReqDto;
 import com.b5f1.docong.api.dto.request.UpdateTeamReqDto;
-import com.b5f1.docong.api.dto.response.FindAllTeamResDto;
-import com.b5f1.docong.api.dto.response.FindTeamResDto;
-import com.b5f1.docong.api.dto.response.UserInfoResDto;
-import com.b5f1.docong.api.dto.response.UserSimpleInfoResDto;
+import com.b5f1.docong.api.dto.response.*;
 import com.b5f1.docong.api.exception.CustomException;
 import com.b5f1.docong.api.exception.ErrorCode;
 import com.b5f1.docong.core.domain.group.Team;
@@ -156,6 +153,10 @@ public class TeamServiceImpl implements TeamService {
         teamUserRepository.delete(findeamUser);
     }
 
+    @Override
+    public List<FindMemberActivateResDto> findMemberWithActivate(Long team_id) {
+        return teamUserQueryRepository.findMemberActivate(team_id);
+    }
 
 
     public boolean isTeam(Long team_id) {
