@@ -58,7 +58,10 @@ public class User {
     private String image;
 
     @Column
-    private Tier tier;
+    private Tier tier=Tier.한콩;
+
+    @Column
+    private Boolean online=false;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserTodo> userTodos = new ArrayList<>();
@@ -84,6 +87,7 @@ public class User {
         this.oauth_type = oauth_type;
         this.image = image;
         this.tier = Tier.한콩;
+        this.online = false;
     }
 
     public void addUserTodo(UserTodo userTodo) {
@@ -130,5 +134,9 @@ public class User {
 
     public void changeTier(Tier tier) {
         this.tier = tier;
+    }
+
+    public void changeActivation(Boolean online) {
+        this.online = online;
     }
 }
