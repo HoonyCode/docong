@@ -93,6 +93,7 @@ function UserAnalysisContainer() {
         <Button
           sx={{
             fontSize: '20px',
+            fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
             color: (theme) => theme.colors.greenText,
             mx: '0.8vw',
             borderRadius: '0px',
@@ -107,6 +108,7 @@ function UserAnalysisContainer() {
         <Button
           sx={{
             fontSize: '20px',
+            fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
             color: (theme) => theme.colors.greenText,
             mx: '0.8vw',
             borderBottom: (theme) => `2px solid ${theme.colors.greenText}`,

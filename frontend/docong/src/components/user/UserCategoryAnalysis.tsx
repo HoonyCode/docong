@@ -80,7 +80,7 @@ function UserCategoryAnalysis({ workTypeAnalysis }: UserCategoryAnalysisProps) {
       options={chartData.options}
       series={chartData.series}
       type="line"
-      width={'100%'}
+      width={'95%'}
       height={'90%'}
     />
   )

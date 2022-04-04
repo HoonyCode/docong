@@ -24,6 +24,18 @@ function NavBarContainer() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  const tierList = [
+    '한콩',
+    '두콩',
+    '세콩',
+    '네콩',
+    '완두콩',
+    '투두콩',
+    '쓰리두콩',
+    '포두콩',
+    '콩나무',
+  ]
+
   const onClickToTimer = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     if (location.pathname !== '/timer') {
@@ -283,9 +295,9 @@ function NavBarContainer() {
         }}
         onClick={(e: any) => onClickProfile(e)}
       >
-        <Box sx={{ width: '60px', alignSelf: 'center' }}>
+        <Box sx={{ width: '50px', alignSelf: 'top' }}>
           <Avatar
-            sx={{ width: 48, height: 48, boxShadow: 2, mr: '10px' }}
+            sx={{ width: 40, height: 40, boxShadow: 2, mr: '10px' }}
             alt="User"
             src={
               userInfo && userInfo.image
@@ -294,8 +306,49 @@ function NavBarContainer() {
             }
           />
         </Box>
-        <Box sx={{ display: 'flex', alignSelf: 'center' }}>
-          {`${userInfo ? userInfo.name : ''}님`}
+        <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'inline-block', alignSelf: 'top' }}>
+            {`${userInfo ? userInfo.name : ''}님`}
+            <Box sx={{ display: 'inline-block' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignSelf: 'center',
+                  p: '4px',
+                  ml: '5px',
+                  borderRadius: '8px',
+                  background: '#f4fce3',
+                  boxShadow: 1,
+                }}
+              >
+                <Avatar
+                  sx={{
+                    height: '24px',
+                    width: 'auto',
+                    alignSelf: 'center',
+                    mr: '5px',
+                  }}
+                  variant="square"
+                  src={
+                    userInfo && userInfo.tier
+                      ? `/images/tier_${
+                          tierList.indexOf(userInfo.tier) + 1
+                        }.png`
+                      : '/images/tier_1.png'
+                  }
+                />
+                <Box
+                  sx={{
+                    fontSize: '20px',
+                    color: (theme) => theme.colors.greenText,
+                    alignSelf: 'center',
+                  }}
+                >
+                  {userInfo && userInfo.tier ? userInfo.tier : '한콩'}
+                </Box>
+              </Box>
+            </Box>
+          </Box>
         </Box>
       </Box>
       <Box sx={{ display: 'flex' }}>
@@ -303,7 +356,7 @@ function NavBarContainer() {
           sx={{
             display: 'flex',
             alignItems: 'center',
-            ml: '100px',
+            ml: '90px',
             height: '25px',
             fontSize: '16px',
             color: (theme) => theme.colors.greenText,
