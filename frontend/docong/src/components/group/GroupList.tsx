@@ -23,14 +23,15 @@ function GroupList({ groups }: GroupListProps) {
             const group = groups
                 .map((group: Group) => ({
                     teamSeq: group.teamSeq,
-                    createDate: group.createdDate,
-                    modifiedDate: group.modifiedDate,
+                    // createDate: group.createdDate,
+                    // modifiedDate: group.modifiedDate,
                     jiraApiToken: group.jiraApiToken,
                     jiraDomain: group.jiraDomain,
                     jiraProjectKey: group.jiraProjectKey,
                     jiraUserId: group.jiraUserId,
                     userList: group.userList,
-                    name: group.name
+                    name: group.name,
+                    leaderEmail: group.leaderEmail
                 }))
             setGroup(
                 produce((draft) => {

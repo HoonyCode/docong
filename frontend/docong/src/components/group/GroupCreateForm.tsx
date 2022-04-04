@@ -78,6 +78,7 @@ function GroupCreateForm({
                                     value={createGroupInfo.name}
                                     color="success"
                                     sx={{ mb: '14px' }}
+                                    inputProps={{ maxLength: 15 }}
                                 />
                             </Grid>
 
@@ -97,7 +98,7 @@ function GroupCreateForm({
                             color="success"
                             type="submit"
                         >
-                            수정
+                            생성
                         </Button>
                         <Button
                             sx={{
