@@ -42,7 +42,7 @@ public class AnalysisGroupServiceTest {
     private TodoService todoService;
 
     @Autowired
-    private AnalysisGroupService analysisGroupService;
+    private AnalysisService analysisService;
 
     @BeforeEach
     void before() {
@@ -79,7 +79,7 @@ public class AnalysisGroupServiceTest {
         pomodoroService.savePomodoro(savePomodoroReqDto2, savedUser1);
         pomodoroService.savePomodoro(savePomodoroReqDto3, savedUser1);
 
-        FindPomoTimeResDto response = analysisGroupService.findPomoTime(savedUser1.getSeq());
+        FindPomoTimeResDto response = analysisService.findPomoTime(savedUser1.getSeq());
 
         assertThat(response.getSinglePomoCount()).isEqualTo(2);
         assertThat(response.getTotalPomoCount()).isEqualTo(9);
@@ -102,7 +102,7 @@ public class AnalysisGroupServiceTest {
         pomodoroService.savePomodoro(savePomodoroReqDto2, savedUser2);
         pomodoroService.savePomodoro(savePomodoroReqDto3, savedUser3);
 
-        List<FindGroupRankingResDto> response = analysisGroupService.findGroupRanking(savedTeam1.getSeq());
+        List<FindGroupRankingResDto> response = analysisService.findGroupRanking(savedTeam1.getSeq());
 
         assertThat(response.size()).isEqualTo(3);
         assertThat(response.get(0).getUserName()).isEqualTo("현서3");
