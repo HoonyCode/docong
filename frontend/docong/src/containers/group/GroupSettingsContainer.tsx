@@ -1,21 +1,55 @@
 import { Box, Button } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
-import { GroupModifyData, JiraData } from '../../api/group';
-import { deleteGroupAsync, modifyGroupAsync, modifyJiraInfoAsync } from '../../modules/group';
-import { useDispatch } from 'react-redux';
+import { GroupModifyData, Group, MemberData, GroupMemberModifyData, GroupMemberModifyData2 } from '../../api/group';
+import { addMemberGroupAsync, deleteGroupAsync, deleteMemberGroupAsync, modifyGroupAsync, modifyJiraInfoAsync, searchAllGroupAsync } from '../../modules/group';
+import { useDispatch, useSelector } from 'react-redux';
 import GroupModify from '../../components/group/GroupModify';
 import GroupDelete from '../../components/group/GroupDelete';
 import GroupDeleteForm from '../../components/group/GroupDeleteForm';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { RootState } from '../../modules';
+import GroupMemberSetting from '../../components/group/GroupMemberSetting';
+import MemberDelete from '../../components/group/MemberDelete';
+import MemberDeleteForm from '../../components/group/MemberDeleteForm';
+import { findAllGroupTodosAsync } from '../../modules/groupTodo';
 
 function GroupSettingsContainer() {
     const navigate = useNavigate()
     const params = useParams()
     const dispatch = useDispatch()
 
+    const userInfo = useSelector((state: RootState) => state.user.userInfo.data)
+    const groups = useSelector((state: RootState) => state.group.groups.data)
     const groupSeq = Number(params.groupSeq)
+    const [group, setGroup] = useState<null | Group>(null)
+
+    useEffect(() => {
+        findAllGroup()
+    }, [])
+
+    useEffect(() => {
+        if (groups != null) {
+            const matchGroup = groups
+                .find(g => g.teamSeq === groupSeq);
+            setGroup({
+                teamSeq: matchGroup ? matchGroup.teamSeq : 0,
+                jiraApiToken: matchGroup ? matchGroup.jiraApiToken : '',
+                jiraDomain: matchGroup ? matchGroup.jiraDomain : '',
+                jiraProjectKey: matchGroup ? matchGroup.jiraProjectKey : '',
+                jiraUserId: matchGroup ? matchGroup.jiraUserId : '',
+                userList: matchGroup ? matchGroup.userList : null,
+                name: matchGroup ? matchGroup.name : '',
+                leaderEmail: matchGroup ? matchGroup.leaderEmail : ''
+            })
+        }
+    }, [groups])
 
     const [isOpenGroupDeleteForm, setIsOpenGroupDeleteForm] = useState(false)
+    const [isOpenMemberDeleteForm, setIsOpenMemberDeleteForm] = useState(false)
+
+    const findAllGroup = () => {
+        dispatch(searchAllGroupAsync.request(null))
+    }
 
     const onClickToGroupTodo = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
@@ -33,7 +67,6 @@ function GroupSettingsContainer() {
     }
 
     const onGroupModifySubmit = (groupModifyData: GroupModifyData) => {
-        console.log("container -> ", groupModifyData)
         dispatch(modifyGroupAsync.request(groupModifyData))
     }
 
@@ -45,9 +78,30 @@ function GroupSettingsContainer() {
         setIsOpenGroupDeleteForm(false)
     }
 
-    const onGroupDeleteSubmit = (team_id: number) => {
-        dispatch(deleteGroupAsync.request(team_id))
+    const openMemberDeleteForm = () => {
+        setIsOpenMemberDeleteForm(true)
+    }
+
+    const closeMemberDeleteForm = () => {
+        setIsOpenMemberDeleteForm(false)
+    }
+
+    const onGroupDeleteSubmit = (id: number) => {
+        dispatch(deleteGroupAsync.request(id))
         navigate(`/timer`)
+    }
+
+    const onMemberDeleteSubmit = (groupMemberModifyData: GroupMemberModifyData2) => {
+        dispatch(deleteMemberGroupAsync.request(groupMemberModifyData))
+        navigate(`/timer`)
+    }
+
+    const onAddGroupMemberSubmit = (groupMemberModifyData: GroupMemberModifyData) => {
+        dispatch(addMemberGroupAsync.request(groupMemberModifyData))
+    }
+
+    const onMemberDeleteByLeaderSubmit = (groupMemberModifyData: GroupMemberModifyData2) => {
+        dispatch(deleteMemberGroupAsync.request(groupMemberModifyData))
     }
 
     return (
@@ -96,7 +150,7 @@ function GroupSettingsContainer() {
                     }}
                     variant="text"
                     color="success"
-                onClick={onClickToGroupAnalysis}
+                    onClick={onClickToGroupAnalysis}
                 >
                     ANALYSIS
                 </Button>
@@ -111,20 +165,52 @@ function GroupSettingsContainer() {
                     }}
                     variant="text"
                     color="success"
-                    onClick={(e: any) => e.prebentDefault()}
                 >
                     SETTING
                 </Button>
             </Box>
-            <h1>그룹 관리</h1>
-            <GroupModify onGroupModifySubmit={onGroupModifySubmit} />
-            <GroupDelete openGroupDeleteForm={openGroupDeleteForm} />
-            <GroupDeleteForm
-                groupSeq={groupSeq}
-                isOpenGroupDeleteForm={isOpenGroupDeleteForm}
-                closeGroupDeleteForm={closeGroupDeleteForm}
-                onGroupDeleteSubmit={onGroupDeleteSubmit}
-            />
+            <Box
+                sx={{
+                    justifyContent: 'center',
+                    pt: 5,
+                    mx: 20
+                }}>
+                {userInfo !== null && group !== null && userInfo.email === group.leaderEmail &&
+                    <h1>그룹 관리</h1>
+                }
+                {userInfo !== null && group !== null && userInfo.email === group.leaderEmail &&
+                <GroupModify
+                    group={group}
+                    onGroupModifySubmit={onGroupModifySubmit}
+                />
+                }
+                <GroupMemberSetting
+                    group={group}
+                    onAddGroupMemberSubmit={onAddGroupMemberSubmit}
+                    onMemberDeleteByLeaderSubmit={onMemberDeleteByLeaderSubmit}
+                />
+                {userInfo!==null && userInfo.email !== group?.leaderEmail &&
+                <MemberDelete
+                    openMemberDeleteForm={openMemberDeleteForm}
+                />
+                }
+                <MemberDeleteForm
+                    group={group}
+                    isOpenMemberDeleteForm={isOpenMemberDeleteForm}
+                    closeMemberDeleteForm={closeMemberDeleteForm}
+                    onMemberDeleteSubmit={onMemberDeleteSubmit}
+                />
+                <GroupDelete
+                    group={group}
+                    openGroupDeleteForm={openGroupDeleteForm}
+                />
+                <GroupDeleteForm
+                    group={group}
+                    isOpenGroupDeleteForm={isOpenGroupDeleteForm}
+                    closeGroupDeleteForm={closeGroupDeleteForm}
+                    onGroupDeleteSubmit={onGroupDeleteSubmit}
+                />
+            </Box>
         </>
     )
 }
