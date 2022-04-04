@@ -1,9 +1,15 @@
 package com.b5f1.docong.core.queryrepository;
 
+import com.b5f1.docong.api.dto.response.FindAllDateCountResDto;
 import com.b5f1.docong.api.dto.response.PomoTimeCountResDto;
+import com.b5f1.docong.api.dto.response.QFindAllDateCountResDto;
 import com.b5f1.docong.core.domain.pomodoro.Pomodoro;
 import com.b5f1.docong.core.domain.todo.QTodo;
+import com.querydsl.core.types.ConstantImpl;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -88,4 +94,41 @@ public class PomodoroQueryRepositoryImpl implements PomodoroQueryRepository {
                 .fetch();
     }
 
+    @Override
+    public List<FindAllDateCountResDto> findAllDateByUser(Long userSeq, int year) {
+
+        StringTemplate formattedDate = Expressions.stringTemplate(
+                "DATE_FORMAT({0}, {1})"
+                , pomodoro.startTime
+                , ConstantImpl.create("%Y-%m-%d"));
+
+        return queryFactory
+                .select(new QFindAllDateCountResDto(
+                        formattedDate,
+                        pomodoro.count()))
+                .from(pomodoro)
+                .where(pomodoro.user.seq.eq(userSeq).and(pomodoro.startTime.year().eq(year)))
+                .groupBy(formattedDate)
+                .fetch();
+    }
+
+    @Override
+    public List<FindAllDateCountResDto> findAllDateByGroup(Long groupSeq, int year) {
+
+        StringTemplate formattedDate = Expressions.stringTemplate(
+                "DATE_FORMAT({0}, {1})"
+                , pomodoro.startTime
+                , ConstantImpl.create("%Y-%m-%d"));
+
+        return queryFactory
+                .select(new QFindAllDateCountResDto(
+                        formattedDate,
+                        pomodoro.count()))
+                .from(pomodoro)
+                .leftJoin(QTodo.todo)
+                .on(pomodoro.todo.eq(QTodo.todo))
+                .where(QTodo.todo.team.seq.eq(groupSeq).and(pomodoro.startTime.year().eq(year)))
+                .groupBy(formattedDate)
+                .fetch();
+    }
 }

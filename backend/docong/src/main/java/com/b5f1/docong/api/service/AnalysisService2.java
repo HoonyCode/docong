@@ -1,5 +1,6 @@
 package com.b5f1.docong.api.service;
 
+import com.b5f1.docong.api.dto.response.FindAllDateCountResDto;
 import com.b5f1.docong.api.dto.response.PomoDayCountResDto;
 import com.b5f1.docong.api.dto.response.PomoTimeCountResDto;
 import org.springframework.stereotype.Service;
@@ -18,5 +19,10 @@ public interface AnalysisService2 {
     List<PomoTimeCountResDto> findTimeCountByUserSolo(Long userSeq);
 
     List<PomoTimeCountResDto> findTimeCountByUserGroup(Long userSeq, Long groupSeq);
+
+    List<FindAllDateCountResDto> findAllDateCountByUser(Long userSeq, int year);
+
+
+    List<FindAllDateCountResDto> findAllDateCountByGroup(Long groupSeq, int year);
 
 }
