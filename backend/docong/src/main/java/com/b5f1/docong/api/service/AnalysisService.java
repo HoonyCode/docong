@@ -16,7 +16,7 @@ public interface AnalysisService {
 
     List<PomoTimeCountResDto> findTimeCountByUserSolo(Long userSeq);
 
-    List<PomoTimeCountResDto> findTimeCountByUserGroup(Long userSeq, Long groupSeq);
+    List<PomoTimeCountResDto> findTimeCountByGroup(Long groupSeq);
 
     List<FindAllDateCountResDto> findAllDateCountByUser(Long userSeq, int year);
 

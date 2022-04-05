@@ -17,7 +17,7 @@ public interface PomodoroQueryRepository {
 
     List<PomoTimeCountResDto> findTimeCountByUser(Long userSeq);
 
-    List<PomoTimeCountResDto> findTimeCountByUserGroup(Long userSeq, Long groupSeq);
+    List<PomoTimeCountResDto> findTimeCountByGroup(Long groupSeq);
 
     List<FindAllDateCountResDto> findAllDateByUser(Long userSeq, int year);
 

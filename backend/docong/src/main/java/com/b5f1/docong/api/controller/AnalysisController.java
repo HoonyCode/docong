@@ -55,8 +55,8 @@ public class AnalysisController {
     }
 
     @GetMapping("/time/{group}")
-    ResponseEntity<List<PomoTimeCountResDto>> findTimeCountGroup(@Auth User user, @PathVariable("group") Long groupSeq) {
-        List<PomoTimeCountResDto> response = analysisService.findTimeCountByUserGroup(user.getSeq(), groupSeq);
+    ResponseEntity<List<PomoTimeCountResDto>> findTimeCountGroup(@PathVariable("group") Long groupSeq) {
+        List<PomoTimeCountResDto> response = analysisService.findTimeCountByGroup(groupSeq);
         return ResponseEntity.status(200).body(response);
     }
 

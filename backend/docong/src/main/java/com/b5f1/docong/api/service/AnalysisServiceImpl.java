@@ -114,12 +114,12 @@ public class AnalysisServiceImpl implements AnalysisService {
     }
 
     @Override
-    public List<PomoTimeCountResDto> findTimeCountByUserGroup(Long userSeq, Long groupSeq) {
+    public List<PomoTimeCountResDto> findTimeCountByGroup(Long groupSeq) {
         List<PomoTimeCountResDto> result = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
             result.add(new PomoTimeCountResDto(i, 0d));
         }
-        List<PomoTimeCountResDto> pomoTimeCountResDtoList = pomodoroRepository.findTimeCountByUserGroup(userSeq, groupSeq);
+        List<PomoTimeCountResDto> pomoTimeCountResDtoList = pomodoroRepository.findTimeCountByGroup(groupSeq);
         for (PomoTimeCountResDto in : pomoTimeCountResDtoList) {
             result.get(in.getHour()).setCnt(in.getCnt());
         }
