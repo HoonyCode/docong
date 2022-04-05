@@ -4,10 +4,12 @@ import com.b5f1.docong.api.dto.response.FindAllDateCountResDto;
 import com.b5f1.docong.api.dto.response.PomoTimeCountResDto;
 import com.b5f1.docong.api.dto.response.QFindAllDateCountResDto;
 import com.b5f1.docong.core.domain.pomodoro.Pomodoro;
+import com.b5f1.docong.core.domain.pomodoro.TimeStatus;
 import com.b5f1.docong.core.domain.todo.QTodo;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -67,7 +69,7 @@ public class PomodoroQueryRepositoryImpl implements PomodoroQueryRepository {
         return queryFactory
                 .select(Projections.constructor(PomoTimeCountResDto.class,
                         pomodoro.startTime.hour(),
-                        pomodoro.startTime.count()
+                        new CaseBuilder().when(pomodoro.timeStatus.eq(TimeStatus.SHORT)).then(0.5).when(pomodoro.timeStatus.eq(TimeStatus.BASIC)).then(1.0).otherwise(2.0).sum()
                 ))
                 .from(pomodoro)
                 .leftJoin(QTodo.todo)
@@ -83,7 +85,7 @@ public class PomodoroQueryRepositoryImpl implements PomodoroQueryRepository {
         return queryFactory
                 .select(Projections.constructor(PomoTimeCountResDto.class,
                         pomodoro.startTime.hour(),
-                        pomodoro.startTime.count()
+                        new CaseBuilder().when(pomodoro.timeStatus.eq(TimeStatus.SHORT)).then(0.5).when(pomodoro.timeStatus.eq(TimeStatus.BASIC)).then(1.0).otherwise(2.0).sum()
                 ))
                 .from(pomodoro)
                 .leftJoin(QTodo.todo)
@@ -105,7 +107,7 @@ public class PomodoroQueryRepositoryImpl implements PomodoroQueryRepository {
         return queryFactory
                 .select(new QFindAllDateCountResDto(
                         formattedDate,
-                        pomodoro.count()))
+                        new CaseBuilder().when(pomodoro.timeStatus.eq(TimeStatus.SHORT)).then(0.5).when(pomodoro.timeStatus.eq(TimeStatus.BASIC)).then(1.0).otherwise(2.0).sum()))
                 .from(pomodoro)
                 .where(pomodoro.user.seq.eq(userSeq).and(pomodoro.startTime.year().eq(year)))
                 .groupBy(formattedDate)
@@ -123,7 +125,7 @@ public class PomodoroQueryRepositoryImpl implements PomodoroQueryRepository {
         return queryFactory
                 .select(new QFindAllDateCountResDto(
                         formattedDate,
-                        pomodoro.count()))
+                        new CaseBuilder().when(pomodoro.timeStatus.eq(TimeStatus.SHORT)).then(0.5).when(pomodoro.timeStatus.eq(TimeStatus.BASIC)).then(1.0).otherwise(2.0).sum()))
                 .from(pomodoro)
                 .leftJoin(QTodo.todo)
                 .on(pomodoro.todo.eq(QTodo.todo))

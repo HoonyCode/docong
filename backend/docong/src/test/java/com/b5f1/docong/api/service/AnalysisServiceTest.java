@@ -2,8 +2,10 @@ package com.b5f1.docong.api.service;
 
 import com.b5f1.docong.api.dto.request.SavePomodoroReqDto;
 import com.b5f1.docong.api.dto.request.SaveTodoReqDto;
+import com.b5f1.docong.api.dto.response.FindAllDateCountResDto;
 import com.b5f1.docong.api.dto.response.FindRankingResDto;
 import com.b5f1.docong.api.dto.response.FindWorktypeAnalysisResDto;
+import com.b5f1.docong.api.dto.response.PomoTimeCountResDto;
 import com.b5f1.docong.core.domain.pomodoro.TimeStatus;
 import com.b5f1.docong.core.domain.pomodoro.noiseStatus;
 import com.b5f1.docong.core.domain.todo.Todo;
@@ -12,6 +14,7 @@ import com.b5f1.docong.core.domain.todo.WorkType;
 import com.b5f1.docong.core.domain.user.User;
 import com.b5f1.docong.core.repository.TodoRepository;
 import com.b5f1.docong.core.repository.UserRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,7 +41,7 @@ class AnalysisServiceTest {
     AnalysisService analysisService;
 
     @Test
-    void findPomoRanking(){
+    void findPomoRanking() {
         //given
         User user1 = User.builder()
                 .email("wjddma1214@naver.com")
@@ -84,7 +87,7 @@ class AnalysisServiceTest {
     }
 
     @Test
-    void findWorktypeAnalysis(){
+    void findWorktypeAnalysis() {
         //given
         User user = User.builder()
                 .email("wjddma1214@naver.com")
@@ -141,4 +144,23 @@ class AnalysisServiceTest {
         assertThat(response.get(0).getCountTodo()).isEqualTo(2);
         assertThat(response.get(0).getTotalPomo()).isEqualTo(7);
     }
+
+
+    @Test
+    void 년도로뽀모가져오기() {
+        List<FindAllDateCountResDto> result = analysisService.findAllDateCountByUser(70L, 2022);
+
+//        for (FindAllDateCountResDto resDto : result) {
+//            System.out.println(resDto);
+//        }
+
+        Assertions.assertThat(result.get(result.size() - 1).getCount().equals(0));
+    }
+
+
+//    @Test
+//    void 시간별로뽀모가져오기(){
+//        List<PomoTimeCountResDto> result = analysisService.findTimeCountByUserSolo(70L);
+//
+//    }
 }
