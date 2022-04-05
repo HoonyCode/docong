@@ -13,9 +13,9 @@ public interface PomodoroQueryRepository {
 
     List<Pomodoro> findDayCountByUserSolo(Long userSeq);
 
-    List<Pomodoro> findDayCountByUserGroup(Long userSeq,Long groupSeq);
+    List<Pomodoro> findDayCountByUserGroup(Long userSeq, Long groupSeq);
 
-    List<PomoTimeCountResDto> findTimeCountByUserSolo(Long userSeq);
+    List<PomoTimeCountResDto> findTimeCountByUser(Long userSeq);
 
     List<PomoTimeCountResDto> findTimeCountByUserGroup(Long userSeq, Long groupSeq);
 
