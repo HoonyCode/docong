@@ -59,15 +59,19 @@ function UserPomoCountAnalysis({
           draft.options.labels = ['개인'].concat(
             userPomoCountAnalysis.teamPomoCount.map((data) => data.teamName)
           )
-          draft.series = [userPomoCountAnalysis.singlePomoCount].concat(
-            userPomoCountAnalysis.teamPomoCount.map((data) => data.pomoCount)
+          draft.series = [userPomoCountAnalysis.singlePomoCount / 2].concat(
+            userPomoCountAnalysis.teamPomoCount.map(
+              (data) => data.pomoCount / 2
+            )
           )
           draft.options.legend.customLegendItems = [
-            ` 개인 (${userPomoCountAnalysis.singlePomoCount} 콩)`,
+            ` 개인 (${userPomoCountAnalysis.singlePomoCount / 2} 콩)`,
           ].concat(
             userPomoCountAnalysis.teamPomoCount
-              .map((data) => ` ${data.teamName} (${data.pomoCount} 콩)`)
-              .concat(` 합계 : 총 ${userPomoCountAnalysis.totalPomoCount} 콩`)
+              .map((data) => ` ${data.teamName} (${data.pomoCount / 2} 콩)`)
+              .concat(
+                ` 합계 : 총 ${userPomoCountAnalysis.totalPomoCount / 2} 콩`
+              )
           )
         })
       )
@@ -80,7 +84,7 @@ function UserPomoCountAnalysis({
       series={chartData.series}
       type="donut"
       width={'95%'}
-      height={'90%'}
+      height={'88%'}
     />
   )
 }

@@ -1,4 +1,4 @@
-import { Box, Button, Tab, Tabs } from '@mui/material'
+import { Box, Button, Divider } from '@mui/material'
 import { memo, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -6,27 +6,22 @@ import { UserData } from '../../api/user'
 import EditUserForm from '../../components/user/EditUserForm'
 import UserCategoryAnalysis from '../../components/user/UserCategoryAnalysis'
 import UserPomoCountAnalysis from '../../components/user/UserPomoCountAnalysis'
-import UserRanking from '../../components/user/UserRanking'
 import { RootState } from '../../modules'
 import {
-  getRankingListAsync,
-  getUserInfoAsync,
+  getUserAllDateAnalysisAsync,
   getUserPomoCountAsync,
   getUserTimeAnalysisAsync,
   getWorkTypeAnalysisAsync,
   setUserInfoAsync,
 } from '../../modules/user'
-import Masonry from '@mui/lab/Masonry'
 import UserTimeCountAnalysis from '../../components/user/UserTimeCountAnalysis'
+import UserAllDateCountAnalysis from '../../components/user/UserAllDateCountAnalysis'
 
 function UserAnalysisContainer() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const userInfo = useSelector((state: RootState) => state.user.userInfo.data)
-  const rankingList = useSelector((state: RootState) =>
-    state.user.rankingList ? state.user.rankingList.data : null
-  )
   const workTypeAnalysis = useSelector((state: RootState) =>
     state.user.workTypeAnalysis ? state.user.workTypeAnalysis.data : null
   )
@@ -38,22 +33,17 @@ function UserAnalysisContainer() {
   const userTimeAnalysis = useSelector((state: RootState) =>
     state.user.userTimeAnalysis ? state.user.userTimeAnalysis.data : null
   )
+  const userAllDateAnalysis = useSelector((state: RootState) =>
+    state.user.userAllDateAnalysis ? state.user.userAllDateAnalysis.data : null
+  )
   const [isOpenEditUserForm, setIsOpenEditUserForm] = useState(false)
-  const [tabValue, setTabValue] = useState(0)
 
   useEffect(() => {
-    dispatch(getUserInfoAsync.request(null))
+    dispatch(getWorkTypeAnalysisAsync.request(null))
+    dispatch(getUserPomoCountAsync.request(null))
+    dispatch(getUserTimeAnalysisAsync.request(null))
+    dispatch(getUserAllDateAnalysisAsync.request(new Date().getFullYear()))
   }, [])
-
-  useEffect(() => {
-    if (tabValue === 0) {
-      dispatch(getRankingListAsync.request(null))
-    } else if (tabValue === 1) {
-      dispatch(getWorkTypeAnalysisAsync.request(null))
-      dispatch(getUserPomoCountAsync.request(null))
-      dispatch(getUserTimeAnalysisAsync.request(null))
-    }
-  }, [tabValue])
 
   const onClickToTodos = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -71,13 +61,6 @@ function UserAnalysisContainer() {
   const editUser = (userData: UserData) => {
     dispatch(setUserInfoAsync.request(userData))
     setIsOpenEditUserForm(false)
-  }
-
-  const onChangeTab = (e: React.SyntheticEvent, newValue: number) => {
-    if (newValue === 0) {
-      dispatch(getRankingListAsync.request(null))
-    }
-    setTabValue(newValue)
   }
 
   return (
@@ -125,34 +108,38 @@ function UserAnalysisContainer() {
         sx={{
           display: 'flex',
           height: '90%',
-          px: '2vw',
+          px: '3vw',
           pt: '3vh',
           pb: '5vh',
         }}
       >
-        <Box sx={{ width: '200px', borderRight: '1px solid lightGray' }}>
-          <Tabs
-            orientation="vertical"
-            value={tabValue}
-            onChange={onChangeTab}
-            aria-label="Analysis Tabs"
-            color="success"
-            sx={{ mt: '2vh' }}
-          >
-            <Tab sx={{ fontSize: '16px' }} label="두콩 랭킹" />
-            <Tab sx={{ fontSize: '16px' }} label="사용자 통계" />
-          </Tabs>
-        </Box>
         <Box
           sx={{
             display: 'flex',
-            height: '100%',
             width: '100%',
             justifyContent: 'center',
-            alignItems: 'center',
             flexGrow: 1,
-            pl: '1vw',
+            overflow: 'overlay',
             '> div': { width: '100%' },
+            '::-webkit-scrollbar': {
+              width: '0px',
+            },
+            '::-webkit-scrollbar-thumb': {
+              backgroundColor: '#8a9788',
+              borderRadius: '8px',
+              backgroundClip: 'padding-box',
+              border: '1px solid transparent',
+            },
+            '::-webkit-scrollbar-track': {
+              backgroundColor: '#c4c4c4',
+              borderRadius: '8px',
+              boxShadow: 'inset 0px 0px 5px white',
+            },
+            '&:hover': {
+              '::-webkit-scrollbar': {
+                width: '8px',
+              },
+            },
           }}
         >
           {userInfo && !userInfo.birth && (
@@ -180,60 +167,88 @@ function UserAnalysisContainer() {
               </Box>
             </Box>
           )}
-          {userInfo && userInfo.birth && tabValue === 0 && (
-            <UserRanking rankingList={rankingList} />
-          )}
-          {userInfo && userInfo.birth && tabValue === 1 && (
-            <Masonry
-              sx={{ height: '100%', width: '100%' }}
-              columns={2}
-              spacing={3}
-            >
+          {userInfo && userInfo.birth && (
+            <Box sx={{ px: '2vw', py: '1vh' }}>
               <Box
                 sx={{
-                  boxShadow: 3,
-                  width: '50%',
-                  height: '40%',
-                  p: '15px',
+                  boxShadow: 2,
+                  width: '100%',
+                  height: '17vw',
+                  p: '20px',
+                  mb: '1.5vw',
                   borderRadius: '8px',
                 }}
               >
-                <Box sx={{ textAlign: 'center', fontSize: '20px' }}>
-                  두콩 합계
+                <Box sx={{ textAlign: 'center', fontSize: '1.8vw' }}>
+                  두콩밭
                 </Box>
-                <UserPomoCountAnalysis
-                  userPomoCountAnalysis={userPomoCountAnalysis}
+                <Divider sx={{ my: '0.3vw' }} variant="middle" />
+                <UserAllDateCountAnalysis
+                  userAllDateAnalysis={userAllDateAnalysis}
                 />
               </Box>
               <Box
                 sx={{
-                  boxShadow: 3,
-                  width: '50%',
-                  height: '50%',
-                  p: '15px',
-                  borderRadius: '8px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  mb: '1.5vw',
                 }}
               >
-                <Box sx={{ textAlign: 'center', fontSize: '20px' }}>
-                  시간대별 통계
+                <Box
+                  sx={{
+                    boxShadow: 2,
+                    width: '49%',
+                    height: '21vw',
+                    p: '20px',
+                    borderRadius: '8px',
+                  }}
+                >
+                  <Box
+                    sx={{ textAlign: 'center', fontSize: '1.6vw', mb: '1vw' }}
+                  >
+                    두콩 합계
+                  </Box>
+                  <UserPomoCountAnalysis
+                    userPomoCountAnalysis={userPomoCountAnalysis}
+                  />
                 </Box>
-                <UserTimeCountAnalysis userTimeAnalysis={userTimeAnalysis} />
-              </Box>
-              <Box
-                sx={{
-                  boxShadow: 3,
-                  width: '50%',
-                  height: '50%',
-                  p: '15px',
-                  borderRadius: '8px',
-                }}
-              >
-                <Box sx={{ textAlign: 'center', fontSize: '20px' }}>
-                  업무 카테고리 통계
+                <Box
+                  sx={{
+                    boxShadow: 2,
+                    width: '49%',
+                    height: '21vw',
+                    p: '20px',
+                    borderRadius: '8px',
+                  }}
+                >
+                  <Box
+                    sx={{ textAlign: 'center', fontSize: '1.6vw', mb: '1vw' }}
+                  >
+                    시간대별 통계
+                  </Box>
+                  <UserTimeCountAnalysis userTimeAnalysis={userTimeAnalysis} />
                 </Box>
-                <UserCategoryAnalysis workTypeAnalysis={workTypeAnalysis} />
               </Box>
-            </Masonry>
+              <Box sx={{ pb: '1vw' }}>
+                <Box
+                  sx={{
+                    boxShadow: 2,
+                    width: '100%',
+                    height: '31vw',
+                    p: '20px',
+                    mb: '20px',
+                    borderRadius: '8px',
+                  }}
+                >
+                  <Box
+                    sx={{ textAlign: 'center', fontSize: '1.6vw', mb: '1vw' }}
+                  >
+                    업무 카테고리 통계
+                  </Box>
+                  <UserCategoryAnalysis workTypeAnalysis={workTypeAnalysis} />
+                </Box>
+              </Box>
+            </Box>
           )}
         </Box>
       </Box>

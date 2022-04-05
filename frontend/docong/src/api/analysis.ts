@@ -37,6 +37,13 @@ export async function getUserTimeAnalysis() {
   return response.data
 }
 
+export async function getUserAllDateAnalysis(year: number) {
+  const response = await axios.get(`${BASE_URL}/api/analysis/date/${year}`, {
+    headers: setHeader(),
+  })
+  return response.data
+}
+
 export interface RankingData {
   userName: string
   userEmail: string
@@ -70,3 +77,10 @@ export interface UserTimeData {
 }
 
 export interface UserTimeAnalysis extends Array<UserTimeData> {}
+
+export interface UserAllDateData {
+  count: number
+  localDate: Array<number>
+}
+
+export interface UserAllDateAnalysis extends Array<UserAllDateData> {}

@@ -24,6 +24,8 @@ const refresh = async (
           alert('로그인 유지 기간이 만료되었습니다.')
           localStorage.removeItem('refreshToken')
           localStorage.removeItem('jwtToken')
+          localStorage.removeItem('persist:root')
+          window.dispatchEvent(new Event('storage'))
         }
       }
     }
@@ -32,7 +34,7 @@ const refresh = async (
   if (!config.headers) {
     config.headers = {}
   }
-  config.headers['authorization'] = `Bearer ${jwtToken}`
+  config.headers['Authorization'] = `Bearer ${jwtToken}`
 
   return config
 }

@@ -6,6 +6,7 @@ import {
   CHANGE_USER_TIMER_TODO,
   CHANGE_USER_TIMER_TYPE,
   getRankingListAsync,
+  getUserAllDateAnalysisAsync,
   getUserInfoAsync,
   getUserPomoCountAsync,
   getUserTimeAnalysisAsync,
@@ -32,6 +33,7 @@ const initialState: UserState = {
   workTypeAnalysis: asyncState.initial(),
   userPomoCountAnalysis: asyncState.initial(),
   userTimeAnalysis: asyncState.initial(),
+  userAllDateAnalysis: asyncState.initial(),
 }
 
 // --- reducerUtils 의 createAsyncReducer, transformToArray 를 활용한 리팩토링 ---
@@ -89,6 +91,10 @@ const user = createReducer<UserState, UserAction>(initialState, {
   .handleAction(
     transformToArray(getUserTimeAnalysisAsync),
     createAsyncReducer(getUserTimeAnalysisAsync, 'userTimeAnalysis')
+  )
+  .handleAction(
+    transformToArray(getUserAllDateAnalysisAsync),
+    createAsyncReducer(getUserAllDateAnalysisAsync, 'userAllDateAnalysis')
   )
 
 export default user

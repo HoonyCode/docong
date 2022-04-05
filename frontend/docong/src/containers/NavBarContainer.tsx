@@ -8,7 +8,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import EditUserForm from '../components/user/EditUserForm'
 import { UserData } from '../api/user'
 import { setUserInfoAsync } from '../modules/user'
-import { useState } from 'react'
+import { memo, useState } from 'react'
+import UserTierModal from '../components/user/UserTierModal'
 
 const LogoImage = styled.img`
   height: 90px;
@@ -19,6 +20,7 @@ function NavBarContainer() {
   const userInfo = useSelector((state: RootState) => state.user.userInfo.data)
   const userTimer = useSelector((state: RootState) => state.user.userTimer)
   const [isOpenEditUserForm, setIsOpenEditUserForm] = useState(false)
+  const [isOpenTierModal, setIsOpenTierModal] = useState(false)
   const location = useLocation()
 
   const dispatch = useDispatch()
@@ -46,6 +48,11 @@ function NavBarContainer() {
   const onClickToUserTodo = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     navigate('/user/todo')
+  }
+
+  const onClickToRanking = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    navigate('/ranking')
   }
 
   const onClickToExtension = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -83,6 +90,14 @@ function NavBarContainer() {
   const editUser = (userData: UserData) => {
     dispatch(setUserInfoAsync.request(userData))
     setIsOpenEditUserForm(false)
+  }
+
+  const openTierModal = () => {
+    setIsOpenTierModal(true)
+  }
+
+  const closeTierModal = () => {
+    setIsOpenTierModal(false)
   }
 
   return (
@@ -216,7 +231,7 @@ function NavBarContainer() {
             background: (theme) => `${darken(0.25, theme.colors.navBg)}`,
           },
         }}
-        onClick={(e: any) => onClickProfile(e)}
+        onClick={(e: any) => onClickToRanking(e)}
       >
         <Box
           sx={{
@@ -319,7 +334,14 @@ function NavBarContainer() {
                   borderRadius: '8px',
                   background: '#f4fce3',
                   boxShadow: 1,
+                  '&:hover': {
+                    background: `${darken(0.1, '#f4fce3')}`,
+                  },
+                  '&:active': {
+                    background: `${darken(0.25, '#f4fce3')}`,
+                  },
                 }}
+                onClick={openTierModal}
               >
                 <Avatar
                   sx={{
@@ -398,8 +420,12 @@ function NavBarContainer() {
         closeEditUserForm={closeEditUserForm}
         editUser={editUser}
       />
+      <UserTierModal
+        isOpenTierModal={isOpenTierModal}
+        closeTierModal={closeTierModal}
+      />
     </>
   )
 }
 
-export default NavBarContainer
+export default memo(NavBarContainer)

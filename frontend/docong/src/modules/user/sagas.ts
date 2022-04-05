@@ -25,6 +25,8 @@ import {
   GET_USER_POMO_COUNT,
   getUserTimeAnalysisAsync,
   GET_USER_TIME_ANALYSIS,
+  getUserAllDateAnalysisAsync,
+  GET_USER_ALL_DATE_ANALYSIS,
 } from './actions'
 import {
   userSignup,
@@ -54,10 +56,12 @@ import { getUserInfo, setUserInfo, UserInfo } from '../../api/user'
 import { findTodo, Todo } from '../../api/todo'
 import {
   getRankingList,
+  getUserAllDateAnalysis,
   getUserPomoCount,
   getUserTimeAnalysis,
   getWorkTypeAnalysis,
   RankingDataList,
+  UserAllDateAnalysis,
   UserPomoCount,
   UserTimeAnalysis,
   WorkTypeAnalysis,
@@ -246,6 +250,21 @@ function* getUserTimeAnalysisSaga(
   }
 }
 
+function* getUserAllDateAnalysisSaga(
+  action: ReturnType<typeof getUserAllDateAnalysisAsync.request>
+) {
+  try {
+    const userAllDateAnalysis: UserAllDateAnalysis = yield call(
+      getUserAllDateAnalysis,
+      action.payload
+    )
+    yield put(getUserAllDateAnalysisAsync.success(userAllDateAnalysis))
+  } catch (e: any) {
+    yield put(getUserAllDateAnalysisAsync.failure(e))
+    console.error(e)
+  }
+}
+
 export function* userSaga() {
   yield takeEvery(USER_SIGNUP, userSignupSaga)
   yield takeEvery(USER_LOGIN, userLoginSaga)
@@ -258,4 +277,5 @@ export function* userSaga() {
   yield takeEvery(GET_WORK_TYPE_ANALYSIS, getWorkTypeAnalysisSaga)
   yield takeEvery(GET_USER_POMO_COUNT, getUserPomoCountSaga)
   yield takeEvery(GET_USER_TIME_ANALYSIS, getUserTimeAnalysisSaga)
+  yield takeEvery(GET_USER_ALL_DATE_ANALYSIS, getUserAllDateAnalysisSaga)
 }

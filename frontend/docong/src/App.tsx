@@ -13,6 +13,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import NavBarPage from './pages/NavBarPage'
 import GroupMainPage from './pages/group/GroupMainPage'
 import GroupAnalysisPage from './pages/group/GroupAnalysisPage'
+import RankingPage from './pages/user/RankingPage'
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -101,6 +102,21 @@ function App() {
     }
   }, [location.pathname])
 
+  useEffect(() => {
+    function checkRefreshToken() {
+      const refreshToken = localStorage.getItem('refreshToken')
+      if (!refreshToken) {
+        navigate('/')
+      }
+    }
+
+    window.addEventListener('storage', checkRefreshToken)
+
+    return () => {
+      window.removeEventListener('storage', checkRefreshToken)
+    }
+  }, [])
+
   return (
     <ThemeProvider theme={theme}>
       <Background>
@@ -111,10 +127,17 @@ function App() {
             <Route path="timer" element={<UserTimerPage />} />
             <Route path="user/todo" element={<UserTodoPage />} />
             <Route path="user/analysis" element={<UserAnalysisPage />} />
+            <Route path="ranking" element={<RankingPage />} />
             <Route path="group" element={<GroupMainPage />} />
             <Route path="group/todo/:groupSeq" element={<GroupTodoPage />} />
-            <Route path="group/analysis/:groupSeq" element={<GroupAnalysisPage />} />
-            <Route path="group/settings/:groupSeq" element={<GroupSettingsPage />} />
+            <Route
+              path="group/analysis/:groupSeq"
+              element={<GroupAnalysisPage />}
+            />
+            <Route
+              path="group/settings/:groupSeq"
+              element={<GroupSettingsPage />}
+            />
           </Route>
         </Routes>
       </Background>

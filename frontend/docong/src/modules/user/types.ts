@@ -4,6 +4,7 @@ import { AsyncState } from '../../lib/reducerUtils'
 import { UserInfo } from '../../api/user'
 import {
   RankingDataList,
+  UserAllDateAnalysis,
   UserPomoCount,
   UserTimeAnalysis,
   WorkTypeAnalysis,
@@ -18,6 +19,7 @@ export type UserState = {
   workTypeAnalysis: AsyncState<WorkTypeAnalysis, Error>
   userPomoCountAnalysis: AsyncState<UserPomoCount, Error>
   userTimeAnalysis: AsyncState<UserTimeAnalysis, Error>
+  userAllDateAnalysis: AsyncState<UserAllDateAnalysis, Error>
 }
 
 export type UserTimerKey = keyof UserState['userTimer']
