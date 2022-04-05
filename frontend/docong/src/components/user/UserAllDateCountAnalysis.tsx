@@ -52,7 +52,10 @@ function UserAllDateCountAnalysis({
             '<span>' +
             `${
               w.config.series[seriesIndex].data[dataPointIndex].x
-                ? w.config.series[seriesIndex].data[dataPointIndex].x + ' 콩'
+                ? w.config.series[seriesIndex].data[dataPointIndex].x +
+                  ' : ' +
+                  series[seriesIndex][dataPointIndex] +
+                  ' 콩'
                 : ''
             }` +
             '</span>' +

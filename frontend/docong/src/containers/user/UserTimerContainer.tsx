@@ -165,9 +165,6 @@ function UserTimerContainer() {
           todo_seq: todo_seq,
         })
       )
-      if (selectedTodo) {
-        changeTodoActivate(false)
-      }
     } else if (status === 'stop') {
       dispatch(stopUserTimer())
     }
