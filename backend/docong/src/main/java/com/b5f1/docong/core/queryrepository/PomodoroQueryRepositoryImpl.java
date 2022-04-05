@@ -80,7 +80,7 @@ public class PomodoroQueryRepositoryImpl implements PomodoroQueryRepository {
     }
 
     @Override
-    public List<PomoTimeCountResDto> findTimeCountByUserGroup(Long userSeq, Long groupSeq) {
+    public List<PomoTimeCountResDto> findTimeCountByGroup(Long groupSeq) {
         return queryFactory
                 .select(Projections.constructor(PomoTimeCountResDto.class,
                         pomodoro.startTime.hour(),
@@ -89,8 +89,7 @@ public class PomodoroQueryRepositoryImpl implements PomodoroQueryRepository {
                 .from(pomodoro)
                 .leftJoin(QTodo.todo)
                 .on(pomodoro.todo.eq(QTodo.todo))
-                .where(pomodoro.user.seq.eq(userSeq)
-                        .and(QTodo.todo.team.seq.eq(groupSeq)))
+                .where(QTodo.todo.team.seq.eq(groupSeq))
                 .groupBy(pomodoro.startTime.hour())
                 .fetch();
     }
