@@ -1,10 +1,26 @@
 import { Box, Button } from '@mui/material'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
+import OnTimer from '../../components/group/OnTimer'
+import { RootState } from '../../modules'
+import { getUserListDataAsync } from '../../modules/group'
 
 function GroupAnalysisContainer() {
     const navigate = useNavigate()
     const params = useParams()
+    const dispatch = useDispatch()
+
     const groupSeq = Number(params.groupSeq)
+    const userList = useSelector((state: RootState) => state.group.userList.data)
+    
+    useEffect(() => {
+        getUserList()
+    }, [])
+
+    const getUserList = () => {
+        dispatch(getUserListDataAsync.request(groupSeq))
+    }
 
     const onClickToGroupTodo = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
@@ -87,6 +103,10 @@ function GroupAnalysisContainer() {
                 >
                     SETTING
                 </Button>
+                <OnTimer
+                    userList={userList}
+                    getUserList={getUserList}
+                />
             </Box>
             <h1>Group Analysis Container</h1>
         </>

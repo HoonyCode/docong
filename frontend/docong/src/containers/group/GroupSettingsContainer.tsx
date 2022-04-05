@@ -1,7 +1,7 @@
-import { Box, Button } from '@mui/material'
+import { Avatar, Box, Button, Tooltip } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
-import { GroupModifyData, Group, MemberData, GroupMemberModifyData, GroupMemberModifyData2 } from '../../api/group';
-import { addMemberGroupAsync, deleteGroupAsync, deleteMemberGroupAsync, modifyGroupAsync, modifyJiraInfoAsync, searchAllGroupAsync } from '../../modules/group';
+import { GroupModifyData, Group, MemberData, GroupMemberModifyData, GroupMemberModifyData2, OnOffUser } from '../../api/group';
+import { addMemberGroupAsync, deleteGroupAsync, deleteMemberGroupAsync, getUserListDataAsync, modifyGroupAsync, modifyJiraInfoAsync, searchAllGroupAsync } from '../../modules/group';
 import { useDispatch, useSelector } from 'react-redux';
 import GroupModify from '../../components/group/GroupModify';
 import GroupDelete from '../../components/group/GroupDelete';
@@ -12,6 +12,7 @@ import GroupMemberSetting from '../../components/group/GroupMemberSetting';
 import MemberDelete from '../../components/group/MemberDelete';
 import MemberDeleteForm from '../../components/group/MemberDeleteForm';
 import { findAllGroupTodosAsync } from '../../modules/groupTodo';
+import OnTimer from '../../components/group/OnTimer';
 
 function GroupSettingsContainer() {
     const navigate = useNavigate()
@@ -19,12 +20,14 @@ function GroupSettingsContainer() {
     const dispatch = useDispatch()
 
     const userInfo = useSelector((state: RootState) => state.user.userInfo.data)
+    const userList = useSelector((state: RootState) => state.group.userList.data)
     const groups = useSelector((state: RootState) => state.group.groups.data)
     const groupSeq = Number(params.groupSeq)
     const [group, setGroup] = useState<null | Group>(null)
 
     useEffect(() => {
         findAllGroup()
+        getUserList()
     }, [])
 
     useEffect(() => {
@@ -49,6 +52,10 @@ function GroupSettingsContainer() {
 
     const findAllGroup = () => {
         dispatch(searchAllGroupAsync.request(null))
+    }
+
+    const getUserList = () => {
+        dispatch(getUserListDataAsync.request(groupSeq))
     }
 
     const onClickToGroupTodo = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -168,7 +175,12 @@ function GroupSettingsContainer() {
                 >
                     SETTING
                 </Button>
+                <OnTimer
+                    userList={userList}
+                    getUserList={getUserList}
+                />
             </Box>
+            
             <Box
                 sx={{
                     justifyContent: 'center',
