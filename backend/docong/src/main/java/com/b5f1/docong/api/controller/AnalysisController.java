@@ -42,7 +42,7 @@ public class AnalysisController {
     }
 
     @GetMapping("/count/{group}")
-    ResponseEntity<PomoDayCountResDto> findDayCountGroup(@Auth User user, @PathVariable Long groupSeq) {
+    ResponseEntity<PomoDayCountResDto> findDayCountGroup(@Auth User user, @PathVariable("group") Long groupSeq) {
         PomoDayCountResDto response = analysisService.findPomoCountByUserGroup(user.getSeq(), groupSeq);
         return ResponseEntity.status(200).body(response);
     }
@@ -55,7 +55,7 @@ public class AnalysisController {
     }
 
     @GetMapping("/time/{group}")
-    ResponseEntity<List<PomoTimeCountResDto>> findTimeCountGroup(@Auth User user, @PathVariable Long groupSeq) {
+    ResponseEntity<List<PomoTimeCountResDto>> findTimeCountGroup(@Auth User user, @PathVariable("group") Long groupSeq) {
         List<PomoTimeCountResDto> response = analysisService.findTimeCountByUserGroup(user.getSeq(), groupSeq);
         return ResponseEntity.status(200).body(response);
     }
@@ -66,8 +66,8 @@ public class AnalysisController {
         return ResponseEntity.status(200).body(response);
     }
 
-    @GetMapping("/date/{year}/{groupSeq}")
-    ResponseEntity<List<FindAllDateCountResDto>> findAllDateCount(@PathVariable Integer year, @PathVariable Long groupSeq) {
+    @GetMapping("/date/{year}/{group}")
+    ResponseEntity<List<FindAllDateCountResDto>> findAllDateCount(@PathVariable Integer year, @PathVariable("group") Long groupSeq) {
         List<FindAllDateCountResDto> response = analysisService.findAllDateCountByGroup(groupSeq, year);
         return ResponseEntity.status(200).body(response);
     }
