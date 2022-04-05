@@ -11,6 +11,7 @@ public enum ErrorCode {
     INVALID_EMAIL_FORMAT(HttpStatus.BAD_REQUEST, "Google 이메일 가입은 Google 로그인을 이용하세요."),
     NULL_PASSWORD(HttpStatus.BAD_REQUEST, "Password 값이 null 입니다."),
     NULL_USER(HttpStatus.BAD_REQUEST, "User 헤더가 필요합니다."),
+    FAIL_SEND_SLACK(HttpStatus.BAD_REQUEST, "Slack 메세지 전송에 실패하였습니다."),
 
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
     INVALID_AUTH_TOKEN(HttpStatus.UNAUTHORIZED, "권한 정보가 없는 토큰입니다."),
