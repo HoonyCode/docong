@@ -1,8 +1,8 @@
-import { Box, Button } from '@mui/material'
+import { Avatar, Box, Button, Tooltip } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Group, MemberData } from '../../api/group'
+import { Group, MemberData, OnOffUser } from '../../api/group'
 import { GroupTodo, GroupTodoInput } from '../../api/groupTodo'
 import GroupTodoComponent from '../../components/group/GroupTodoComponent'
 import { RootState } from '../../modules'
@@ -11,6 +11,8 @@ import { modifyTodoStatusAsync } from '../../modules/todo'
 import { changeUserTimerTodo } from '../../modules/user'
 import produce from 'immer'
 import { getUserListDataAsync } from '../../modules/group'
+import OnTimerDetail from '../../components/group/OnTimerDetail'
+import OnTimer from '../../components/group/OnTimer'
 
 function GroupTodoContainer() {
     const navigate = useNavigate()
@@ -20,7 +22,7 @@ function GroupTodoContainer() {
     const groupSeq = Number(params.groupSeq)
     const groups = useSelector((state: RootState) => state.group.groups.data)
     const groupTodos = useSelector((state: RootState) => state.groupTodo.groupTodos.data)
-    const userList = useSelector((state: RootState) => state.group.userList)
+    const userList = useSelector((state: RootState) => state.group.userList.data)
     const [group, setGroup] = useState<null | Group>(null)
 
     useEffect(() => {
@@ -48,7 +50,7 @@ function GroupTodoContainer() {
     const findGroupTodos = () => {
         dispatch(findAllGroupTodosAsync.request(groupSeq))
     }
-    
+
     const getUserList = () => {
         dispatch(getUserListDataAsync.request(groupSeq))
     }
@@ -94,7 +96,6 @@ function GroupTodoContainer() {
             })
         )
     }
-
 
     return (
         <>
@@ -169,6 +170,10 @@ function GroupTodoContainer() {
                         SETTING
                     </Button>
                 </Box>
+                <OnTimer
+                    userList={userList}
+                    getUserList={getUserList}
+                />
             </Box>
             <Box
                 sx={{

@@ -575,7 +575,7 @@ function GroupTodoComponent({
                                         src={
                                             card.userImg
                                                 ? card.userImg
-                                                : '/images/Profile_Default.jpg'
+                                                : '/images/Profile_Default.png'
                                         }
                                     />
                                 </Tooltip>
