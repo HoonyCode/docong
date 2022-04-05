@@ -11,5 +11,5 @@ import lombok.ToString;
 @ToString
 public class PomoTimeCountResDto {
     Integer hour;
-    Long cnt;
+    Double cnt;
 }

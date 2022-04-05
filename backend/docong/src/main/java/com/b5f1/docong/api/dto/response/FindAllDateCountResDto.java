@@ -15,10 +15,10 @@ import java.util.*;
 public class FindAllDateCountResDto {
 
     private LocalDate localDate;
-    private Long count;
+    private Double count;
 
     @QueryProjection
-    public FindAllDateCountResDto(String localDate, Long count) {
+    public FindAllDateCountResDto(String localDate, Double count) {
         this.localDate = LocalDate.parse(localDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         this.count = count;
     }
@@ -29,7 +29,7 @@ public class FindAllDateCountResDto {
             int dayOfMonth = new GregorianCalendar(year, i, 1).getActualMaximum(Calendar.DAY_OF_MONTH);
 
             for (int j = 1; j <= dayOfMonth; j++) {
-                FindAllDateCountResDto findAllDateCountResDto = new FindAllDateCountResDto(String.format("%d-%02d-%02d", year, i + 1, j), 0l);
+                FindAllDateCountResDto findAllDateCountResDto = new FindAllDateCountResDto(String.format("%d-%02d-%02d", year, i + 1, j), 0d);
                 map.put(findAllDateCountResDto.localDate, findAllDateCountResDto);
             }
         }

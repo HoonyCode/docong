@@ -104,7 +104,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     public List<PomoTimeCountResDto> findTimeCountByUserSolo(Long userSeq) {
         List<PomoTimeCountResDto> result = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
-            result.add(new PomoTimeCountResDto(i, 0L));
+            result.add(new PomoTimeCountResDto(i, 0d));
         }
         List<PomoTimeCountResDto> pomoTimeCountResDtoList = pomodoroRepository.findTimeCountByUserSolo(userSeq);
         for (PomoTimeCountResDto in : pomoTimeCountResDtoList) {
@@ -117,7 +117,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     public List<PomoTimeCountResDto> findTimeCountByUserGroup(Long userSeq, Long groupSeq) {
         List<PomoTimeCountResDto> result = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
-            result.add(new PomoTimeCountResDto(i, 0L));
+            result.add(new PomoTimeCountResDto(i, 0d));
         }
         List<PomoTimeCountResDto> pomoTimeCountResDtoList = pomodoroRepository.findTimeCountByUserGroup(userSeq, groupSeq);
         for (PomoTimeCountResDto in : pomoTimeCountResDtoList) {
