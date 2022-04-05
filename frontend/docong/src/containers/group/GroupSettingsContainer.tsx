@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Tooltip } from '@mui/material'
+import { Avatar, Box, Button, Divider, Tooltip } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { GroupModifyData, Group, MemberData, GroupMemberModifyData, GroupMemberModifyData2, OnOffUser } from '../../api/group';
 import { addMemberGroupAsync, deleteGroupAsync, deleteMemberGroupAsync, getUserListDataAsync, modifyGroupAsync, modifyJiraInfoAsync, searchAllGroupAsync } from '../../modules/group';
@@ -180,7 +180,7 @@ function GroupSettingsContainer() {
                     getUserList={getUserList}
                 />
             </Box>
-            
+
             <Box
                 sx={{
                     justifyContent: 'center',
@@ -191,20 +191,20 @@ function GroupSettingsContainer() {
                     <h1>그룹 관리</h1>
                 }
                 {userInfo !== null && group !== null && userInfo.email === group.leaderEmail &&
-                <GroupModify
-                    group={group}
-                    onGroupModifySubmit={onGroupModifySubmit}
-                />
+                    <GroupModify
+                        group={group}
+                        onGroupModifySubmit={onGroupModifySubmit}
+                    />
                 }
                 <GroupMemberSetting
                     group={group}
                     onAddGroupMemberSubmit={onAddGroupMemberSubmit}
                     onMemberDeleteByLeaderSubmit={onMemberDeleteByLeaderSubmit}
                 />
-                {userInfo!==null && userInfo.email !== group?.leaderEmail &&
-                <MemberDelete
-                    openMemberDeleteForm={openMemberDeleteForm}
-                />
+                {userInfo !== null && userInfo.email !== group?.leaderEmail &&
+                    <MemberDelete
+                        openMemberDeleteForm={openMemberDeleteForm}
+                    />
                 }
                 <MemberDeleteForm
                     group={group}
@@ -212,10 +212,12 @@ function GroupSettingsContainer() {
                     closeMemberDeleteForm={closeMemberDeleteForm}
                     onMemberDeleteSubmit={onMemberDeleteSubmit}
                 />
-                <GroupDelete
-                    group={group}
-                    openGroupDeleteForm={openGroupDeleteForm}
-                />
+                {userInfo !== null && group !== null && userInfo.email === group.leaderEmail &&
+                    <GroupDelete
+                        group={group}
+                        openGroupDeleteForm={openGroupDeleteForm}
+                    />
+                }
                 <GroupDeleteForm
                     group={group}
                     isOpenGroupDeleteForm={isOpenGroupDeleteForm}
