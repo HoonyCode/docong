@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 import { addMemberGroup, createGroup, DefaultResponse, deleteGroup, deleteMemberGroup, getJiraIssue, getUserListData, Group, GroupData, Groups, modifyGroup, modifyJiraInfo, OnOffUserList, searchAllGroup, searchGroup } from '../../api/group';
-import { actions, ADD_MEMBER_GROUP, CREATE_GROUP, DELETE_GROUP, DELETE_MEMBER_GROUP, getJiraIssueAsync, GET_JIRA_ISSUE, GET_USER_LIST_DATA, MODIFY_GROUP, MODIFY_JIRA_INFO, searchAllGroupAsync, SEARCH_ALL_GROUP, SEARCH_GROUP } from './actions';
+import { actions, ADD_MEMBER_GROUP, CREATE_GROUP, DELETE_GROUP, DELETE_MEMBER_GROUP, getJiraIssueAsync, getUserListDataAsync, GET_JIRA_ISSUE, GET_USER_LIST_DATA, MODIFY_GROUP, MODIFY_JIRA_INFO, searchAllGroupAsync, SEARCH_ALL_GROUP, SEARCH_GROUP } from './actions';
 
 
 
@@ -95,7 +95,9 @@ export function* getUserListDataSaga(action: ReturnType<typeof actions.getUserLi
       getUserListData,
       action.payload
     )
+    yield put(getUserListDataAsync.success(getUserListDataResponse))
   } catch (e: any) {
+    yield put(getUserListDataAsync.failure(e))
     console.error(e)
   }
 }

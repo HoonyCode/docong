@@ -27,7 +27,7 @@ function UserProfile({ userInfo, openEditUserForm }: UserProfileProps) {
           <Avatar
             sx={{ width: 48, height: 48, boxShadow: 2 }}
             alt="User"
-            src="/images/Profile_Default.jpg"
+            src="/images/Profile_Default.png"
           />
         </Box>
         <Box
