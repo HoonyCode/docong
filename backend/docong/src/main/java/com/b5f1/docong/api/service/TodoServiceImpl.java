@@ -103,8 +103,8 @@ public class TodoServiceImpl implements TodoService{
     }
 
     private void sendSlackMessage(Todo todo, Boolean activate) {
-        String message = (activate)? ":writing_hand: ** ["+todo.getUserTodo().getUser().getName()+"] ** 님이 ** ["+todo.getTitle()+"] ** 업무 집중을 시작했어요!"
-                                    : ":raised_hands: ** ["+todo.getUserTodo().getUser().getName()+"] ** 님이 쉬고 있어요!";
+        String message = (activate)? "> :writing_hand: *["+todo.getUserTodo().getUser().getName()+"]* 님이 *["+todo.getTitle()+"]* 업무 집중을 시작했어요!"
+                                    : "> :raised_hands: *["+todo.getUserTodo().getUser().getName()+"]* 님이 쉬고 있어요!";
         String token = todo.getTeam().getSlackToken();
         String channel = todo.getTeam().getSlackChannel();
 
