@@ -63,7 +63,6 @@ export async function changeTodoActivate(
   todoId: number,
   activateData: ActivateData
 ) {
-  console.log('activate')
   const response = await axios.put(
     `${BASE_URL}/api/todo/activate/${todoId}`,
     activateData,
