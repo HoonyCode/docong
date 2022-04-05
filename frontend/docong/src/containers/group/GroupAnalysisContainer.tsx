@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import OnTimer from '../../components/group/OnTimer'
 import { RootState } from '../../modules'
-import { getUserListDataAsync } from '../../modules/group'
+import { getGroupAllDateAnalysisAsync, getGroupRankingListAsync, getGroupTimeAnalysisAsync, getUserListDataAsync } from '../../modules/group'
 
 function GroupAnalysisContainer() {
     const navigate = useNavigate()
@@ -14,8 +14,25 @@ function GroupAnalysisContainer() {
     const groupSeq = Number(params.groupSeq)
     const userList = useSelector((state: RootState) => state.group.userList.data)
     
+    const groupAllDateAnalysis = useSelector((state: RootState) => 
+    state.group.groupAllDateAnalysis ? state.group.groupAllDateAnalysis.data : null)
+
+    const rankingList = useSelector((state: RootState) => 
+    state.group.rankingList ? state.group.rankingList.data : null)
+
+    const groupTimeAnalysis = useSelector((state:RootState) =>
+    state.group.groupTimeAnalysis ? state.group.groupTimeAnalysis.data : null)
+
+    const groupAllDateInput = {
+        year: new Date().getFullYear(),
+        groupSeq: groupSeq
+    }
+
     useEffect(() => {
         getUserList()
+        dispatch(getGroupAllDateAnalysisAsync.request(groupAllDateInput))
+        dispatch(getGroupRankingListAsync.request(groupSeq))
+        dispatch(getGroupTimeAnalysisAsync.request(groupSeq))
     }, [])
 
     const getUserList = () => {
@@ -35,6 +52,12 @@ function GroupAnalysisContainer() {
     const onClickToGroupSettings = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
         navigate(`/group/settings/${groupSeq}`)
+    }
+
+    const check = () => {
+        console.log("groupAllDateAnalysis->",groupAllDateAnalysis)
+        console.log("rankingList->",rankingList)
+        console.log("groupTimeAnalysis->",groupTimeAnalysis)
     }
 
 
@@ -108,7 +131,7 @@ function GroupAnalysisContainer() {
                     getUserList={getUserList}
                 />
             </Box>
-            <h1>Group Analysis Container</h1>
+            <Button onClick={check}>console</Button>
         </>
     )
 }

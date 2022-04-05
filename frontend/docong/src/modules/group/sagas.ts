@@ -1,6 +1,7 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
+import { getGroupAllDateAnalysis, getGroupRankingList, getGroupTimeAnalysis, RankingDataList, UserAllDateAnalysis, UserTimeAnalysis } from '../../api/analysis';
 import { addMemberGroup, createGroup, DefaultResponse, deleteGroup, deleteMemberGroup, getJiraIssue, getUserListData, Group, GroupData, Groups, modifyGroup, modifyJiraInfo, OnOffUserList, searchAllGroup, searchGroup } from '../../api/group';
-import { actions, ADD_MEMBER_GROUP, CREATE_GROUP, DELETE_GROUP, DELETE_MEMBER_GROUP, getJiraIssueAsync, getUserListDataAsync, GET_JIRA_ISSUE, GET_USER_LIST_DATA, MODIFY_GROUP, MODIFY_JIRA_INFO, searchAllGroupAsync, SEARCH_ALL_GROUP, SEARCH_GROUP } from './actions';
+import { actions, ADD_MEMBER_GROUP, CREATE_GROUP, DELETE_GROUP, DELETE_MEMBER_GROUP, getJiraIssueAsync, getUserListDataAsync, GET_GROUP_ALL_DATE_ANALYSIS, GET_GROUP_RANKING_LIST, GET_GROUP_TIME_ANALYSIS, GET_JIRA_ISSUE, GET_USER_LIST_DATA, MODIFY_GROUP, MODIFY_JIRA_INFO, searchAllGroupAsync, SEARCH_ALL_GROUP, SEARCH_GROUP } from './actions';
 
 
 
@@ -127,6 +128,49 @@ export function* getJiraIssueSaga(action: ReturnType<typeof actions.getJiraIssue
   }
 }
 
+export function* getGroupAllDateAnalysisSaga(action: ReturnType<typeof actions.getGroupAllDateAnalysisAsync.request>) {
+  try {
+    const getGroupAllDateAnalysisResponse: UserAllDateAnalysis = yield call(
+      getGroupAllDateAnalysis,
+      action.payload.year,
+      action.payload.groupSeq
+    )
+    yield put(actions.getGroupAllDateAnalysisAsync.success(getGroupAllDateAnalysisResponse))
+  }
+  catch (e:any) {
+    console.log(e)
+    yield put(actions.getGroupAllDateAnalysisAsync.failure(e))
+  }
+}
+
+export function* getGroupRankingListSaga(action: ReturnType<typeof actions.getGroupRankingListAsync.request>) {
+  try {
+    const getGroupRankingListResponse: RankingDataList = yield call(
+      getGroupRankingList,
+      action.payload
+    )
+    yield put(actions.getGroupRankingListAsync.success(getGroupRankingListResponse))
+  }
+  catch (e:any) {
+    console.log(e)
+    yield put(actions.getGroupRankingListAsync.failure(e))
+  }
+}
+
+export function* getGroupTimeAnalysisSaga(action: ReturnType<typeof actions.getGroupTimeAnalysisAsync.request>) {
+  try {
+    const getGroupTimeAnalysisAsyncResponse: UserTimeAnalysis = yield call(
+      getGroupTimeAnalysis,
+      action.payload
+    )
+    yield put(actions.getGroupTimeAnalysisAsync.success(getGroupTimeAnalysisAsyncResponse))
+  }
+  catch (e:any) {
+    console.log(e)
+    yield put(actions.getGroupTimeAnalysisAsync.failure(e))
+  }
+}
+
 export function* groupSaga() {
   yield takeEvery(CREATE_GROUP, createGroupSaga)
   yield takeEvery(MODIFY_GROUP, modifyGroupSaga)
@@ -138,4 +182,7 @@ export function* groupSaga() {
   yield takeEvery(MODIFY_JIRA_INFO, modifyJiraInfoSaga)
   yield takeEvery(GET_JIRA_ISSUE, getJiraIssueSaga)
   yield takeEvery(GET_USER_LIST_DATA, getUserListDataSaga)
+  yield takeEvery(GET_GROUP_ALL_DATE_ANALYSIS, getGroupAllDateAnalysisSaga)
+  yield takeEvery(GET_GROUP_RANKING_LIST, getGroupRankingListSaga)
+  yield takeEvery(GET_GROUP_TIME_ANALYSIS, getGroupTimeAnalysisSaga)
 }

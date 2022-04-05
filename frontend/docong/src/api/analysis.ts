@@ -44,6 +44,28 @@ export async function getUserAllDateAnalysis(year: number) {
   return response.data
 }
 
+// group API
+export async function getGroupAllDateAnalysis(year:number, groupSeq: number) { // 그룹 잔디
+  const response = await axios.get(`${BASE_URL}/api/analysis/date/${year}/${groupSeq}`,{
+    headers: setHeader(),
+  })
+  return response.data
+}
+
+export async function getGroupRankingList(team_id: number) { // 그룹 랭킹
+  const response = await axios.get(`${BASE_URL}/api/analysis/groupRanking/${team_id}`, {
+    headers: setHeader(),
+  })
+  return response.data
+}
+
+export async function getGroupTimeAnalysis(groupSeq: number) { // 시간대별 뽀모
+  const response = await axios.get(`${BASE_URL}/api/analysis/time/${groupSeq}`, {
+    headers: setHeader(),
+  })
+  return response.data
+}
+
 export interface RankingData {
   userName: string
   userEmail: string
@@ -84,3 +106,9 @@ export interface UserAllDateData {
 }
 
 export interface UserAllDateAnalysis extends Array<UserAllDateData> {}
+
+
+export interface GroupAllDateInput {
+  year: number
+  groupSeq: number
+}

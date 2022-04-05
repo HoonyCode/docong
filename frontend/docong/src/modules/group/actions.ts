@@ -1,6 +1,7 @@
 import { createAsyncAction } from 'typesafe-actions' // createAsyncAction 유틸함수 사용
 import { AxiosError } from 'axios'
 import { GroupCreateData, GroupModifyData, GroupMemberModifyData, DefaultResponse, GroupData, GroupMemberModifyData2, Groups, OnOffUserList } from '../../api/group'
+import { GroupAllDateInput, RankingDataList, UserAllDateAnalysis, UserTimeAnalysis } from '../../api/analysis'
 
 
 export const CREATE_GROUP = 'group/CREATE_GROUP'
@@ -42,6 +43,18 @@ export const MODIFY_JIRA_INFO_FAIL = 'group/MODIFY_JIRA_INFO_FAIL'
 export const GET_JIRA_ISSUE = 'group/GET_JIRA_ISSUE'
 export const GET_JIRA_ISSUE_SUCCESS = 'group/GET_JIRA_ISSUE_SUCCESS'
 export const GET_JIRA_ISSUE_FAIL = 'group/GET_JIRA_ISSUE_FAIL'
+
+export const GET_GROUP_ALL_DATE_ANALYSIS = 'group/GET_GROUP_ALL_DATE_ANALYSIS'
+export const GET_GROUP_ALL_DATE_ANALYSIS_SUCCESS = 'group/GET_GROUP_ALL_DATE_ANALYSIS_SUCCESS'
+export const GET_GROUP_ALL_DATE_ANALYSIS_FAIL = 'group/GET_GROUP_ALL_DATE_ANALYSIS_FAIL'
+
+export const GET_GROUP_RANKING_LIST = 'group/GET_GROUP_RANKING_LIST'
+export const GET_GROUP_RANKING_LIST_SUCCESS = 'group/GET_GROUP_RANKING_LIST_SUCCESS'
+export const GET_GROUP_RANKING_LIST_FAIL = 'group/GET_GROUP_RANKING_LIST_FAIL'
+
+export const GET_GROUP_TIME_ANALYSIS = 'group/GET_GROUP_TIME_ANALYSIS'
+export const GET_GROUP_TIME_ANALYSIS_SUCCESS = 'group/GET_GROUP_TIME_ANALYSIS_SUCCESS'
+export const GET_GROUP_TIME_ANALYSIS_FAIL = 'group/GET_GROUP_TIME_ANALYSIS_FAIL'
 
 // 액션 생성함수 선언
 export const createGroupAsync = createAsyncAction(
@@ -104,6 +117,24 @@ export const getJiraIssueAsync = createAsyncAction(
     GET_JIRA_ISSUE_FAIL
 )<any, DefaultResponse, AxiosError>()
 
+export const getGroupAllDateAnalysisAsync = createAsyncAction(
+    GET_GROUP_ALL_DATE_ANALYSIS,
+    GET_GROUP_ALL_DATE_ANALYSIS_SUCCESS,
+    GET_GROUP_ALL_DATE_ANALYSIS_FAIL
+)<GroupAllDateInput, UserAllDateAnalysis, AxiosError>()
+
+export const getGroupRankingListAsync = createAsyncAction(
+    GET_GROUP_RANKING_LIST,
+    GET_GROUP_RANKING_LIST_SUCCESS,
+    GET_GROUP_RANKING_LIST_FAIL
+)<number, RankingDataList, AxiosError>()
+
+export const getGroupTimeAnalysisAsync = createAsyncAction(
+    GET_GROUP_TIME_ANALYSIS,
+    GET_GROUP_TIME_ANALYSIS_SUCCESS,
+    GET_GROUP_TIME_ANALYSIS_FAIL
+)<number, UserTimeAnalysis, AxiosError>()
+
 export const actions = {
     createGroupAsync,
     modifyGroupAsync,
@@ -114,5 +145,8 @@ export const actions = {
     deleteMemberGroupAsync,
     getUserListDataAsync,
     modifyJiraInfoAsync,
-    getJiraIssueAsync
+    getJiraIssueAsync,
+    getGroupAllDateAnalysisAsync,
+    getGroupRankingListAsync,
+    getGroupTimeAnalysisAsync
 }
