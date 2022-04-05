@@ -65,7 +65,7 @@ public class PomodoroQueryRepositoryImpl implements PomodoroQueryRepository {
     }
 
     @Override
-    public List<PomoTimeCountResDto> findTimeCountByUserSolo(Long userSeq) {
+    public List<PomoTimeCountResDto> findTimeCountByUser(Long userSeq) {
         return queryFactory
                 .select(Projections.constructor(PomoTimeCountResDto.class,
                         pomodoro.startTime.hour(),
@@ -74,8 +74,7 @@ public class PomodoroQueryRepositoryImpl implements PomodoroQueryRepository {
                 .from(pomodoro)
                 .leftJoin(QTodo.todo)
                 .on(pomodoro.todo.eq(QTodo.todo))
-                .where(pomodoro.user.seq.eq(userSeq)
-                        .and(QTodo.todo.team.isNull()))
+                .where(pomodoro.user.seq.eq(userSeq))
                 .groupBy(pomodoro.startTime.hour())
                 .fetch();
     }

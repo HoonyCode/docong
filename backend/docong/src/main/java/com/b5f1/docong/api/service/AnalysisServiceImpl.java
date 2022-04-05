@@ -106,7 +106,7 @@ public class AnalysisServiceImpl implements AnalysisService {
         for (int i = 0; i < 24; i++) {
             result.add(new PomoTimeCountResDto(i, 0d));
         }
-        List<PomoTimeCountResDto> pomoTimeCountResDtoList = pomodoroRepository.findTimeCountByUserSolo(userSeq);
+        List<PomoTimeCountResDto> pomoTimeCountResDtoList = pomodoroRepository.findTimeCountByUser(userSeq);
         for (PomoTimeCountResDto in : pomoTimeCountResDtoList) {
             result.get(in.getHour()).setCnt(in.getCnt());
         }
@@ -148,7 +148,7 @@ public class AnalysisServiceImpl implements AnalysisService {
     @Override
     public List<FindAllDateCountResDto> findAllDateCountByGroup(Long groupSeq, int year) {
 
-        List<FindAllDateCountResDto> findAllDateCountResDto = pomodoroRepository.findAllDateByUser(groupSeq, year);
+        List<FindAllDateCountResDto> findAllDateCountResDto = pomodoroRepository.findAllDateByGroup(groupSeq, year);
 
         Map<LocalDate, FindAllDateCountResDto> map = new FindAllDateCountResDto().MakeDate(year);
 
