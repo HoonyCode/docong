@@ -6,6 +6,7 @@ import { PomoData } from '../../api/pomo'
 import { Todo } from '../../api/todo'
 import {
   RankingDataList,
+  UserAllDateAnalysis,
   UserPomoCount,
   UserTimeAnalysis,
   WorkTypeAnalysis,
@@ -53,6 +54,12 @@ export const GET_USER_TIME_ANALYSIS = 'user/GET_USER_TIME_ANALYSIS'
 export const GET_USER_TIME_ANALYSIS_SUCCESS =
   'user/GET_USER_TIME_ANALYSIS_SUCCESS'
 export const GET_USER_TIME_ANALYSIS_ERROR = 'user/GET_USER_TIME_ANALYSIS_ERROR'
+
+export const GET_USER_ALL_DATE_ANALYSIS = 'user/GET_USER_ALL_DATE_ANALYSIS'
+export const GET_USER_ALL_DATE_ANALYSIS_SUCCESS =
+  'user/GET_USER_ALL_DATE_ANALYSIS_SUCCESS'
+export const GET_USER_ALL_DATE_ANALYSIS_ERROR =
+  'user/GET_USER_ALL_DATE_ANALYSIS_ERROR'
 
 export const INIT_USER_TIMER = 'user/INIT_USER_TIMER'
 export const CHANGE_USER_TIMER_TYPE = 'user/CHANGE_USER_TIMER_TYPE'
@@ -124,6 +131,12 @@ export const getUserTimeAnalysisAsync = createAsyncAction(
   GET_USER_TIME_ANALYSIS_ERROR
 )<any, UserTimeAnalysis, AxiosError>()
 
+export const getUserAllDateAnalysisAsync = createAsyncAction(
+  GET_USER_ALL_DATE_ANALYSIS,
+  GET_USER_ALL_DATE_ANALYSIS_SUCCESS,
+  GET_USER_ALL_DATE_ANALYSIS_ERROR
+)<number, UserAllDateAnalysis, AxiosError>()
+
 export const initUserTimer = createAction(INIT_USER_TIMER)()
 export const changeUserTimerType = createAction(CHANGE_USER_TIMER_TYPE)<any>()
 export const changeUserTimerTodo = createAction(
@@ -150,6 +163,7 @@ export const actions = {
   getWorkTypeAnalysisAsync,
   getUserPomoCountAsync,
   getUserTimeAnalysisAsync,
+  getUserAllDateAnalysisAsync,
   initUserTimer,
   changeUserTimerType,
   changeUserTimerTodo,

@@ -81,7 +81,7 @@ function UserCategoryAnalysis({ workTypeAnalysis }: UserCategoryAnalysisProps) {
       series={chartData.series}
       type="line"
       width={'95%'}
-      height={'90%'}
+      height={'88%'}
     />
   )
 }
