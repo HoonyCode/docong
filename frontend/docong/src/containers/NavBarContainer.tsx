@@ -1,15 +1,25 @@
 import styled from 'styled-components'
-import { Avatar, Box } from '@mui/material'
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Avatar,
+  Box,
+} from '@mui/material'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import { darken } from 'polished'
+import { lighten, darken } from 'polished'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../modules'
 import { useLocation, useNavigate } from 'react-router-dom'
 import EditUserForm from '../components/user/EditUserForm'
 import { UserData } from '../api/user'
 import { setUserInfoAsync } from '../modules/user'
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import UserTierModal from '../components/user/UserTierModal'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { createGroupAsync, searchAllGroupAsync } from '../modules/group'
+import { Group, GroupCreateData } from '../api/group'
+import GroupCreateForm from '../components/group/GroupCreateForm'
 
 const LogoImage = styled.img`
   height: 90px;
@@ -19,8 +29,10 @@ const LogoImage = styled.img`
 function NavBarContainer() {
   const userInfo = useSelector((state: RootState) => state.user.userInfo.data)
   const userTimer = useSelector((state: RootState) => state.user.userTimer)
+  const groups = useSelector((state: RootState) => state.group.groups.data)
   const [isOpenEditUserForm, setIsOpenEditUserForm] = useState(false)
   const [isOpenTierModal, setIsOpenTierModal] = useState(false)
+  const [isOpenCreateGroupForm, setIsOpenCreateGroupForm] = useState(false)
   const location = useLocation()
 
   const dispatch = useDispatch()
@@ -37,6 +49,31 @@ function NavBarContainer() {
     '포두콩',
     '콩나무',
   ]
+
+  useEffect(() => {
+    searchAllGroup()
+  }, [])
+
+  const searchAllGroup = () => {
+    dispatch(searchAllGroupAsync.request(null))
+  }
+
+  const onCreateGroupSubmit = (groupCreateData: GroupCreateData) => {
+    dispatch(createGroupAsync.request(groupCreateData))
+    setIsOpenCreateGroupForm(false)
+  }
+
+  const openGroupCreateForm = () => {
+    setIsOpenCreateGroupForm(true)
+  }
+
+  const closeCreateGroupForm = () => {
+    setIsOpenCreateGroupForm(false)
+  }
+
+  const moveGroupTodo = (groupSeq: number) => {
+    navigate(`/group/todo/${groupSeq}`)
+  }
 
   const onClickToTimer = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -122,7 +159,6 @@ function NavBarContainer() {
             display: 'flex',
             justifyContent: 'space-between',
             mt: '6vh',
-            mb: '1vh',
             height: '50px',
             fontSize: '25px',
             cursor: 'pointer',
@@ -165,7 +201,6 @@ function NavBarContainer() {
           {
             display: 'flex',
             justifyContent: 'space-between',
-            mb: '1.5vh',
             height: '50px',
             fontSize: '25px',
             cursor: 'pointer',
@@ -204,23 +239,137 @@ function NavBarContainer() {
           <ArrowForwardIosIcon />
         </Box>
       </Box>
-      <Box sx={{ px: '40px', pb: '30px' }}>
-        <Box
+      <Box sx={{ px: '8px' }}>
+        <Accordion
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            fontSize: '25px',
-            color: (theme) => theme.colors.greenText,
+            pl: '30px',
+            pr: '26px',
+            backgroundColor: (theme) => theme.colors.navBg,
+            boxShadow: 0,
           }}
         >
-          GROUP (개발중)
-        </Box>
+          <AccordionSummary
+            sx={{ px: '0px' }}
+            expandIcon={
+              <ExpandMoreIcon
+                sx={{
+                  width: '35px',
+                  height: '35px',
+                  color: (theme) => theme.colors.greenText,
+                }}
+              />
+            }
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                fontSize: '25px',
+                color: (theme) => theme.colors.greenText,
+              }}
+            >
+              GROUP
+            </Box>
+          </AccordionSummary>
+          <AccordionDetails
+            sx={{
+              p: '0px 0px 0px 2px',
+            }}
+          >
+            <Box
+              sx={{
+                overflow: 'overlay',
+                maxHeight: '26vh',
+                '@media (max-height: 800px)': {
+                  maxHeight: '22vh',
+                },
+                p: '2px 10px 2px 2px',
+                '::-webkit-scrollbar': {
+                  width: '0px',
+                },
+                '::-webkit-scrollbar-thumb': {
+                  backgroundColor: '#8a9788',
+                  borderRadius: '8px',
+                  backgroundClip: 'padding-box',
+                  border: '1px solid transparent',
+                },
+                '::-webkit-scrollbar-track': {
+                  backgroundColor: '#c4c4c4',
+                  borderRadius: '8px',
+                  boxShadow: 'inset 0px 0px 5px white',
+                },
+                '&:hover': {
+                  '::-webkit-scrollbar': {
+                    width: '8px',
+                  },
+                },
+              }}
+            >
+              {groups &&
+                groups.map((group: Group, index: number) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'start',
+                      alignItems: 'center',
+                      height: '42px',
+                      boxShadow: 2,
+                      p: '5px 15px',
+                      mb: '1vh',
+                      fontSize: '20px',
+                      borderRadius: '10px',
+                      cursor: 'pointer',
+                      '&:hover': {
+                        background: (theme) =>
+                          `${darken(0.05, theme.colors.navBg)}`,
+                      },
+                      '&:active': {
+                        background: (theme) =>
+                          `${darken(0.1, theme.colors.navBg)}`,
+                      },
+                    }}
+                    onClick={() => {
+                      moveGroupTodo(group.teamSeq)
+                    }}
+                  >
+                    {group.name}
+                  </Box>
+                ))}
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '30px',
+                boxShadow: 2,
+                p: '5px 15px 5px 0px',
+                m: '2px 10px 1vh 2px',
+                fontSize: '16px',
+                borderRadius: '10px',
+                cursor: 'pointer',
+                '&:hover': {
+                  background: (theme) => `${darken(0.05, theme.colors.navBg)}`,
+                },
+                '&:active': {
+                  background: (theme) => `${darken(0.1, theme.colors.navBg)}`,
+                },
+              }}
+              onClick={openGroupCreateForm}
+            >
+              + 그룹 생성
+            </Box>
+          </AccordionDetails>
+        </Accordion>
       </Box>
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
-          mt: '60px',
+          mt: '3vh',
           height: '40px',
           fontSize: '16px',
           cursor: 'pointer',
@@ -229,6 +378,9 @@ function NavBarContainer() {
           },
           '&:active': {
             background: (theme) => `${darken(0.25, theme.colors.navBg)}`,
+          },
+          '@media (max-height: 800px)': {
+            mt: '0.5vh',
           },
         }}
         onClick={(e: any) => onClickToRanking(e)}
@@ -300,15 +452,7 @@ function NavBarContainer() {
           fontSize: '28px',
           fontWeight: 'bold',
           color: (theme) => theme.colors.greenText,
-          cursor: 'pointer',
-          '&:hover': {
-            background: (theme) => `${darken(0.1, theme.colors.navBg)}`,
-          },
-          '&:active': {
-            background: (theme) => `${darken(0.25, theme.colors.navBg)}`,
-          },
         }}
-        onClick={(e: any) => onClickProfile(e)}
       >
         <Box sx={{ width: '50px', alignSelf: 'top' }}>
           <Avatar
@@ -317,13 +461,25 @@ function NavBarContainer() {
             src={
               userInfo && userInfo.image
                 ? userInfo.image
-                : '/images/Profile_Default.jpg'
+                : '/images/Profile_Default.png'
             }
           />
         </Box>
         <Box sx={{ display: 'flex' }}>
           <Box sx={{ display: 'inline-block', alignSelf: 'top' }}>
-            {`${userInfo ? userInfo.name : ''}님`}
+            <Box
+              sx={{
+                display: 'inline',
+                cursor: 'pointer',
+                '&:hover': {
+                  color: (theme) => `${lighten(0.1, theme.colors.greenText)}`,
+                },
+                '&:active': {
+                  color: (theme) => `${darken(0.1, theme.colors.greenText)}`,
+                },
+              }}
+              onClick={(e: any) => onClickProfile(e)}
+            >{`${userInfo ? userInfo.name : ''}님`}</Box>
             <Box sx={{ display: 'inline-block' }}>
               <Box
                 sx={{
@@ -334,6 +490,7 @@ function NavBarContainer() {
                   borderRadius: '8px',
                   background: '#f4fce3',
                   boxShadow: 1,
+                  cursor: 'pointer',
                   '&:hover': {
                     background: `${darken(0.1, '#f4fce3')}`,
                   },
@@ -423,6 +580,11 @@ function NavBarContainer() {
       <UserTierModal
         isOpenTierModal={isOpenTierModal}
         closeTierModal={closeTierModal}
+      />
+      <GroupCreateForm
+        isOpenGroupCreateForm={isOpenCreateGroupForm}
+        closeGroupCreateForm={closeCreateGroupForm}
+        onCreateGroupSubmit={onCreateGroupSubmit}
       />
     </>
   )
