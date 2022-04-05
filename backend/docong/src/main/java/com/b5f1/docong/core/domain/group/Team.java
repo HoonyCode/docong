@@ -34,6 +34,12 @@ public class Team extends BaseEntity {
     @Column
     private String jiraProjectKey;
 
+    @Column
+    private String slackToken;
+
+    @Column
+    private String slackChannel;
+
     public void changeName(String name){
         this.name = name;
     }
