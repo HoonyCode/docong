@@ -51,6 +51,10 @@ dependencies {
     //mail
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
+    //slack
+    implementation("com.slack.api:bolt:1.20.2")
+    implementation("com.slack.api:bolt-servlet:1.20.2")
+    implementation("com.slack.api:bolt-jetty:1.20.2")
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
