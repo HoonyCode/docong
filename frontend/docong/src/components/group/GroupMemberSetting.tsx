@@ -5,6 +5,8 @@ import { useSelector } from "react-redux";
 import { Group, GroupMemberModifyData, GroupMemberModifyData2, MemberData } from "../../api/group";
 import { RootState } from "../../modules";
 import produce from 'immer'
+import GroupSlack from "./GroupSlack";
+import GroupSlackForm from "./GroupSlackForm";
 
 interface GroupMemberSettingProps {
     group: any
@@ -19,6 +21,9 @@ function GroupMemberSetting({
 }: GroupMemberSettingProps) {
 
     const userInfo = useSelector((state: RootState) => state.user.userInfo.data)
+    
+    const [isOpenGroupSlackForm, setIsOpenGroupSlackForm] = useState(false)
+
     const [addMemberInfo, setAddMemberInfo] = useState({
         teamId: group ? group.teamSeq : 0,
         userEmail: ''
@@ -84,6 +89,18 @@ function GroupMemberSetting({
         onMemberDeleteByLeaderSubmit({ team_id: group.teamSeq, user_email: user_email })
     }
 
+    const openGroupSlackForm = () => {
+        setIsOpenGroupSlackForm(true)
+    }
+
+    const closeGroupSlackForm = () => {
+        setIsOpenGroupSlackForm(false)
+    }
+
+    const onGroupSlackSubmit = () => {
+        alert('서비스 준비중입니다.')
+    }
+
     return (
         <Box
             sx={{
@@ -133,59 +150,67 @@ function GroupMemberSetting({
                 </Table>
             </TableContainer>
             {userInfo !== null && group !== null && userInfo.email === group.leaderEmail &&
-                <Box sx={{
-                    justifyContent: 'flex-end',
-                    width: '100%',
-                    minWidth: '600px',
-                    flexDirection: 'row',
-                }}>
-                    <Box sx={{ width: '12%', minWidth: '200px', py: 2, my: 2 }}>
-                        <Box
-                            sx={{
-                                height: '40px',
-                                mb: '2vh',
-                                justifyContent: 'end',
-                                fontWeight: 'bold',
-                            }}
-                        >
-                            <div>추가하기</div>
-                        </Box>
-                        <Box
-                            component="form"
-                            sx={{
-                                width: '18%',
-                                minWidth: '300px',
-                                flexDirection: 'column',
-                            }}
-                            onSubmit={onAddMemberSubmit}
-                        >
-                            <TextField
-                                required
-                                fullWidth
-                                size="small"
-                                id="email"
-                                variant="outlined"
-                                onChange={onChangeEmail}
-                                value={addMemberInfo.userEmail}
-                                color="success"
-                                sx={{ background: 'white', mb: '2vh' }}
-                            />
-                            <Button
+                <Box>
+                    <Box sx={{
+                        justifyContent: 'flex-end',
+                        width: '100%',
+                        minWidth: '600px',
+                        flexDirection: 'row',
+                    }}>
+                        <Box sx={{ width: '12%', minWidth: '200px', py: 2, my: 2 }}>
+                            <Box
                                 sx={{
                                     height: '40px',
                                     mb: '2vh',
                                     justifyContent: 'end',
                                     fontWeight: 'bold',
-                                    background: (theme) => theme.colors.gray,
                                 }}
-                                variant="contained"
-                                type="submit"
-                                color="success"
                             >
-                                ADD
-                            </Button>
+                                <div>추가하기</div>
+                            </Box>
+                            <Box
+                                component="form"
+                                sx={{
+                                    width: '18%',
+                                    minWidth: '300px',
+                                    flexDirection: 'column',
+                                }}
+                                onSubmit={onAddMemberSubmit}
+                            >
+                                <TextField
+                                    required
+                                    fullWidth
+                                    size="small"
+                                    id="email"
+                                    variant="outlined"
+                                    onChange={onChangeEmail}
+                                    value={addMemberInfo.userEmail}
+                                    color="success"
+                                    sx={{ background: 'white', mb: '2vh' }}
+                                />
+                                <Button
+                                    sx={{
+                                        height: '40px',
+                                        mb: '2vh',
+                                        justifyContent: 'end',
+                                        fontWeight: 'bold',
+                                        background: (theme) => theme.colors.gray,
+                                    }}
+                                    variant="contained"
+                                    type="submit"
+                                    color="success"
+                                >
+                                    ADD
+                                </Button>
+                            </Box>
                         </Box>
                     </Box>
+                    <GroupSlack openGroupSlackForm={openGroupSlackForm}/>
+                    <GroupSlackForm 
+                        isOpenGroupSlackForm={isOpenGroupSlackForm}
+                        closeGroupSlackForm={closeGroupSlackForm}
+                        onGroupSlackSubmit={onGroupSlackSubmit}
+                        />
                 </Box>
             }
         </Box>
