@@ -66,6 +66,7 @@ import {
   UserTimeAnalysis,
   WorkTypeAnalysis,
 } from '../../api/analysis'
+import { changeTodoActivateAsync } from '../todo'
 
 function* userSignupSaga(action: ReturnType<typeof userSignupAsync.request>) {
   try {
@@ -193,6 +194,12 @@ function* savePomoSaga(action: ReturnType<typeof savePomoAsync.request>) {
   try {
     yield call(savePomo, action.payload)
     if (action.payload.todo_seq) {
+      yield put(
+        changeTodoActivateAsync.request({
+          todoId: action.payload.todo_seq,
+          activateData: { activate: false },
+        })
+      )
       const selectedTodo: Todo = yield call(findTodo, action.payload.todo_seq)
       yield put(changeUserTimerTodo(selectedTodo))
     }

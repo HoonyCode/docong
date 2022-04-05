@@ -10,6 +10,7 @@ const setHeader = function () {
 }
 
 export async function savePomo(pomoData: PomoData) {
+  console.log(pomoData)
   const response = await axios.post(`${BASE_URL}/api/pomo`, pomoData, {
     headers: setHeader(),
   })
