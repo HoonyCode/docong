@@ -52,10 +52,10 @@ function GroupTodoContainer() {
     setGroupSeq(Number(params.groupSeq))
   }, [params.groupSeq])
 
-  // useEffect(() => {
-  //   findGroupTodos()
-  //   getUserList()
-  // }, [groupSeq])
+  useEffect(() => {
+    findGroupTodos()
+    getUserList()
+  }, [groupSeq])
 
   useInterval(() => {
     findGroupTodos()
