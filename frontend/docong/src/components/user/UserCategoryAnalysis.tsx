@@ -10,7 +10,25 @@ interface UserCategoryAnalysisProps {
 function UserCategoryAnalysis({ workTypeAnalysis }: UserCategoryAnalysisProps) {
   const [chartData, setChartData] = useState({
     options: {
-      labels: [''],
+      labels: [
+        '기획',
+        '설계',
+        '디자인',
+        '컨설팅',
+        '개발',
+        'QA',
+        '분석',
+        '운영',
+        '회계',
+        '제작',
+        '관리',
+        '홍보',
+        '인사',
+        '문서화',
+        '학습',
+        '독서',
+        '기타',
+      ],
       colors: ['#d8f5a2', '#8ce99a'],
       chart: {
         zoom: {
@@ -49,27 +67,34 @@ function UserCategoryAnalysis({ workTypeAnalysis }: UserCategoryAnalysisProps) {
       {
         name: '전체 콩',
         type: 'column',
-        data: [0],
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
       {
         name: '평균 콩',
         type: 'line',
-        data: [0],
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       },
     ],
   })
 
   useEffect(() => {
     if (workTypeAnalysis) {
+      console.log(workTypeAnalysis)
       setChartData(
         produce((draft) => {
-          draft.options.labels = workTypeAnalysis.map((data) => data.workType)
-          draft.series[0].data = workTypeAnalysis.map(
-            (data) => data.totalPomo / 2
-          )
-          draft.series[1].data = workTypeAnalysis.map((data) =>
-            Number((data.totalPomo / 2 / data.countTodo).toFixed(1))
-          )
+          for (let i = 0; i < workTypeAnalysis.length; i++) {
+            const index = draft.options.labels.indexOf(
+              workTypeAnalysis[i].workType
+            )
+            draft.series[0].data[index] = workTypeAnalysis[i].totalPomo / 2
+            draft.series[1].data[index] = Number(
+              (
+                workTypeAnalysis[i].totalPomo /
+                2 /
+                workTypeAnalysis[i].countTodo
+              ).toFixed(1)
+            )
+          }
         })
       )
     }
