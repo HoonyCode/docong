@@ -1,6 +1,8 @@
-import { Avatar, Box, Tooltip } from '@mui/material'
+import { Avatar, Box, Button, Tooltip } from '@mui/material'
+import { useEffect, useState } from 'react'
 import { OnOffUser, OnOffUserList } from '../../api/group'
 import OnTimerDetail from './OnTimerDetail'
+import produce from 'immer'
 
 interface OnTimerProps {
   userList: OnOffUserList | null
@@ -8,6 +10,55 @@ interface OnTimerProps {
 }
 
 function OnTimer({ userList, getUserList }: OnTimerProps) {
+
+  const [userState, setUserState] = useState({
+    columns: [
+      {
+        id: 0,
+        title: 'onTimer',
+        users: [{
+          name: '',
+          email: '',
+          img: ''
+        }],
+      },
+      {
+        id: 1,
+        title: 'other',
+        users: [{
+          name: '',
+          email: '',
+          img: ''
+        }],
+      },
+    ],
+  })
+
+  useEffect(() => {
+    if(userList !== null) {
+      const onTimer = userList
+      .filter((user: OnOffUser) => user.online === true)
+      .map((user: OnOffUser) => ({
+        name: user.userName,
+        email: user.userEmail,
+        img: user.userImg
+      }))
+      const other = userList
+      .filter((user: OnOffUser) => user.online !== true)
+      .map((user: OnOffUser) => ({
+        name: user.userName,
+        email: user.userEmail,
+        img: user.userImg
+      }))
+      setUserState(
+        produce((draft) => {
+          draft.columns[0].users = onTimer
+          draft.columns[1].users = other
+        })
+      )
+    }
+  }, [userList])
+  
   return (
     <Box
       sx={{
@@ -18,11 +69,9 @@ function OnTimer({ userList, getUserList }: OnTimerProps) {
         height: '100%',
       }}
     >
-      {userList !== null &&
-        userList
-          .filter((user: OnOffUser) => user.online === true)
-          .map((user: OnOffUser) => (
-            <Tooltip title={`${user.userName} (${user.userEmail})`}>
+      {userState.columns[0].users
+          .map((user: {name: string, email: string, img: string}) => (
+            <Tooltip title={`${user.name} (${user.email})`}>
               <Avatar
                 sx={{
                   width: 24,
@@ -33,14 +82,14 @@ function OnTimer({ userList, getUserList }: OnTimerProps) {
                   justifyContent: 'center',
                   alignItems: 'end',
                 }}
-                alt={`${user.userName}`}
+                alt={`${user.name}`}
                 src={
-                  user.userImg ? user.userImg : '/images/Profile_Default.png'
+                  user.img ? user.img : '/images/Profile_Default.png'
                 }
               />
             </Tooltip>
           ))}
-      <OnTimerDetail userList={userList} getUserList={getUserList} />
+      <OnTimerDetail userState={userState} getUserList={getUserList} />
     </Box>
   )
 }

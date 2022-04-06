@@ -15,6 +15,7 @@ import {
 } from '../../modules/group'
 import { setUserInfoAsync } from '../../modules/user'
 import UserRanking from '../../components/user/UserRanking'
+import useInterval from '@use-it/interval'
 
 function GroupAnalysisContainer() {
   const navigate = useNavigate()
@@ -47,11 +48,14 @@ function GroupAnalysisContainer() {
   const [isOpenEditUserForm, setIsOpenEditUserForm] = useState(false)
 
   useEffect(() => {
-    getUserList()
     dispatch(getGroupAllDateAnalysisAsync.request(groupAllDateInput))
     dispatch(getGroupRankingListAsync.request(groupSeq))
     dispatch(getGroupTimeAnalysisAsync.request(groupSeq))
   }, [])
+
+  useInterval(() => {
+    getUserList()
+  }, 5000)
 
   const getUserList = () => {
     dispatch(getUserListDataAsync.request(groupSeq))

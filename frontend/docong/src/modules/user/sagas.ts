@@ -204,7 +204,7 @@ function* savePomoSaga(action: ReturnType<typeof savePomoAsync.request>) {
       yield put(changeUserTimerTodo(selectedTodo))
     }
   } catch (e: any) {
-    alert('Pomo 저장 실패')
+    alert('콩 저장 실패')
     console.error(e)
   }
 }

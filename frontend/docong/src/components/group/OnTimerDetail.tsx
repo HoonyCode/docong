@@ -13,17 +13,25 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { OnOffUser, OnOffUserList } from '../../api/group'
 import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded'
 
+interface UserState {
+  columns: {
+    id: number;
+    title: string;
+    users: {
+      name: string;
+      email: string;
+      img: string;
+    }[];
+  }[];
+}
+
 interface OnTimerDetailProps {
-  userList: OnOffUserList | null
+  userState: UserState
   getUserList: () => void
 }
 
-function OnTimerDetail({ userList, getUserList }: OnTimerDetailProps) {
+function OnTimerDetail({ userState, getUserList }: OnTimerDetailProps) {
   const [state, setState] = useState(false)
-
-  useEffect(() => {
-    getUserList()
-  }, [state])
 
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -46,74 +54,70 @@ function OnTimerDetail({ userList, getUserList }: OnTimerDetailProps) {
     >
       <h1>On Timer</h1>
       <List>
-        {userList !== null &&
-          userList
-            .filter((user: OnOffUser) => user.online === true)
-            .map((user: OnOffUser, index: number) => (
-              <ListItem key={index}>
-                <Avatar
-                  sx={{
-                    width: 32,
-                    height: 32,
-                    mr: '16px',
-                    flexDirection: 'column',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'end',
-                    boxShadow: 3,
-                  }}
-                  alt={`${user.userName}`}
-                  src={
-                    user.userImg ? user.userImg : '/images/Profile_Default.png'
-                  }
-                />
-                <ListItemText
-                  primary={`${user.userName}`}
-                  primaryTypographyProps={{
-                    fontSize: '22px',
-                    fontWeight: 'bold',
-                    fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
-                    color: (theme) => theme.colors.greenText,
-                  }}
-                />
-              </ListItem>
-            ))}
+        {userState.columns[0].users
+          .map((user: { name: string, email: string, img: string }, index: number) => (
+            <ListItem key={index}>
+              <Avatar
+                sx={{
+                  width: 32,
+                  height: 32,
+                  mr: '16px',
+                  flexDirection: 'column',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'end',
+                  boxShadow: 3,
+                }}
+                alt={`${user.name}`}
+                src={
+                  user.img ? user.img : '/images/Profile_Default.png'
+                }
+              />
+              <ListItemText
+                primary={`${user.name}`}
+                primaryTypographyProps={{
+                  fontSize: '22px',
+                  fontWeight: 'bold',
+                  fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                  color: (theme) => theme.colors.greenText,
+                }}
+              />
+            </ListItem>
+          ))}
       </List>
       <Divider sx={{ my: '20px' }} />
       <h1>Other</h1>
       <List>
-        {userList !== null &&
-          userList
-            .filter((user: OnOffUser) => user.online !== true)
-            .map((user: OnOffUser, index: number) => (
-              <ListItem button key={index}>
-                <Avatar
-                  sx={{
-                    width: 32,
-                    height: 32,
-                    mr: '16px',
-                    flexDirection: 'column',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'end',
-                    boxShadow: 3,
-                  }}
-                  alt={`${user.userName}`}
-                  src={
-                    user.userImg ? user.userImg : '/images/Profile_Default.png'
-                  }
-                />
-                <ListItemText
-                  primary={`${user.userName}`}
-                  primaryTypographyProps={{
-                    fontSize: '22px',
-                    fontWeight: 'bold',
-                    fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
-                    color: (theme) => theme.colors.greenText,
-                  }}
-                />
-              </ListItem>
-            ))}
+        {userState.columns[1].users
+          .map((user: { name: string, email: string, img: string }, index: number) => (
+            <ListItem button key={index}>
+              <Avatar
+                sx={{
+                  width: 32,
+                  height: 32,
+                  mr: '16px',
+                  flexDirection: 'column',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'end',
+                  boxShadow: 3,
+                }}
+                alt={`${user.name}`}
+                src={
+                  user.img ? user.img : '/images/Profile_Default.png'
+                }
+              />
+              <ListItemText
+                primary={`${user.name}`}
+                primaryTypographyProps={{
+                  fontSize: '22px',
+                  fontWeight: 'bold',
+                  fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                  color: (theme) => theme.colors.greenText,
+                }}
+              />
+            </ListItem>
+          ))}
       </List>
       <Divider sx={{ my: '20px' }} />
     </Box>

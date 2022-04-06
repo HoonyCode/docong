@@ -24,6 +24,8 @@ import GroupMemberSetting from '../../components/group/GroupMemberSetting'
 import MemberDelete from '../../components/group/MemberDelete'
 import MemberDeleteForm from '../../components/group/MemberDeleteForm'
 import OnTimer from '../../components/group/OnTimer'
+import useInterval from '@use-it/interval'
+
 
 function GroupSettingsContainer() {
   const navigate = useNavigate()
@@ -36,10 +38,13 @@ function GroupSettingsContainer() {
   const groupSeq = Number(params.groupSeq)
   const [group, setGroup] = useState<null | Group>(null)
 
-  useEffect(() => {
-    findAllGroup()
+  // useEffect(() => {
+  //   findAllGroup()
+  // }, [])
+
+  useInterval(() => {
     getUserList()
-  }, [])
+  }, 5000)
 
   useEffect(() => {
     if (groups != null) {
