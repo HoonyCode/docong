@@ -1,61 +1,36 @@
-import axios from 'axios'
+import Api from '../lib/customApi'
 import { BASE_URL } from './auth'
 
-const setHeader = function () {
-  const token = localStorage.getItem('jwtToken')
-  const header = {
-    Authorization: `Bearer ${token}`,
-  }
-  return header
-}
-
 export async function saveTodo(todoInput: TodoInput) {
-  const response = await axios.post(`${BASE_URL}/api/todo`, todoInput, {
-    headers: setHeader(),
-  })
+  const response = await Api.post(`${BASE_URL}/api/todo`, todoInput)
   return response.data
 }
 
 export async function findTodo(todoId: number) {
-  const response = await axios.get(`${BASE_URL}/api/todo/${todoId}`, {
-    headers: setHeader(),
-  })
+  const response = await Api.get(`${BASE_URL}/api/todo/${todoId}`)
   return response.data
 }
 
 export async function modifyTodo(todoId: number, todoInput: TodoInput) {
-  const response = await axios.put(
-    `${BASE_URL}/api/todo/${todoId}`,
-    todoInput,
-    {
-      headers: setHeader(),
-    }
-  )
+  const response = await Api.put(`${BASE_URL}/api/todo/${todoId}`, todoInput)
   return response.data
 }
 
 export async function deleteTodo(todoId: number) {
-  const response = await axios.delete(`${BASE_URL}/api/todo/${todoId}`, {
-    headers: setHeader(),
-  })
+  const response = await Api.delete(`${BASE_URL}/api/todo/${todoId}`)
   return response.data
 }
 
 export async function modifyTodoStatus(todoId: number, todoStatus: string) {
-  const response = await axios.put(
+  const response = await Api.put(
     `${BASE_URL}/api/todo/status/${todoId}`,
-    todoStatus,
-    {
-      headers: setHeader(),
-    }
+    todoStatus
   )
   return response.data
 }
 
 export async function findUserTodos() {
-  const response = await axios.get(`${BASE_URL}/api/todo/user`, {
-    headers: setHeader(),
-  })
+  const response = await Api.get(`${BASE_URL}/api/todo/user`)
   return response.data
 }
 
@@ -63,13 +38,15 @@ export async function changeTodoActivate(
   todoId: number,
   activateData: ActivateData
 ) {
-  const response = await axios.put(
+  const response = await Api.put(
     `${BASE_URL}/api/todo/activate/${todoId}`,
-    activateData,
-    {
-      headers: setHeader(),
-    }
+    activateData
   )
+  return response.data
+}
+
+export async function predictPomo(predictData: PredictData) {
+  const response = await Api.post(`${BASE_URL}/api/todo/predict`, predictData)
   return response.data
 }
 
@@ -110,4 +87,22 @@ export interface Todos extends Array<Todo> {}
 
 export interface ActivateData {
   activate: boolean
+}
+
+export interface PredictData {
+  birth: string
+  endTime: string
+  gender: string
+  importance: number
+  job: string
+  mbti: string
+  position: number
+  proficiency: number
+  startTime: string
+  timeStatus: string
+  type: number
+}
+
+export interface PredictPomo {
+  pred: number
 }

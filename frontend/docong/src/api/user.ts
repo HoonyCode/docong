@@ -1,25 +1,13 @@
-import axios from 'axios'
+import Api from '../lib/customApi'
 import { BASE_URL } from './auth'
 
-const setHeader = function () {
-  const token = localStorage.getItem('jwtToken')
-  const header = {
-    Authorization: `Bearer ${token}`,
-  }
-  return header
-}
-
 export async function getUserInfo() {
-  const response = await axios.get(`${BASE_URL}/api/user/info`, {
-    headers: setHeader(),
-  })
+  const response = await Api.get(`${BASE_URL}/api/user/info`)
   return response.data
 }
 
 export async function setUserInfo(userData: UserData) {
-  const response = await axios.patch(`${BASE_URL}/api/user/info`, userData, {
-    headers: setHeader(),
-  })
+  const response = await Api.patch(`${BASE_URL}/api/user/info`, userData)
   return response.data
 }
 

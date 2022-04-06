@@ -1,68 +1,51 @@
-import axios from 'axios'
+import Api from '../lib/customApi'
 import { BASE_URL } from './auth'
 
-const setHeader = function () {
-  const token = localStorage.getItem('jwtToken')
-  const header = {
-    Authorization: `Bearer ${token}`,
-  }
-  return header
-}
-
 export async function getRankingList() {
-  const response = await axios.get(`${BASE_URL}/api/analysis/ranking`, {
-    headers: setHeader(),
-  })
+  const response = await Api.get(`${BASE_URL}/api/analysis/ranking`)
   return response.data
 }
 
 export async function getWorkTypeAnalysis() {
-  const response = await axios.get(`${BASE_URL}/api/analysis/worktype`, {
-    headers: setHeader(),
-  })
+  const response = await Api.get(`${BASE_URL}/api/analysis/worktype`)
   return response.data
 }
 
 export async function getUserPomoCount() {
-  const response = await axios.get(`${BASE_URL}/api/analysis/pomotime`, {
-    headers: setHeader(),
-  })
+  const response = await Api.get(`${BASE_URL}/api/analysis/pomotime`)
   return response.data
 }
 
 export async function getUserTimeAnalysis() {
-  const response = await axios.get(`${BASE_URL}/api/analysis/time`, {
-    headers: setHeader(),
-  })
+  const response = await Api.get(`${BASE_URL}/api/analysis/time`)
   return response.data
 }
 
 export async function getUserAllDateAnalysis(year: number) {
-  const response = await axios.get(`${BASE_URL}/api/analysis/date/${year}`, {
-    headers: setHeader(),
-  })
+  const response = await Api.get(`${BASE_URL}/api/analysis/date/${year}`)
   return response.data
 }
 
 // group API
-export async function getGroupAllDateAnalysis(year:number, groupSeq: number) { // 그룹 잔디
-  const response = await axios.get(`${BASE_URL}/api/analysis/date/${year}/${groupSeq}`,{
-    headers: setHeader(),
-  })
+export async function getGroupAllDateAnalysis(year: number, groupSeq: number) {
+  // 그룹 잔디
+  const response = await Api.get(
+    `${BASE_URL}/api/analysis/date/${year}/${groupSeq}`
+  )
   return response.data
 }
 
-export async function getGroupRankingList(team_id: number) { // 그룹 랭킹
-  const response = await axios.get(`${BASE_URL}/api/analysis/groupRanking/${team_id}`, {
-    headers: setHeader(),
-  })
+export async function getGroupRankingList(team_id: number) {
+  // 그룹 랭킹
+  const response = await Api.get(
+    `${BASE_URL}/api/analysis/groupRanking/${team_id}`
+  )
   return response.data
 }
 
-export async function getGroupTimeAnalysis(groupSeq: number) { // 시간대별 뽀모
-  const response = await axios.get(`${BASE_URL}/api/analysis/time/${groupSeq}`, {
-    headers: setHeader(),
-  })
+export async function getGroupTimeAnalysis(groupSeq: number) {
+  // 시간대별 뽀모
+  const response = await Api.get(`${BASE_URL}/api/analysis/time/${groupSeq}`)
   return response.data
 }
 
@@ -106,7 +89,6 @@ export interface UserAllDateData {
 }
 
 export interface UserAllDateAnalysis extends Array<UserAllDateData> {}
-
 
 export interface GroupAllDateInput {
   year: number

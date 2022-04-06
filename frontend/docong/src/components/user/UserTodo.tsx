@@ -38,6 +38,9 @@ import DragHandleIcon from '@mui/icons-material/DragHandle'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
 import CircleIcon from '@mui/icons-material/Circle'
+import axios from 'axios'
+import { BASE_URL } from '../../api/auth'
+import Api from '../../lib/customApi'
 
 interface UserTodoProps {
   userTodos: any
@@ -93,7 +96,7 @@ function UserTodo({
     userEmail: userInfo ? userInfo.email : null,
     workImportance: '중',
     workProficiency: '중급',
-    workType: '기타',
+    workType: '개발',
   })
 
   const dispatch = useDispatch()
@@ -221,7 +224,7 @@ function UserTodo({
       userEmail: userInfo ? userInfo.email : null,
       workImportance: '중',
       workProficiency: '중급',
-      workType: '',
+      workType: '개발',
     })
   }
 
@@ -300,6 +303,41 @@ function UserTodo({
 
   const onChangeTodoType = (e: SelectChangeEvent<string>) => {
     setTodoInput({ ...todoInput, workType: e.target.value })
+  }
+
+  const onClickPredictPomo = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    if (userInfo && userInfo.birth) {
+      let start_date = new Date()
+      let end_date = new Date()
+      start_date.setSeconds(
+        start_date.getSeconds() - start_date.getTimezoneOffset() * 60
+      )
+      end_date.setSeconds(
+        end_date.getSeconds() + 1500 - end_date.getTimezoneOffset() * 60
+      )
+      const predictData = {
+        birth: userInfo.birth,
+        end_time: end_date.toISOString(),
+        gender: userInfo.gender,
+        importance: todoInput.workImportance,
+        job: userInfo.job,
+        mbti: userInfo.mbti,
+        position: userInfo.position,
+        proficiency: todoInput.workProficiency,
+        start_time: start_date.toISOString(),
+        time_status: 'BASIC',
+        type: todoInput.workType,
+      }
+      const predictPomoResponse: any = await Api.post(
+        `${BASE_URL}/api/todo/predict`,
+        predictData
+      )
+      setTodoInput({
+        ...todoInput,
+        predictedPomo: predictPomoResponse.data.pred,
+      })
+    }
   }
 
   const onSubmitCreateTodo = (e: FormEvent<HTMLFormElement>) => {
@@ -795,42 +833,86 @@ function UserTodo({
                     </MenuItem>
                   ))}
                 </Select>
-                <TextField
-                  required
-                  fullWidth
-                  type="number"
-                  InputProps={{
-                    inputProps: {
-                      max: 12,
-                      min: 1,
-                    },
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <CircleIcon
+                <Box sx={{ display: 'flex', mb: '14px' }}>
+                  <TextField
+                    required
+                    fullWidth
+                    type="number"
+                    InputProps={{
+                      inputProps: {
+                        max: 12,
+                        min: 1,
+                      },
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <CircleIcon
+                            sx={{
+                              width: '20px',
+                              height: '20px',
+                              color: (theme) =>
+                                `${lighten(0.1, theme.colors.greenText)}`,
+                              mr: '4px',
+                            }}
+                          />
+                          <CloseIcon
+                            sx={{
+                              width: '18px',
+                              height: '18px',
+                              color: (theme) =>
+                                `${lighten(0.3, theme.colors.greenText)}`,
+                            }}
+                          />
+                        </InputAdornment>
+                      ),
+                    }}
+                    onChange={onChangeTodoPredictedPomo}
+                    value={todoInput.predictedPomo}
+                    color="success"
+                    sx={{ mr: '12px' }}
+                  />
+                  {userInfo && userInfo.birth && (
+                    <Box>
+                      <Button
+                        sx={{
+                          width: '150px',
+                          height: '56px',
+                          fontSize: '20px',
+                          fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                          color: (theme) => theme.colors.pageBg,
+                          background: (theme) => theme.colors.greenButton,
+                          borderRadius: '8px',
+                        }}
+                        variant="contained"
+                        color="success"
+                        onClick={onClickPredictPomo}
+                      >
+                        콩 예측하기
+                      </Button>
+                    </Box>
+                  )}
+                  {userInfo && !userInfo.birth && (
+                    <Tooltip title="사용자 추가 정보 입력이 필요합니다.">
+                      <Box>
+                        <Button
                           sx={{
-                            width: '20px',
-                            height: '20px',
-                            color: (theme) =>
-                              `${lighten(0.1, theme.colors.greenText)}`,
-                            mr: '4px',
+                            width: '150px',
+                            height: '56px',
+                            fontSize: '20px',
+                            fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                            color: (theme) => theme.colors.pageBg,
+                            background: (theme) => theme.colors.greenButton,
+                            borderRadius: '8px',
                           }}
-                        />
-                        <CloseIcon
-                          sx={{
-                            width: '18px',
-                            height: '18px',
-                            color: (theme) =>
-                              `${lighten(0.3, theme.colors.greenText)}`,
-                          }}
-                        />
-                      </InputAdornment>
-                    ),
-                  }}
-                  onChange={onChangeTodoPredictedPomo}
-                  value={todoInput.predictedPomo}
-                  color="success"
-                  sx={{ mb: '14px' }}
-                />
+                          variant="contained"
+                          color="success"
+                          disabled
+                        >
+                          콩 예측하기
+                        </Button>
+                      </Box>
+                    </Tooltip>
+                  )}
+                </Box>
               </Grid>
             </Grid>
           </DialogContent>
@@ -1100,42 +1182,86 @@ function UserTodo({
                     </MenuItem>
                   ))}
                 </Select>
-                <TextField
-                  required
-                  fullWidth
-                  type="number"
-                  InputProps={{
-                    inputProps: {
-                      max: 12,
-                      min: 1,
-                    },
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <CircleIcon
+                <Box sx={{ display: 'flex', mb: '14px' }}>
+                  <TextField
+                    required
+                    fullWidth
+                    type="number"
+                    InputProps={{
+                      inputProps: {
+                        max: 12,
+                        min: 1,
+                      },
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <CircleIcon
+                            sx={{
+                              width: '20px',
+                              height: '20px',
+                              color: (theme) =>
+                                `${lighten(0.1, theme.colors.greenText)}`,
+                              mr: '4px',
+                            }}
+                          />
+                          <CloseIcon
+                            sx={{
+                              width: '18px',
+                              height: '18px',
+                              color: (theme) =>
+                                `${lighten(0.3, theme.colors.greenText)}`,
+                            }}
+                          />
+                        </InputAdornment>
+                      ),
+                    }}
+                    onChange={onChangeTodoPredictedPomo}
+                    value={todoInput.predictedPomo}
+                    color="success"
+                    sx={{ mr: '12px' }}
+                  />
+                  {userInfo && userInfo.birth && (
+                    <Box>
+                      <Button
+                        sx={{
+                          width: '150px',
+                          height: '56px',
+                          fontSize: '20px',
+                          fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                          color: (theme) => theme.colors.pageBg,
+                          background: (theme) => theme.colors.greenButton,
+                          borderRadius: '8px',
+                        }}
+                        variant="contained"
+                        color="success"
+                        onClick={onClickPredictPomo}
+                      >
+                        콩 예측하기
+                      </Button>
+                    </Box>
+                  )}
+                  {userInfo && !userInfo.birth && (
+                    <Tooltip title="사용자 추가 정보 입력이 필요합니다.">
+                      <Box>
+                        <Button
                           sx={{
-                            width: '20px',
-                            height: '20px',
-                            color: (theme) =>
-                              `${lighten(0.1, theme.colors.greenText)}`,
-                            mr: '4px',
+                            width: '150px',
+                            height: '56px',
+                            fontSize: '20px',
+                            fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                            color: (theme) => theme.colors.pageBg,
+                            background: (theme) => theme.colors.greenButton,
+                            borderRadius: '8px',
                           }}
-                        />
-                        <CloseIcon
-                          sx={{
-                            width: '18px',
-                            height: '18px',
-                            color: (theme) =>
-                              `${lighten(0.3, theme.colors.greenText)}`,
-                          }}
-                        />
-                      </InputAdornment>
-                    ),
-                  }}
-                  onChange={onChangeTodoPredictedPomo}
-                  value={todoInput.predictedPomo}
-                  color="success"
-                  sx={{ mb: '14px' }}
-                />
+                          variant="contained"
+                          color="success"
+                          disabled
+                        >
+                          콩 예측하기
+                        </Button>
+                      </Box>
+                    </Tooltip>
+                  )}
+                </Box>
               </Grid>
             </Grid>
           </DialogContent>
