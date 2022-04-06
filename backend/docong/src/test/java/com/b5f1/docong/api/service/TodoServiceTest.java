@@ -2,16 +2,11 @@ package com.b5f1.docong.api.service;
 
 import com.b5f1.docong.api.dto.request.ModifyTodoStatusReqDto;
 import com.b5f1.docong.api.dto.request.PredictPomoReqDto;
-import com.b5f1.docong.api.dto.request.SaveTeamReqDto;
 import com.b5f1.docong.api.dto.request.SaveTodoReqDto;
 import com.b5f1.docong.api.dto.response.FindTodoResDto;
 import com.b5f1.docong.api.dto.response.PredictPomoResDto;
-import com.b5f1.docong.core.domain.group.Team;
-import com.b5f1.docong.core.domain.todo.Todo;
-import com.b5f1.docong.core.domain.todo.TodoStatus;
-import com.b5f1.docong.core.domain.todo.UserTodo;
+import com.b5f1.docong.core.domain.todo.*;
 import com.b5f1.docong.core.domain.user.User;
-import com.b5f1.docong.core.repository.TeamRepository;
 import com.b5f1.docong.core.repository.TodoRepository;
 import com.b5f1.docong.core.repository.UserRepository;
 import com.b5f1.docong.core.repository.UserTodoRepository;
@@ -24,9 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.internal.matchers.text.ValuePrinter.print;
 
 @SpringBootTest
 @Transactional
@@ -169,9 +161,9 @@ class TodoServiceTest {
                 .job("IT/인터넷")
                 .position(0)
                 .mbti("ISFP")
-                .importance(4)
-                .proficiency(1)
-                .type(4)
+                .importance(WorkImportance.상)
+                .proficiency(WorkProficiency.중급)
+                .type(WorkType.개발)
                 .start_time("2022-03-29 17:39:52")
                 .end_time( "2022-03-29 17:54:52")
                 .time_status("SHORT")
@@ -181,7 +173,6 @@ class TodoServiceTest {
         PredictPomoResDto response = todoService.predictPomo(reqDto);
 
         //then
-        assertThat(response.getPred().intValue()).isEqualTo(20);
     }
 
     private void createUser() {
