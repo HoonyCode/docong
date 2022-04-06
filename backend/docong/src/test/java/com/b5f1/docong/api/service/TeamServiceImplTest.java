@@ -102,8 +102,6 @@ class TeamServiceImplTest {
         Long result = teamService.updateTeam(updateTeamReqDto);
         Optional<Team> findTeam = teamRepository.findById(save.get().getSeq());
         //then
-        System.out.println("result = " + result);
-        System.out.println("findTeam.get().getName() = " + findTeam.get().getName());
         assertThat(findTeam.get().getName()).isEqualTo("changedTeamName");
     }
 
@@ -116,14 +114,11 @@ class TeamServiceImplTest {
         //when
         teamService.deleteTeam(seq);
         Optional<Team> find = teamRepository.findById(seq);
-        System.out.println("find.isPresent() = " + find.isPresent());
         List<TeamUser> teamUsers = teamUserRepository.findAll();
-        System.out.println("teamUsers.stream().count() = " + teamUsers.stream().count());
         long count = teamUsers
                 .stream()
                 .filter(teamUser -> teamUser.getTeam().getSeq() == seq)
                 .count();
-        System.out.println("count = " + count);
         //then
         assertThat(find.isPresent()).isEqualTo(false);
         assertThat(count).isEqualTo(0);

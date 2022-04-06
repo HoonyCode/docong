@@ -81,10 +81,8 @@ class JiraServiceTest {
         String token = "jlDdT1ysSdcNME0VJ2FP1FBF";
 
         String encodeToken = jiraService.encrypt(token.getBytes());
-        System.out.println(encodeToken);
 
         String decodeToken = jiraService.decrypt(encodeToken.getBytes());
-        System.out.println(decodeToken);
 
         assertThat(decodeToken).isEqualTo(token);
     }
@@ -96,7 +94,6 @@ class JiraServiceTest {
                 .activate(true)
                 .build();
         savedUser = userRepository.save(user);
-        System.out.println("User:" + savedUser.getSeq());
     }
 
     private void createTeam() {
@@ -104,6 +101,5 @@ class JiraServiceTest {
                 .name("Test-Team")
                 .build();
         savedTeam = teamRepository.save(team);
-        System.out.println("Team:" + savedTeam.getSeq());
     }
 }

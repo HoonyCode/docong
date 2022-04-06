@@ -26,7 +26,6 @@ public class TeamController {
 
     @PostMapping
     public ResponseEntity<Long> createTeam(@Auth User user, @RequestBody @Validated SaveTeamReqDto teamReqDto) {
-        System.out.println("teamReqDto.getName() = " + teamReqDto.getName());
         Long result = teamService.createTeam(teamReqDto);
         return ResponseEntity.ok().body(result);
     }

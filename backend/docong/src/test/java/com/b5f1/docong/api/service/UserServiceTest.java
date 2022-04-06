@@ -58,8 +58,6 @@ public class UserServiceTest {
     void testDeleteUser() {
         User user = userRepository.findByEmailAndActivateTrue("testcode@naver.com");
         userService.deleteUser(user);
-        System.out.println("test email -> " + user.getEmail());
-        System.out.println("test activate -> " + user.isActivate());
 
         assertThat(!user.isActivate());
     }

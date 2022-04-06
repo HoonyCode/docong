@@ -18,17 +18,11 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("PrincipalDetailsService 진입");
         User user = userRepository.findByEmailAndActivateTrue(username);
-        System.out.println("loadUserByUserName에서 찾는 user -> " + user);
         if (username != "deleteUser" && user != null) {
-            System.out.println("loadUserByUsername 진입, email : " + username);
             return new PrincipalDetails(user);
         }
         // 요청에 해당하는 user를 찾지 못하면 여기에 도달
-        System.out.println("loadUserByUserName -> 요청에 해당하는 user를 찾지 못했습니다.");
         throw new UsernameNotFoundException("User not found in the database");
-
-//        return new PrincipalDetails(new User());
     }
 }

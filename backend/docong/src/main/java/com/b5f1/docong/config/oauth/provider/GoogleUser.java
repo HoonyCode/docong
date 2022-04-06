@@ -32,7 +32,6 @@ public class GoogleUser implements OAuthUserInfo {
 
     @Override
     public String getImage() {
-        System.out.println("google imageUrl -> " + (String) attribute.get("imageUrl"));
         return (String) attribute.get("imageUrl");
     }
 
