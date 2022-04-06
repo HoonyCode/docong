@@ -113,9 +113,9 @@ public class TodoServiceImpl implements TodoService{
         entity.put("job", reqDto.getJob());
         entity.put("position", reqDto.getPosition());
         entity.put("mbti", reqDto.getMbti());
-        entity.put("importance", reqDto.getImportance());
-        entity.put("proficiency", reqDto.getProficiency());
-        entity.put("type", reqDto.getType());
+        entity.put("importance", reqDto.getImportance().ordinal());
+        entity.put("proficiency", reqDto.getProficiency().ordinal());
+        entity.put("type", reqDto.getType().ordinal());
         entity.put("start_time", reqDto.getStart_time());
         entity.put("end_time", reqDto.getEnd_time());
         entity.put("time_status", reqDto.getTime_status());
@@ -159,12 +159,4 @@ public class TodoServiceImpl implements TodoService{
         }
     }
 
-    public static String asJsonString(final Object obj) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            return new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
