@@ -270,7 +270,10 @@ function GroupTodoComponent({
 
   const onClickStartTodoTimer = () => {
     if (selectedTodo) {
-      if (selectedTodo.status === 'DONE') {
+      if (selectedTodo.activate === true) {
+        alert('이미 진행 중인 콩입니다!')
+      }
+      else if (selectedTodo.status === 'DONE') {
         alert('완료된 콩은 시작할 수 없습니다!')
         setSelectedTodo(null)
       } else {
@@ -282,6 +285,10 @@ function GroupTodoComponent({
   }
 
   const openModifyTodoForm = (card: any) => {
+    if(card.activate === true) {
+      alert('진행 중인 콩은 수정할 수 없습니다.')
+      return
+    }
     setModifyTodoId(card.id)
     setGroupTodoInput({
       title: card.title,
@@ -374,6 +381,10 @@ function GroupTodoComponent({
   }
 
   const handleCardMove = (card: any, source: any, destination: any) => {
+    if(card.activate === true) {
+      alert('진행 중인 콩은 상태를 변경할 수 없습니다.')
+      return
+    }
     const updatedBoard = moveCard(board, source, destination)
     setBoard(updatedBoard)
     console.log('status change -> ', card.id)
@@ -389,6 +400,10 @@ function GroupTodoComponent({
   }
 
   const handleCardRemove = (card: any) => {
+    if(card.activate === true) {
+      alert('진행 중인 콩은 삭제할 수 없습니다.')
+      return
+    }
     setSelectedDeleteTodo(card.id)
   }
 
