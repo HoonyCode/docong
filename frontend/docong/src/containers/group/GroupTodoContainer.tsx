@@ -16,6 +16,7 @@ import { modifyTodoStatusAsync } from '../../modules/todo'
 import { changeUserTimerTodo } from '../../modules/user'
 import { getUserListDataAsync } from '../../modules/group'
 import OnTimer from '../../components/group/OnTimer'
+import useInterval from '@use-it/interval'
 
 function GroupTodoContainer() {
   const navigate = useNavigate()
@@ -51,10 +52,15 @@ function GroupTodoContainer() {
     setGroupSeq(Number(params.groupSeq))
   }, [params.groupSeq])
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   findGroupTodos()
+  //   getUserList()
+  // }, [groupSeq])
+
+  useInterval(() => {
     findGroupTodos()
     getUserList()
-  }, [groupSeq])
+  }, 5000)
 
   const findGroupTodos = () => {
     dispatch(findAllGroupTodosAsync.request(groupSeq))

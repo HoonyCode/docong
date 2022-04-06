@@ -652,7 +652,7 @@ function GroupTodoComponent({
                   fontSize: '30px',
                   fontWeight: 'bold',
                   fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
-                  color: (theme) => theme.colors.lightGreenText,
+                  color: '#5c7cfa',
                 }}
                 variant={'text'}
                 color="success"
