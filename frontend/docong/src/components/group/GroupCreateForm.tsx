@@ -8,7 +8,7 @@ import {
   Grid,
   TextField,
 } from '@mui/material'
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { GroupCreateData } from '../../api/group'
 import { RootState } from '../../modules'
@@ -30,6 +30,13 @@ function GroupCreateForm({
     userEmail: userInfo ? userInfo.email : '',
     name: '',
   })
+
+  useEffect(()=>{
+    setCreateGroupInfo({
+      userEmail: userInfo ? userInfo.email : '',
+      name: '',
+    })
+  }, [userInfo])
 
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     setCreateGroupInfo({ ...createGroupInfo, name: e.target.value })
