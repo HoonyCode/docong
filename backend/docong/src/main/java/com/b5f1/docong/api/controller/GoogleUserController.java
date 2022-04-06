@@ -31,9 +31,6 @@ public class GoogleUserController {
 
     @PostMapping("/oauth/jwt/google")
     public ResponseEntity<GoogleLoginResDto> GoogleJwtCreate(@RequestBody Map<String, Object> data) {
-        System.out.println("GoogleJwtCreate 실행됨");
-        System.out.println(data.get("profileObj"));
-
         OAuthUserInfo googleUser = new GoogleUser((Map<String, Object>) data.get("profileObj"));
 
         User userEntity = userRepository.findByEmailAndActivateTrue(googleUser.getEmail());
@@ -77,8 +74,6 @@ public class GoogleUserController {
         userEntity.saveRefreshToken(refreshToken);
         userRepository.save(userEntity);
 
-        System.out.println("Google JWT Token : " + jwtToken);
-        System.out.println("Google Refresh Token : " + refreshToken);
         GoogleLoginResDto googleLoginResDto = new GoogleLoginResDto(jwtToken, refreshToken, newUser);
         return ResponseEntity.ok().body(googleLoginResDto);
     }

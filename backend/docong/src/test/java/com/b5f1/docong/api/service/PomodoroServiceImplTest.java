@@ -92,7 +92,6 @@ class PomodoroServiceImplTest {
         //when
         List<Pomodoro> findByUser = pomodoroService.findAll(savedUser.getSeq());
 
-        System.out.println("findByUser = " + findByUser);
 
         //then
         assertThat(findByUser.get(0).getSeq()).isEqualTo(seq);

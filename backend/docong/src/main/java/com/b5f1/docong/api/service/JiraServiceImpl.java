@@ -128,7 +128,6 @@ public class JiraServiceImpl implements JiraService{
 
                 todo.changeJiraIssueId(issueId);
                 issueIds.add(issueId);
-                System.out.println("저장Todo" + title + content + status);
             }
         }
         return issueIds;

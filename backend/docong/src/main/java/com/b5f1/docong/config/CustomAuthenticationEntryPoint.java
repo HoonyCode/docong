@@ -22,7 +22,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
         log.error("UnAuthorized error : {}", e.getMessage());
         String exception = (String) request.getAttribute("exception");
-        System.out.println("CustomAuthenticationEntryPoint 진입 => " + exception);
 
         if("token expired".equals(exception)) {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);

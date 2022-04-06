@@ -43,30 +43,23 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
-        System.out.println("JwtAuthenticationFilter 진입");
-
         try {
             // request에 있는 username과 password를 파싱해서 자바 Object로 받기
             ObjectMapper om = new ObjectMapper();
             LoginReqDto loginReqDto = om.readValue(request.getInputStream(), LoginReqDto.class);
 
-            System.out.println("JwtAuthenticationFilter : " + loginReqDto);
 
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(loginReqDto.getEmail(), loginReqDto.getPassword());
 
-            System.out.println("JwtAuthenticaionFilter : 토큰 생성 완료");
 
             Authentication authentication = authenticationManager.authenticate(authenticationToken); // 여기서 PrincipalDetailsService 진입
 
-            System.out.println("authentication? -> " + authentication);
 
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-            System.out.println("Authentication : " + principalDetails.getUser().getEmail());
 
             return authentication;
         } catch (BadCredentialsException e) {
-            System.out.println("BadCredentialsException 발생!");
             sendErrorResponse(response, "BadCredentialsException");
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,8 +101,6 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
         userEntity.saveRefreshToken(refreshToken);
         userRepository.save(userEntity);
 
-        System.out.println("JWT TOKEN : " + jwtToken);
-        System.out.println("Refresh TOKEN : " + refreshToken);
         // response의 header로 Access Token 보내기
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);
         // response의 header로 Refresh Token 보내기

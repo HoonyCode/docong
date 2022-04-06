@@ -33,7 +33,6 @@ public class AuthHandlerMethodArgumentResolver implements HandlerMethodArgumentR
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        System.out.println("@Auth 진입");
         // annotaion 있어야 함. 타입이 맞아야 함. @Auth User user
         boolean hasAnnotation = parameter.getParameterAnnotation(Auth.class) != null;
         boolean isUser = parameter.getParameterType().equals(User.class);
@@ -44,18 +43,15 @@ public class AuthHandlerMethodArgumentResolver implements HandlerMethodArgumentR
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String token = webRequest.getHeader(JwtProperties.HEADER_STRING);
-        System.out.println("AuthHandlerMethodA~~~ Token : " + token);
 
         if (token != null) {
             JWTVerifier verifier = JWT.require(Algorithm.HMAC512(secret)).build(); // issuer?
             handleError(token);
             DecodedJWT decodedJWT = verifier.verify(token.replace(JwtProperties.TOKEN_PREFIX, ""));
             String email = decodedJWT.getSubject();
-            System.out.println("Email : " + email);
             return userRepository.findByEmailAndActivateTrue(email);
         } else {
             throw new CustomException(ErrorCode.TOKEN_NOT_FOUND);
-//            return null;
         }
     }
 

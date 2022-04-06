@@ -38,8 +38,6 @@ public class UserServiceImpl implements UserService {
         // gmail 가입 시도 시 oAuth를 이용해달라고 하기
         String emailPart = joinReqDto.getEmail().trim().split("@")[1];
         if (emailPart.equals("gmail.com")) {
-            // 에러 던지기
-//            System.out.println("gmail은 Google 로그인을 이용해주세요.");
             throw new CustomException(ErrorCode.INVALID_EMAIL_FORMAT);
         } else {
             User user = User.builder()
@@ -118,7 +116,6 @@ public class UserServiceImpl implements UserService {
                 String refreshToken = expiredAuthorization.replace(JwtProperties.TOKEN_PREFIX, ""); // Bearer 를 제외한 나머지를 refreshToken으로 저장
                 String email = JWT.require(Algorithm.HMAC512(secret)).build().verify(refreshToken)
                         .getClaim("email").asString();
-                System.out.println("email-> " + email);
 
                 User user = userRepository.findByEmailAndActivateTrue(email);
 

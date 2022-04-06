@@ -34,9 +34,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         // 어느 요청이 들어오던 해당 메서드를 거친다. -> Authorization(JWT)이 유효한지 체크
-        System.out.println("JwtAuthorizationFilter 진입");
         String header = request.getHeader(JwtProperties.HEADER_STRING);
-        System.out.println("header Authorization : " + header);
 
         if (header == null || !header.startsWith(JwtProperties.TOKEN_PREFIX)) {
             chain.doFilter(request, response);
