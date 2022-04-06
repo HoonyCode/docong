@@ -38,7 +38,6 @@ import DragHandleIcon from '@mui/icons-material/DragHandle'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
 import CircleIcon from '@mui/icons-material/Circle'
-import axios from 'axios'
 import { BASE_URL } from '../../api/auth'
 import Api from '../../lib/customApi'
 
@@ -333,9 +332,16 @@ function UserTodo({
         `${BASE_URL}/api/todo/predict`,
         predictData
       )
+      let realPredictPomo = 1
+      if (predictPomoResponse.data.pred / 2 > 1) {
+        realPredictPomo = Math.min(
+          Math.round(predictPomoResponse.data.pred / 2),
+          12
+        )
+      }
       setTodoInput({
         ...todoInput,
-        predictedPomo: predictPomoResponse.data.pred,
+        predictedPomo: realPredictPomo,
       })
     }
   }

@@ -40,6 +40,9 @@ import DragHandleIcon from '@mui/icons-material/DragHandle'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown'
 import CircleIcon from '@mui/icons-material/Circle'
+import Api from '../../lib/customApi'
+import { BASE_URL } from '../../api/auth'
+import CircularProgress from '@mui/material/CircularProgress'
 
 interface GroupTodoProps {
   group: Group | null
@@ -100,7 +103,7 @@ function GroupTodoComponent({
     userEmail: userInfo ? userInfo.email : '',
     workImportance: '중',
     workProficiency: '중급',
-    workType: '기타',
+    workType: '개발',
   })
 
   const [jiraInfoInput, setJiraInfoInput] = useState({
@@ -247,7 +250,7 @@ function GroupTodoComponent({
       userEmail: userInfo ? userInfo.email : '',
       workImportance: '중',
       workProficiency: '중급',
-      workType: '',
+      workType: '개발',
     })
   }
 
@@ -269,12 +272,14 @@ function GroupTodoComponent({
   }
 
   const onClickStartTodoTimer = () => {
-    if (selectedTodo) {
+    if (selectedTodo && userInfo) {
       if (selectedTodo.activate === true) {
         alert('이미 진행 중인 콩입니다!')
-      }
-      else if (selectedTodo.status === 'DONE') {
+      } else if (selectedTodo.status === 'DONE') {
         alert('완료된 콩은 시작할 수 없습니다!')
+        setSelectedTodo(null)
+      } else if (selectedTodo.userEmail !== userInfo.email) {
+        alert('본인의 Todo만 시작할 수 있습니다!')
         setSelectedTodo(null)
       } else {
         startTodoTimer(selectedTodo)
@@ -285,7 +290,7 @@ function GroupTodoComponent({
   }
 
   const openModifyTodoForm = (card: any) => {
-    if(card.activate === true) {
+    if (card.activate === true) {
       alert('진행 중인 콩은 수정할 수 없습니다.')
       return
     }
@@ -295,7 +300,7 @@ function GroupTodoComponent({
       content: card.content,
       predictedPomo: card.predictedPomo,
       teamId: groupSeq,
-      userEmail: userInfo ? userInfo.email : '',
+      userEmail: card.userEmail,
       workImportance: card.workImportance,
       workProficiency: card.workProficiency,
       workType: card.workType,
@@ -346,6 +351,52 @@ function GroupTodoComponent({
     setGroupTodoInput({ ...groupTodoInput, workType: e.target.value })
   }
 
+  const onChangeTodoUserEmail = (e: SelectChangeEvent<string>) => {
+    setGroupTodoInput({ ...groupTodoInput, userEmail: e.target.value })
+  }
+
+  const onClickPredictPomo = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    if (userInfo && userInfo.birth) {
+      let start_date = new Date()
+      let end_date = new Date()
+      start_date.setSeconds(
+        start_date.getSeconds() - start_date.getTimezoneOffset() * 60
+      )
+      end_date.setSeconds(
+        end_date.getSeconds() + 1500 - end_date.getTimezoneOffset() * 60
+      )
+      const predictData = {
+        birth: userInfo.birth,
+        end_time: end_date.toISOString(),
+        gender: userInfo.gender,
+        importance: groupTodoInput.workImportance,
+        job: userInfo.job,
+        mbti: userInfo.mbti,
+        position: userInfo.position,
+        proficiency: groupTodoInput.workProficiency,
+        start_time: start_date.toISOString(),
+        time_status: 'BASIC',
+        type: groupTodoInput.workType,
+      }
+      const predictPomoResponse: any = await Api.post(
+        `${BASE_URL}/api/todo/predict`,
+        predictData
+      )
+      let realPredictPomo = 1
+      if (predictPomoResponse.data.pred / 2 > 1) {
+        realPredictPomo = Math.min(
+          Math.round(predictPomoResponse.data.pred / 2),
+          12
+        )
+      }
+      setGroupTodoInput({
+        ...groupTodoInput,
+        predictedPomo: realPredictPomo,
+      })
+    }
+  }
+
   const onSubmitCreateTodo = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     createTodo(groupTodoInput)
@@ -381,7 +432,7 @@ function GroupTodoComponent({
   }
 
   const handleCardMove = (card: any, source: any, destination: any) => {
-    if(card.activate === true) {
+    if (card.activate === true) {
       alert('진행 중인 콩은 상태를 변경할 수 없습니다.')
       return
     }
@@ -400,7 +451,7 @@ function GroupTodoComponent({
   }
 
   const handleCardRemove = (card: any) => {
-    if(card.activate === true) {
+    if (card.activate === true) {
       alert('진행 중인 콩은 삭제할 수 없습니다.')
       return
     }
@@ -567,12 +618,35 @@ function GroupTodoComponent({
             </Grid>
             <Box
               sx={{
+                display: 'flex',
                 mb: '1vh',
                 fontSize: '14px',
                 fontWeight: 'bold',
-                color: (theme) => theme.colors.lightGreenText,
+                alignItems: 'center',
               }}
-            >{`${card.realPomo / 2} / ${card.predictedPomo} 콩`}</Box>
+            >
+              <Box
+                sx={{
+                  color: (theme) => theme.colors.lightGreenText,
+                  mr: '8px',
+                }}
+              >
+                {`${card.realPomo / 2} / ${card.predictedPomo} 콩`}{' '}
+              </Box>
+              <Box sx={{ mr: '3px', color: '#2f9e44' }}>
+                {card.activate ? '진행중' : ''}
+              </Box>
+              {card.activate && (
+                <CircularProgress
+                  sx={{
+                    width: '15px !important',
+                    height: '15px !important',
+                    color: '#2f9e44',
+                  }}
+                  disableShrink
+                />
+              )}
+            </Box>
             <Grid container>
               <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center' }}>
                 <Chip
@@ -611,10 +685,18 @@ function GroupTodoComponent({
                   />
                 )}
               </Grid>
-              <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'end' }}>
+              <Grid
+                item
+                xs={6}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'end',
+                  alignItems: 'center',
+                }}
+              >
                 <Tooltip title={`${card.userName} (${card.userEmail})`}>
                   <Avatar
-                    sx={{ width: 28, height: 28 }}
+                    sx={{ width: 28, height: 28, mr: '2px' }}
                     alt={`${card.userName} (${card.userEmail})`}
                     src={
                       card.userImg
@@ -736,6 +818,20 @@ function GroupTodoComponent({
                     fontWeight: 'bold',
                   }}
                 >
+                  <div>담당자</div>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    height: '56px',
+                    ml: '10px',
+                    mb: '14px',
+                    justifyContent: 'start',
+                    alignItems: 'center',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                  }}
+                >
                   <div>업무 종류</div>
                 </Box>
                 <Box
@@ -804,6 +900,54 @@ function GroupTodoComponent({
                   color="success"
                   sx={{ mb: '14px' }}
                 />
+                <Select
+                  required
+                  fullWidth
+                  id="user-email"
+                  value={groupTodoInput.userEmail}
+                  onChange={onChangeTodoUserEmail}
+                  color="success"
+                  sx={{
+                    mb: '14px',
+                    fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                    '> div': {
+                      display: 'flex',
+                      alignItems: 'center',
+                    },
+                  }}
+                >
+                  {group?.userList?.map((user, index) => (
+                    <MenuItem
+                      sx={{ display: 'flex' }}
+                      key={index}
+                      value={user.email}
+                    >
+                      <Avatar
+                        sx={{
+                          width: 26,
+                          height: 26,
+                          mr: '10px',
+                          flexDirection: 'column',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'end',
+                          boxShadow: 3,
+                        }}
+                        alt={`${user.name}`}
+                        src={
+                          user.image
+                            ? user.image
+                            : '/images/Profile_Default.png'
+                        }
+                      />
+                      <Box
+                        sx={{
+                          fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                        }}
+                      >{`${user.name} (${user.email})`}</Box>
+                    </MenuItem>
+                  ))}
+                </Select>
                 <Select
                   required
                   fullWidth
@@ -906,42 +1050,86 @@ function GroupTodoComponent({
                     </MenuItem>
                   ))}
                 </Select>
-                <TextField
-                  required
-                  fullWidth
-                  type="number"
-                  InputProps={{
-                    inputProps: {
-                      max: 12,
-                      min: 1,
-                    },
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <CircleIcon
+                <Box sx={{ display: 'flex', mb: '14px' }}>
+                  <TextField
+                    required
+                    fullWidth
+                    type="number"
+                    InputProps={{
+                      inputProps: {
+                        max: 12,
+                        min: 1,
+                      },
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <CircleIcon
+                            sx={{
+                              width: '20px',
+                              height: '20px',
+                              color: (theme) =>
+                                `${lighten(0.1, theme.colors.greenText)}`,
+                              mr: '4px',
+                            }}
+                          />
+                          <CloseIcon
+                            sx={{
+                              width: '18px',
+                              height: '18px',
+                              color: (theme) =>
+                                `${lighten(0.3, theme.colors.greenText)}`,
+                            }}
+                          />
+                        </InputAdornment>
+                      ),
+                    }}
+                    onChange={onChangeTodoPredictedPomo}
+                    value={groupTodoInput.predictedPomo}
+                    color="success"
+                    sx={{ mr: '12px' }}
+                  />
+                  {userInfo && userInfo.birth && (
+                    <Box>
+                      <Button
+                        sx={{
+                          width: '150px',
+                          height: '56px',
+                          fontSize: '20px',
+                          fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                          color: (theme) => theme.colors.pageBg,
+                          background: (theme) => theme.colors.greenButton,
+                          borderRadius: '8px',
+                        }}
+                        variant="contained"
+                        color="success"
+                        onClick={onClickPredictPomo}
+                      >
+                        콩 예측하기
+                      </Button>
+                    </Box>
+                  )}
+                  {userInfo && !userInfo.birth && (
+                    <Tooltip title="사용자 추가 정보 입력이 필요합니다.">
+                      <Box>
+                        <Button
                           sx={{
-                            width: '20px',
-                            height: '20px',
-                            color: (theme) =>
-                              `${lighten(0.1, theme.colors.greenText)}`,
-                            mr: '4px',
+                            width: '150px',
+                            height: '56px',
+                            fontSize: '20px',
+                            fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                            color: (theme) => theme.colors.pageBg,
+                            background: (theme) => theme.colors.greenButton,
+                            borderRadius: '8px',
                           }}
-                        />
-                        <CloseIcon
-                          sx={{
-                            width: '18px',
-                            height: '18px',
-                            color: (theme) =>
-                              `${lighten(0.3, theme.colors.greenText)}`,
-                          }}
-                        />
-                      </InputAdornment>
-                    ),
-                  }}
-                  onChange={onChangeTodoPredictedPomo}
-                  value={groupTodoInput.predictedPomo}
-                  color="success"
-                  sx={{ mb: '14px' }}
-                />
+                          variant="contained"
+                          color="success"
+                          disabled
+                        >
+                          콩 예측하기
+                        </Button>
+                      </Box>
+                    </Tooltip>
+                  )}
+                </Box>
               </Grid>
             </Grid>
           </DialogContent>
@@ -1038,6 +1226,20 @@ function GroupTodoComponent({
                     fontWeight: 'bold',
                   }}
                 >
+                  <div>담당자</div>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    height: '56px',
+                    ml: '10px',
+                    mb: '14px',
+                    justifyContent: 'start',
+                    alignItems: 'center',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                  }}
+                >
                   <div>업무 종류</div>
                 </Box>
                 <Box
@@ -1106,6 +1308,54 @@ function GroupTodoComponent({
                   color="success"
                   sx={{ mb: '14px' }}
                 />
+                <Select
+                  required
+                  fullWidth
+                  id="user-email"
+                  value={groupTodoInput.userEmail}
+                  onChange={onChangeTodoUserEmail}
+                  color="success"
+                  sx={{
+                    mb: '14px',
+                    fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                    '> div': {
+                      display: 'flex',
+                      alignItems: 'center',
+                    },
+                  }}
+                >
+                  {group?.userList?.map((user, index) => (
+                    <MenuItem
+                      sx={{ display: 'flex' }}
+                      key={index}
+                      value={user.email}
+                    >
+                      <Avatar
+                        sx={{
+                          width: 26,
+                          height: 26,
+                          mr: '10px',
+                          flexDirection: 'column',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'end',
+                          boxShadow: 3,
+                        }}
+                        alt={`${user.name}`}
+                        src={
+                          user.image
+                            ? user.image
+                            : '/images/Profile_Default.png'
+                        }
+                      />
+                      <Box
+                        sx={{
+                          fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                        }}
+                      >{`${user.name} (${user.email})`}</Box>
+                    </MenuItem>
+                  ))}
+                </Select>
                 <Select
                   required
                   fullWidth
@@ -1211,42 +1461,86 @@ function GroupTodoComponent({
                     </MenuItem>
                   ))}
                 </Select>
-                <TextField
-                  required
-                  fullWidth
-                  type="number"
-                  InputProps={{
-                    inputProps: {
-                      max: 12,
-                      min: 1,
-                    },
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <CircleIcon
+                <Box sx={{ display: 'flex', mb: '14px' }}>
+                  <TextField
+                    required
+                    fullWidth
+                    type="number"
+                    InputProps={{
+                      inputProps: {
+                        max: 12,
+                        min: 1,
+                      },
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <CircleIcon
+                            sx={{
+                              width: '20px',
+                              height: '20px',
+                              color: (theme) =>
+                                `${lighten(0.1, theme.colors.greenText)}`,
+                              mr: '4px',
+                            }}
+                          />
+                          <CloseIcon
+                            sx={{
+                              width: '18px',
+                              height: '18px',
+                              color: (theme) =>
+                                `${lighten(0.3, theme.colors.greenText)}`,
+                            }}
+                          />
+                        </InputAdornment>
+                      ),
+                    }}
+                    onChange={onChangeTodoPredictedPomo}
+                    value={groupTodoInput.predictedPomo}
+                    color="success"
+                    sx={{ mr: '12px' }}
+                  />
+                  {userInfo && userInfo.birth && (
+                    <Box>
+                      <Button
+                        sx={{
+                          width: '150px',
+                          height: '56px',
+                          fontSize: '20px',
+                          fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                          color: (theme) => theme.colors.pageBg,
+                          background: (theme) => theme.colors.greenButton,
+                          borderRadius: '8px',
+                        }}
+                        variant="contained"
+                        color="success"
+                        onClick={onClickPredictPomo}
+                      >
+                        콩 예측하기
+                      </Button>
+                    </Box>
+                  )}
+                  {userInfo && !userInfo.birth && (
+                    <Tooltip title="사용자 추가 정보 입력이 필요합니다.">
+                      <Box>
+                        <Button
                           sx={{
-                            width: '20px',
-                            height: '20px',
-                            color: (theme) =>
-                              `${lighten(0.1, theme.colors.greenText)}`,
-                            mr: '4px',
+                            width: '150px',
+                            height: '56px',
+                            fontSize: '20px',
+                            fontFamily: 'MapoPeacefull, TmoneyRoundWindRegular',
+                            color: (theme) => theme.colors.pageBg,
+                            background: (theme) => theme.colors.greenButton,
+                            borderRadius: '8px',
                           }}
-                        />
-                        <CloseIcon
-                          sx={{
-                            width: '18px',
-                            height: '18px',
-                            color: (theme) =>
-                              `${lighten(0.3, theme.colors.greenText)}`,
-                          }}
-                        />
-                      </InputAdornment>
-                    ),
-                  }}
-                  onChange={onChangeTodoPredictedPomo}
-                  value={groupTodoInput.predictedPomo}
-                  color="success"
-                  sx={{ mb: '14px' }}
-                />
+                          variant="contained"
+                          color="success"
+                          disabled
+                        >
+                          콩 예측하기
+                        </Button>
+                      </Box>
+                    </Tooltip>
+                  )}
+                </Box>
               </Grid>
             </Grid>
           </DialogContent>
