@@ -1,60 +1,39 @@
-import axios from 'axios'
+import Api from '../lib/customApi'
 // import { modifyJiraInfo } from '../modules/group'
 import { BASE_URL } from './auth'
 import { UserInfo } from './user'
 
-const setHeader = function () {
-  const token = localStorage.getItem('jwtToken')
-  const header = {
-    Authorization: `Bearer ${token}`,
-  }
-  return header
-}
-
 export async function createGroup(groupCreateData: GroupCreateData) {
-  const response = await axios.post(`${BASE_URL}/api/team`, groupCreateData, {
-    headers: setHeader(),
-  })
+  const response = await Api.post(`${BASE_URL}/api/team`, groupCreateData)
   return response.data
 }
 
 export async function modifyGroup(groupModifyData: GroupModifyData) {
-  const response = await axios.put(`${BASE_URL}/api/team`, groupModifyData, {
-    headers: setHeader(),
-  })
+  const response = await Api.put(`${BASE_URL}/api/team`, groupModifyData)
   return response.data
 }
 
 export async function deleteGroup(team_id: number) {
-  const response = await axios.delete(`${BASE_URL}/api/team/${team_id}`, {
-    headers: setHeader(),
-  })
+  const response = await Api.delete(`${BASE_URL}/api/team/${team_id}`)
   return response.data
 }
 
 export async function searchGroup(team_id: number) {
-  const response = await axios.get(`${BASE_URL}/api/team/${team_id}`, {
-    headers: setHeader(),
-  })
+  const response = await Api.get(`${BASE_URL}/api/team/${team_id}`)
   return response.data
 }
 
 export async function searchAllGroup() {
-  const response = await axios.get(`${BASE_URL}/api/team/all`, {
-    headers: setHeader(),
-  })
+  const response = await Api.get(`${BASE_URL}/api/team/all`)
   return response.data
 }
 
 export async function addMemberGroup(
   groupMemberModifyData: GroupMemberModifyData
 ) {
-  const response = await axios.post(
+  const response = await Api.post(
     `${BASE_URL}/api/team/member`,
-    groupMemberModifyData,
-    {
-      headers: setHeader(),
-    }
+    groupMemberModifyData
   )
   return response.data
 }
@@ -62,37 +41,24 @@ export async function addMemberGroup(
 export async function deleteMemberGroup(
   groupMemberModifyData: GroupMemberModifyData2
 ) {
-  const response = await axios.delete(
-    `${BASE_URL}/api/team/member/${groupMemberModifyData.team_id}/${groupMemberModifyData.user_email}`,
-    {
-      headers: setHeader(),
-    }
+  const response = await Api.delete(
+    `${BASE_URL}/api/team/member/${groupMemberModifyData.team_id}/${groupMemberModifyData.user_email}`
   )
   return response.data
 }
 
 export async function getUserListData(team_id: number) {
-  const response = await axios.get(`${BASE_URL}/api/team/activate/${team_id}`, {
-    headers: setHeader(),
-  })
+  const response = await Api.get(`${BASE_URL}/api/team/activate/${team_id}`)
   return response.data
 }
 
 export async function modifyJiraInfo(jiraData: JiraData, team_id: number) {
-  const response = await axios.post(
-    `${BASE_URL}/api/jira/${team_id}`,
-    jiraData,
-    {
-      headers: setHeader(),
-    }
-  )
+  const response = await Api.post(`${BASE_URL}/api/jira/${team_id}`, jiraData)
   return response.data
 }
 
 export async function getJiraIssue(team_id: number) {
-  const response = await axios.get(`${BASE_URL}/api/jira/${team_id}`, {
-    headers: setHeader(),
-  })
+  const response = await Api.get(`${BASE_URL}/api/jira/${team_id}`)
   return response.data
 }
 

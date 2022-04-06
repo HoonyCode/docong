@@ -82,3 +82,17 @@
 .highlight.on {
   color: #455A47;
 }
+
+.MuiTooltip-popper {
+  > div {
+    font-size: 16px;
+    font-family: 'MapoPeacefull', 'TmoneyRoundWindRegular';
+  }
+}
+
+.MuiTooltip-tooltip {
+  > div {
+    font-size: 16px;
+    font-family: 'MapoPeacefull', 'TmoneyRoundWindRegular';
+  }
+}

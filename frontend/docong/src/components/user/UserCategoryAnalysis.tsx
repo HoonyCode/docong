@@ -79,7 +79,6 @@ function UserCategoryAnalysis({ workTypeAnalysis }: UserCategoryAnalysisProps) {
 
   useEffect(() => {
     if (workTypeAnalysis) {
-      console.log(workTypeAnalysis)
       setChartData(
         produce((draft) => {
           for (let i = 0; i < workTypeAnalysis.length; i++) {
