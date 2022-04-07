@@ -120,7 +120,10 @@ class TodoServiceTest {
                 .title("제목")
                 .content("내용")
                 .build();
+        UserTodo userTodo = UserTodo.builder().todo(todo).user(user).build();
+        todo.addUserTodo(userTodo);
         Todo savedTodo = todoRepository.save(todo);
+
         SaveTodoReqDto reqDto = new SaveTodoReqDto("제목수정", "내용수정", null, user.getEmail(), null, null, null, 4);
 
         // when
