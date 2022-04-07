@@ -240,7 +240,7 @@ frontend/docong/src
 | **프로젝트 계획서**            | [바로가기](https://hoonycode.notion.site/3a0858e268ed4ab38f84958f9c4c35b9) |
 | **요구사항 명세서**            | [바로가기](https://hoonycode.notion.site/97a540499299439ea6e546e879949148?v=243ee694716c4ca186d3e42dcabd8efe) |
 | **과제 리뷰 일지 & 미팅 자료** | [바로가기](https://hoonycode.notion.site/8e68bf7fa3464389acfd40b19ebf3a7c) |
-| **팀 컴벤션**                  | [바로가기](https://hoonycode.notion.site/ff83485995444308b9b90d5f86c47bf7) |
+| **팀 컨벤션**                  | [바로가기](https://hoonycode.notion.site/ff83485995444308b9b90d5f86c47bf7) |
 | **학습 자료 공유**             | [바로가기](https://hoonycode.notion.site/616eabbded3d4e1a93503a98135811fd) |
 | **Wireframe**                  | [바로가기](https://www.figma.com/file/9Zam5pM8ZUlpRlAYgzl2I5?embed_host=notion&kind=&node-id=207%3A275&viewer=1) |
 | **Mockup & Prototype**         | [바로가기](https://www.figma.com/file/VoUaXkmQT3bf7t7E5Lw3YX?embed_host=notion&kind=&node-id=0%3A1&viewer=1) |
