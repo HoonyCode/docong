@@ -8,13 +8,17 @@
 
 **웹 기반 Pomodoro Timer 및 집중 시간 분석 서비스**
 
-> 여러분은 집중을 잘하고 계신가요?
+> 여러분은 집중을 잘하고 계신가요?<br/>
 > 얼마나 프로젝트에 집중했는지? 어떤 분야에 내가 시간을 투자했는지? 궁금한 적이 있지 않으신가요?
 >
-> 
+> <br/>
 >
-> 할 일을 생성하고 타이머 사용해 최대한 집중력을 발휘해 보세요!
+> <br/>
+>
+> 할 일을 생성하고 타이머 사용해 최대한 집중력을 발휘해 보세요! <br/>
 > 콩을 분석해서 여러분의 시간을 분석해보세요!
+>
+> <br/>
 
 <br><br>
 
@@ -231,19 +235,21 @@ frontend/docong/src
 
 
 
-| Notion                  | [Docong Notion 바로가기](https://hoonycode.notion.site/DOCONG-5edb319c5fe740d59e9aa2d51862f48a) |
-| ----------------------- | ------------------------------------------------------------ |
-| **프로젝트 계획서**     | [바로가기](https://hoonycode.notion.site/3a0858e268ed4ab38f84958f9c4c35b9) |
-| **요구사항 명세서**     | [바로가기](https://hoonycode.notion.site/97a540499299439ea6e546e879949148?v=243ee694716c4ca186d3e42dcabd8efe) |
-| **팀 컴벤션**           | [바로가기](https://hoonycode.notion.site/ff83485995444308b9b90d5f86c47bf7) |
-| **학습 자료 공유**      | [바로가기](https://hoonycode.notion.site/616eabbded3d4e1a93503a98135811fd) |
-| **Wireframe**           | [바로가기](https://www.figma.com/file/9Zam5pM8ZUlpRlAYgzl2I5?embed_host=notion&kind=&node-id=207%3A275&viewer=1) |
-| **Mockup & Prototype**  | [바로가기](https://www.figma.com/file/VoUaXkmQT3bf7t7E5Lw3YX?embed_host=notion&kind=&node-id=0%3A1&viewer=1) |
-| **유저가이드**          | [바로가기](https://mangrove-purchase-535.notion.site/Docong-User-Guide-5591e2fb4f87445e82e55bd34e5b6bbe) |
-| **ERD**                 | [바로가기]()                                                 |
-| **BackEnd - API Docs**  | [바로가기](https://hoonycode.notion.site/d72a1a3fc764466d8ad1301cd312fdbd?v=1ff66a9be81348c79ae8eed07b507324) |
-| **최종 발표 자료**      | [바로가기]()                                                 |
-| **프로젝트 서비스 UCC** | [바로가기]()                                                 |
+| Notion                         | [Docong Notion 바로가기](https://hoonycode.notion.site/DOCONG-5edb319c5fe740d59e9aa2d51862f48a) |
+| ------------------------------ | ------------------------------------------------------------ |
+| **프로젝트 계획서**            | [바로가기](https://hoonycode.notion.site/3a0858e268ed4ab38f84958f9c4c35b9) |
+| **요구사항 명세서**            | [바로가기](https://hoonycode.notion.site/97a540499299439ea6e546e879949148?v=243ee694716c4ca186d3e42dcabd8efe) |
+| **과제 리뷰 일지 & 미팅 자료** | [바로가기](https://hoonycode.notion.site/8e68bf7fa3464389acfd40b19ebf3a7c) |
+| **팀 컴벤션**                  | [바로가기](https://hoonycode.notion.site/ff83485995444308b9b90d5f86c47bf7) |
+| **학습 자료 공유**             | [바로가기](https://hoonycode.notion.site/616eabbded3d4e1a93503a98135811fd) |
+| **Wireframe**                  | [바로가기](https://www.figma.com/file/9Zam5pM8ZUlpRlAYgzl2I5?embed_host=notion&kind=&node-id=207%3A275&viewer=1) |
+| **Mockup & Prototype**         | [바로가기](https://www.figma.com/file/VoUaXkmQT3bf7t7E5Lw3YX?embed_host=notion&kind=&node-id=0%3A1&viewer=1) |
+| **유저가이드**                 | [바로가기](https://mangrove-purchase-535.notion.site/Docong-User-Guide-5591e2fb4f87445e82e55bd34e5b6bbe) |
+| **ERD**                        | [바로가기](https://hoonycode.notion.site/9aeabbaf31f94b39ba48f7584ed7d118) |
+| **BackEnd - API Docs**         | [바로가기](https://hoonycode.notion.site/d72a1a3fc764466d8ad1301cd312fdbd?v=1ff66a9be81348c79ae8eed07b507324) |
+| **포팅 메뉴얼**                | [바로가기](https://lab.ssafy.com/s06-s-project/S06P21S003/-/wikis/%ED%8F%AC%ED%8C%85-%EB%A9%94%EB%89%B4%EC%96%BC) |
+| **최종 발표 자료**             | [바로가기]()                                                 |
+| **프로젝트 서비스 UCC**        | [바로가기]()                                                 |
 
 
 
