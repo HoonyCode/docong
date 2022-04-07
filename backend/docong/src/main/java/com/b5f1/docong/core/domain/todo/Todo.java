@@ -3,15 +3,13 @@ package com.b5f1.docong.core.domain.todo;
 import com.b5f1.docong.core.domain.BaseEntity;
 import com.b5f1.docong.core.domain.group.Team;
 import com.b5f1.docong.core.domain.pomodoro.TimeStatus;
-import com.querydsl.core.annotations.QueryEntity;
+import com.b5f1.docong.core.domain.user.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -96,5 +94,9 @@ public class Todo extends BaseEntity {
 
     public void deleteTodo(){
         this.deleted = true;
+    }
+
+    public void changeUser(User changedUser) {
+        this.userTodo.changeUser(changedUser);
     }
 }

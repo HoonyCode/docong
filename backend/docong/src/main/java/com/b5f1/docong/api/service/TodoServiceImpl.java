@@ -69,6 +69,10 @@ public class TodoServiceImpl implements TodoService{
     public void modifyTodo(Long id, SaveTodoReqDto reqDto) {
         Todo todo = getTodo(id);
         todo.changeTodo(reqDto.getTitle(), reqDto.getContent(), reqDto.getWorkImportance(),reqDto.getWorkProficiency(),reqDto.getWorkType(), reqDto.getPredictedPomo());
+        if(todo.getUserTodo().getUser().getEmail() != reqDto.getUserEmail()){
+            User changedUser = userRepository.findByEmailAndActivateTrue(reqDto.userEmail);
+            todo.changeUser(changedUser);
+        }
     }
 
     @Override
