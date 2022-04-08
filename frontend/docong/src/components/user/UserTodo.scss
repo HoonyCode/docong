@@ -1,0 +1,98 @@
+.react-kanban-board {
+  > div {
+    height: 100%;
+  }
+}
+
+.react-kanban-column {
+  width: 378px;
+  min-height: 200px !important;
+  margin: 0 1vw;
+  background-color: white;
+  height: 100%;
+
+  @media (max-width: 1660px) {
+    width: 338px;
+  }
+
+  & + & {
+    margin-left: 2.5vw;
+  }
+
+  > div:nth-child(1) {
+    display: flex;
+    justify-content: center;
+    margin-right: 10px;
+  }
+
+  > div:nth-child(2) {
+    height: calc(100% - 60px) !important;
+    overflow-y: overlay;
+    background: #FAFAFA;
+    border-radius: 8px;
+    padding-top: 8px;
+    padding-left: 8px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #8a9788;
+    border-radius: 8px;
+    background-clip: padding-box;
+    border: 1px solid transparent;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: #c4c4c4;
+    border-radius: 8px;
+    box-shadow: inset 0px 0px 5px white;
+  }
+  &:hover {
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+  }
+}
+
+.highlight {
+  display: inline-block; 
+  position: relative;
+  z-index: 1;
+  transition: 0.4s all;
+}
+
+.highlight:after {
+  content:"";
+  width: 0%;
+  height: 13px;
+  display: inline-block;
+  background: #D9FCDB;
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  z-index: -1;
+  transition: 0.3s all;
+}
+
+.highlight.on:after {
+  width: 100%;
+}
+
+.highlight.on {
+  color: #455A47;
+}
+
+.MuiTooltip-popper {
+  > div {
+    font-size: 16px;
+    font-family: 'MapoPeacefull', 'TmoneyRoundWindRegular';
+  }
+}
+
+.MuiTooltip-tooltip {
+  > div {
+    font-size: 16px;
+    font-family: 'MapoPeacefull', 'TmoneyRoundWindRegular';
+  }
+}

@@ -1,0 +1,35 @@
+{
+    "name": "Docong",
+    "description": "Docong Extension",
+    "version": "2.1",
+    "manifest_version": 3,
+    "background":{
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "img/icon16.png",
+            "32": "img/icon32.png",
+            "48": "img/icon48.png",
+            "128": "img/icon128.png"
+        }
+    },
+    "icons": {
+        "16": "img/icon16.png",
+        "32": "img/icon32.png",
+        "48": "img/icon48.png",
+        "128": "img/icon128.png"
+    },
+    "permissions": [
+        "storage","tabs","scripting", "alarms"
+    ],
+    "host_permissions":[
+        "http://*/",
+        "https://*/"
+    ],
+    "web_accessible_resources": [{
+        "resources": ["img/logo.png"],
+        "matches": ["<all_urls>"]
+    }]
+}

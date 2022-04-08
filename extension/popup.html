@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: 500px;
+            height: fit-content;
+            display: flex;
+        }
+        #add {
+            width: fit-content;
+            height: 200px;
+            padding-right: 25px;
+            margin-right: 25px;
+            border-right: 2px solid black;
+        }
+        #deleteAll{
+            float: right;
+        }
+        table{
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid black;
+            margin-bottom: 10px;
+        }
+        td{
+            padding: 3px;
+            border: 1px solid black;
+        }
+        td:first-child{
+            width: 95%;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="container">
+        <div id="add">
+            <form id="add_form">
+                <input class="add_rec_input" type="text" name="url" id="url" placeholder="URL">
+                <br>
+                <br>
+                <button type="submit">Add</button>
+                <button id="deleteAll">초기화</button>
+            </form>
+        </div>
+        <div style="width:100%">
+            <table style="border:1px solid black;">
+                <tbody id ="list" >
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/popup.js"></script>
+</body>
